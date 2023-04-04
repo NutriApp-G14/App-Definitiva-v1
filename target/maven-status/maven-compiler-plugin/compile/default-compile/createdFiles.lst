@@ -1,0 +1,4 @@
+com/demo/nutri/repository/UsuarioRepository.class
+com/demo/nutri/model/Usuario.class
+com/demo/nutri/NutriApplication.class
+com/demo/nutri/controller/UsuarioController.class

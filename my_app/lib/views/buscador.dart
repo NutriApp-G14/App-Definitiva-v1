@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_app/views/listviewfood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
 class BuscadorComida extends StatefulWidget {
@@ -25,11 +25,31 @@ class _BuscadorComidaState extends State<BuscadorComida> {
     }
   }
 
+  _navigateListAlimento(BuildContext context) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Buscador de comidas'),
+        title: Text(
+          'Buscador de comidas',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+          // automaticallyImplyLeading: false,
+        ),
+        leading: IconButton(
+          icon: Icon(Icons
+              .arrow_back_ios_new_sharp), // Agrega aquí la imagen personalizada de flecha
+          onPressed: () => Navigator.of(context).pop(),
+          color: Colors.black,
+        ),
       ),
       body: Column(
         children: [
@@ -48,6 +68,7 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                   EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             ),
           ),
+          SizedBox(height: 10),
           ElevatedButton(
             onPressed: _onSubmitSearch,
             child: Text('Buscar'),
@@ -139,6 +160,9 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                                 _foods[index]['nutrients']['CHOCDF'],
                                 _foods[index]['nutrients']['FAT'],
                                 _foods[index]['nutrients']['PROCNT'],
+                                _foods[index]['nutrients']['NA'] ?? 0,
+                                _foods[index]['nutrients']['SUGAR'] ?? 0,
+                                _foods[index]['nutrients']['FIBTG'] ?? 0,
                                 _foods[index]['image'] ?? "",
                               );
                             },
@@ -192,6 +216,15 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                                               ['PROCNT'],
                                           carbohidratos: _foods[index]
                                               ['nutrients']['CHOCDF'],
+                                          sodio: _foods[index]['nutrients']
+                                                  ['NA'] ??
+                                              0,
+                                          azucar: _foods[index]['nutrients']
+                                                  ['SUGAR'] ??
+                                              0,
+                                          fibra: _foods[index]['nutrients']
+                                                  ['FIBTG'] ??
+                                              0,
                                           image: _foods[index]['image'] ?? "",
                                         )));
                           },
@@ -271,6 +304,9 @@ class _BuscadorComidaState extends State<BuscadorComida> {
       double carbohidratos,
       double grasas,
       double proteinas,
+      double sodio,
+      double azucar,
+      double fibra,
       String image) async {
     final response = await http.post(
       Uri.parse('http://localhost:8080/foods/add'),
@@ -284,11 +320,16 @@ class _BuscadorComidaState extends State<BuscadorComida> {
         'unidadesCantidad': unidadesCantidad,
         'carbohidratos': carbohidratos,
         'grasas': grasas,
+        'fibra': fibra,
         'proteinas': proteinas,
+        'sodio': sodio,
+        'azucar': azucar,
         'image': image,
         'nombreUsuario': widget.nombreUsuario
       }),
     );
+    Navigator.pop(context);
+    _navigateListAlimento(context);
     return response;
   }
 }

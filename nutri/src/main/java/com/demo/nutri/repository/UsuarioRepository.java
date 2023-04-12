@@ -8,4 +8,4 @@ import com.demo.nutri.model.Usuario;
 
 public interface UsuarioRepository extends CrudRepository<Usuario, String> {
     List<Usuario> findByNombre(String nombre);
-   }
+}

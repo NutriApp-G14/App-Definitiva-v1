@@ -1,5 +1,7 @@
 package com.demo.nutri.model;
 
+import java.lang.reflect.Array;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -9,6 +11,14 @@ public class Usuario {
     private String nombreUsuario;
     private String nombre;
     private String password;
+    private String age;
+    private String height;
+    private String weight;
+    private String gender;
+    private String activity;
+// private Array allergies;
+
+
 
     public String getPassword() {
         return password;
@@ -46,12 +56,49 @@ public class Usuario {
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
     }
-
     public String getNombre() {
         return nombre;
     }
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    public String getHeight() {
+        return height;
+    }
+    public void setHeight(String height) {
+        this.height = height;
+    }
+    public String getAge() {
+        return age;
+    }
+    public void setAge(String age) {
+        this.age = age;
+    }
+    public String getWeight() {
+        return weight;
+    }
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    public String getActivity() {
+        return activity;
+    }
+    public void setActivity(String activity) {
+        this.activity = activity;
+    }
+    // public Array getAllergies() {
+    //      return allergies;
+    //  }
+    //  public void setAllergies(Array allergies) {
+    //      this.allergies = allergies;
+    //  }
+
+    
 
 }

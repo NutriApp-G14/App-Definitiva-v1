@@ -62,6 +62,12 @@ public class UsuarioController {
         return usuarioRepository.findById(id).map(usuario -> {
             usuario.setNombre(Usuario.getNombre());
             usuario.setPassword(Usuario.getPassword());
+            usuario.setAge(Usuario.getAge());
+            usuario.setHeight(Usuario.getHeight());
+            usuario.setWeight(Usuario.getWeight());
+            usuario.setGender(Usuario.getGender());
+            usuario.setActivity(Usuario.getActivity());
+            //usuario.setAllergies(Usuario.getAllergies());
             usuarioRepository.save(usuario);
             return ResponseEntity.ok().body(usuario);
         }).orElse(new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND));

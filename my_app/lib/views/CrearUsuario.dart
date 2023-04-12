@@ -368,7 +368,7 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ListAlimentos(nombreUsuario: 'jorge')));
+                        builder: (context) => IniciarSesionPage()));
               },
               child: Text('¿Ya tienes cuenta? Inicia sesión'),
             ),

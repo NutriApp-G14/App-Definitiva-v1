@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/P.Lozano/my_app/windows/flutter
+# Install script for directory: C:/Users/P.Lozano/App-Definitiva-v1/my_app/windows/flutter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

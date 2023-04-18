@@ -16,8 +16,8 @@ public class Usuario {
     private String weight;
     private String gender;
     private String activity;
+    private String objective;
 // private Array allergies;
-
 
 
     public String getPassword() {
@@ -92,13 +92,10 @@ public class Usuario {
     public void setActivity(String activity) {
         this.activity = activity;
     }
-    // public Array getAllergies() {
-    //      return allergies;
-    //  }
-    //  public void setAllergies(Array allergies) {
-    //      this.allergies = allergies;
-    //  }
-
-    
-
+    public String getObjective() {
+        return objective;
+    }
+    public void setObjective(String objective) {
+        this.objective = objective;
+    }
 }

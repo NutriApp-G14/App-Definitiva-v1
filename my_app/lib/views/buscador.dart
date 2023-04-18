@@ -309,7 +309,7 @@ class _BuscadorComidaState extends State<BuscadorComida> {
       double fibra,
       String image) async {
     final response = await http.post(
-      Uri.parse('http://34.76.21.186:8080/foods/add'),
+      Uri.parse('http://localhost:8080/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

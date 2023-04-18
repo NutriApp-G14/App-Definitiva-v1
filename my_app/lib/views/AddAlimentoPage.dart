@@ -33,7 +33,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
       double carbohidratosController,
       String imageController,
       String nombreUsuarioController) async {
-    var url = "http://34.76.21.186:8080/foods/add";
+    var url = "http://localhost:8080/foods/add";
     Map data = {
       'name': nameController,
       'unidadesCantidad': unidadesCantidadController,

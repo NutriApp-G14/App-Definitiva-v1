@@ -10,6 +10,7 @@ import 'package:my_app/views/EditarUsuario.dart';
 import 'package:my_app/views/buscador.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:my_app/model/Alergias.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 List<String> alergias_ = [];
 List<String> _alergias(Alergias alergia) {
@@ -55,6 +56,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
   var _peso;
   var _altura;
   var _sexo;
+  var _objectiveSeleccionado;
+  late Map<String, dynamic> requerimientoCalorico;
 
   DataBaseHelper dataBaseHelper = DataBaseHelper();
 
@@ -130,6 +133,63 @@ class _UsuarioPageState extends State<UsuarioPage> {
     return _necesidadAgua1;
   }
 
+  Map<String, dynamic> _factorActividad(String actividad, double tmb, String _objectiveSeleccionado, double weight){
+
+        var calorieRequirement;
+
+        switch (actividad) {
+          case 'sedentario':
+            calorieRequirement = tmb * 1.2;
+            break;
+          case 'poco activo':
+            calorieRequirement = tmb * 1.375;
+            break;
+          case 'moderadamente activo':
+            calorieRequirement = tmb * 1.55;
+            break;
+          case 'activo':
+            calorieRequirement = tmb * 1.725;
+            break;
+          case 'muy activo':
+            calorieRequirement = tmb * 1.9;
+            break;
+          default:
+            calorieRequirement = tmb;
+          }
+
+          switch (_objectiveSeleccionado) {
+          case 'perder peso rapidamente':
+            calorieRequirement  *= 0.8;
+            break;
+          case 'perder peso lentamente':
+            calorieRequirement  *= 0.9;
+            break;
+          case 'mantener peso':
+            calorieRequirement  *= 1;
+            break;
+          case 'aumentar peso lentamente':
+            calorieRequirement  *= 1.1;
+            break;
+          case 'aumentar peso rapidamente':
+            calorieRequirement  *= 1.2;
+            break;
+          default:
+            calorieRequirement = calorieRequirement;
+          }
+
+            // Calculate macronutrient ranges
+            double protein = weight * (_objectiveSeleccionado == 'aumentar peso lentamente' || _objectiveSeleccionado == 'aumentar peso rapidamente' ? 2.2 : 1.8);
+            double fat = calorieRequirement * 0.25 / 9;
+            double carb = (calorieRequirement - (protein * 4) - (fat * 9)) / 4;
+
+            return {
+              'calories': calorieRequirement,
+              'protein': protein,
+              'fat': fat,
+              'carb': carb,
+            };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,11 +212,14 @@ class _UsuarioPageState extends State<UsuarioPage> {
                 _peso = double.parse(usuario.weight);
                 _altura = double.parse(usuario.height);
                 _sexo = usuario.gender;
+                _objectiveSeleccionado = usuario.objective;
 
                 double _imc = _calcularIMC(_peso, _altura);
-                double _necesidadAgua =
-                    _calcularNecesidadAgua(_peso, _altura, _sexo, _edad);
+                double _necesidadAgua = _calcularNecesidadAgua(_peso, _altura, _sexo, _edad);
                 double _tmb = _calculateTmb(_peso, _altura, _sexo, _edad);
+                if(_objectiveSeleccionado != "ninguno"){
+                  requerimientoCalorico = _factorActividad(usuario.activity,  _tmb, _objectiveSeleccionado,  _peso);
+                }
 
                 return Column(children: [
                   Padding(
@@ -174,7 +237,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                   children: [
                                     SizedBox(width: 15),
                                     Text(
-                                      usuario.nombreUsuario,
+                                      usuario.nombre,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Open Sans',
@@ -321,6 +384,89 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                   ],
                                 ),
                                 SizedBox(height: 8),
+                                FutureBuilder<Alergias>(
+                                  future: _futureAlergias,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<Alergias> snapshot) {
+                                    if (snapshot.hasData) {
+                                      final alergia = snapshot.data!;
+                                      final listaAlergias = _alergias(alergia);
+                                      return Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                          child: Card(
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(16),
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text('Alergias:',
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        Wrap(
+                                                          children: [
+                                                            for (String item
+                                                                in listaAlergias)
+                                                              Container(
+                                                                margin: EdgeInsets
+                                                                    .fromLTRB(
+                                                                        0,
+                                                                        10,
+                                                                        5,
+                                                                        0),
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            8,
+                                                                        vertical:
+                                                                            4),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          248,
+                                                                          220,
+                                                                          179),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                  border: Border.all(
+                                                                      color: Color.fromARGB(
+                                                                          255,
+                                                                          255,
+                                                                          119,
+                                                                          0),
+                                                                      width: 2),
+                                                                ),
+                                                                child: Text(
+                                                                  item,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              )
+                                                          ],
+                                                        )
+                                                      ]))));
+                                    } else if (snapshot.hasError) {
+                                      return Center(
+                                        child: Text("Error: ${snapshot.error}"),
+                                      );
+                                    } else {
+                                      return Center(
+                                        child: Text(
+                                            ""), //CircularProgressIndicator(),
+                                      );
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -373,7 +519,169 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                           ),
                                         ],
                                       ),
-                                    ])))
+                                    ]))),
+                          Card(
+                            child: Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  DropdownButtonFormField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Objetivo',
+                                      icon: Icon(Icons.sports_score),
+                                    ),
+                                    value: _objectiveSeleccionado,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _objectiveSeleccionado = value;
+                                      });
+                                    dataBaseHelper.updateUsuario(usuario.nombre, usuario.nombreUsuario, usuario.password, usuario.age,
+                                                                  usuario.height, usuario.weight, usuario.gender, usuario.activity, _objectiveSeleccionado );
+
+                                    requerimientoCalorico = _factorActividad(usuario.activity,  _tmb, _objectiveSeleccionado,  _peso);
+                                    print(requerimientoCalorico);
+                                    },
+                                    items: [
+                                      DropdownMenuItem(
+                                        value: 'ninguno',
+                                        child: Text('Ninguno'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'perder peso rapidamente',
+                                        child: Text('Perder peso rapidamente'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'perder peso lentamente',
+                                        child: Text('Perder peso lentamente'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'mantener peso',
+                                        child: Text('Mantener peso'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'aumentar peso rapidamente',
+                                        child: Text('Aumentar peso rapidamente'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'aumentar peso lentamente',
+                                        child: Text('Aumentar peso lentamente'),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 16),
+                                  if (usuario.objective == "ninguno")...[
+                                    Text("No se ha establecido ningún objetivo"),
+                                    Text("Introduzca su objetivo para poder ver esta sección"),
+                                  ]
+                                  else ...[
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Calorias:",
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          Text(
+                                            "${requerimientoCalorico['calories'].toStringAsFixed(2)} KCal",
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Proteinas:",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: const Color.fromARGB(
+                                                  238, 104, 201, 253)
+                                            ),
+                                          ),
+                                          Text(
+                                            "${requerimientoCalorico['protein'].toStringAsFixed(2)} g",
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Hidratos:",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: const Color.fromARGB(
+                                                  251, 93, 223, 54)
+                                            ),
+                                          ),
+                                          Text(
+                                            "${requerimientoCalorico['carb'].toStringAsFixed(2)} g",
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Grasas:",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: const Color.fromARGB(
+                                                  234, 236, 97, 87)
+                                            ),
+                                          ),
+                                          Text(
+                                            "${requerimientoCalorico['fat'].toStringAsFixed(2)} g",
+                                          ),
+                                        ],
+                                      ),
+                                      PieChart(
+                                        dataMap: { "Proteínas": requerimientoCalorico['protein'],
+                                                    "Hidratos": requerimientoCalorico['carb'],
+                                                    "Grasas": requerimientoCalorico['fat'],
+                                        },
+                                        chartRadius: 100,
+                                        ringStrokeWidth: 10,
+                                        colorList: [
+                                          Color.fromARGB(238, 104, 201, 253),
+                                          Color.fromARGB(251, 93, 223, 54),
+                                          Color.fromARGB(234, 236, 97, 87),
+                                        ], // especifica colores para los segmentos
+                                        legendOptions: LegendOptions(
+                                          showLegends: false,
+                                          legendPosition: LegendPosition
+                                              .right, // coloca la leyenda a la derecha del gráfico
+                                          legendTextStyle: TextStyle(
+                                              fontSize: 5,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
+                                        ),
+                                        chartValuesOptions: ChartValuesOptions(
+                                          showChartValueBackground: true,
+                                          chartValueBackgroundColor:
+                                              Colors.grey[200],
+                                          chartValueStyle: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black,
+                                          ),
+                                          showChartValuesInPercentage: true,
+                                          // coloca un fondo gris para los valores del gráfico
+                                        ),
+                                        chartType: ChartType.ring,
+                                        //ringStrokeWidthFactor: 0.3,
+                                        // utiliza un gráfico de pastel de anillo
+                                      ),
+                                  ],
+                                  
+                                ],
+                              ),
+                            ),
+                          )
                       ],
                     ),
                   )
@@ -390,61 +698,6 @@ class _UsuarioPageState extends State<UsuarioPage> {
                     CircularProgressIndicator(),
                   ],
                 ));
-              }
-            },
-          ),
-          FutureBuilder<Alergias>(
-            future: _futureAlergias,
-            builder: (BuildContext context, AsyncSnapshot<Alergias> snapshot) {
-              if (snapshot.hasData) {
-                final alergia = snapshot.data!;
-                final listaAlergias = _alergias(alergia);
-                return Padding(
-                    padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                    child: Card(
-                        child: Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Alergias:',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold)),
-                                  Wrap(
-                                    children: [
-                                      for (String item in listaAlergias)
-                                        Container(
-                                          margin:
-                                              EdgeInsets.fromLTRB(0, 10, 5, 0),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 4),
-                                          decoration: BoxDecoration(
-                                            color: Color.fromARGB(
-                                                255, 248, 220, 179),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            border: Border.all(
-                                                color: Color.fromARGB(
-                                                    255, 255, 119, 0),
-                                                width: 2),
-                                          ),
-                                          child: Text(
-                                            item,
-                                            style: TextStyle(fontSize: 14),
-                                          ),
-                                        )
-                                    ],
-                                  )
-                                ]))));
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text("Error: ${snapshot.error}"),
-                );
-              } else {
-                return Center(
-                  child: Text(""), //CircularProgressIndicator(),
-                );
               }
             },
           ),

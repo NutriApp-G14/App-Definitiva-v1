@@ -226,12 +226,16 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                   },
                   items: [
                     DropdownMenuItem(
-                      value: 'nada activo',
-                      child: Text('Nada activo'),
+                      value: 'sedentario',
+                      child: Text('Sedentario'),
                     ),
                     DropdownMenuItem(
                       value: 'poco activo',
                       child: Text('Poco activo'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'moderadamente activo',
+                      child: Text('Moderadamente Activo'),
                     ),
                     DropdownMenuItem(
                       value: 'activo',
@@ -316,6 +320,7 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                           pesoSeleccionado.toString(),
                           _generoSeleccionado,
                           _nivelActividadSeleccionado,
+                          "ninguno"
                         );
                         Map<String, bool> alergiasSeleccionadas =
                             seleccionarAlergias(alergias, seleccionadas);

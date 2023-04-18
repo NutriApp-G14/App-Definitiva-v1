@@ -67,7 +67,7 @@ public class UsuarioController {
             usuario.setWeight(Usuario.getWeight());
             usuario.setGender(Usuario.getGender());
             usuario.setActivity(Usuario.getActivity());
-            //usuario.setAllergies(Usuario.getAllergies());
+            usuario.setObjective(Usuario.getObjective());
             usuarioRepository.save(usuario);
             return ResponseEntity.ok().body(usuario);
         }).orElse(new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND));

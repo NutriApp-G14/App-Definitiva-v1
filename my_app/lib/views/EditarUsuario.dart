@@ -36,7 +36,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
 
   Future<Usuario> getUsuarioById(String nombreUsuario) async {
     final response = await http
-        .get(Uri.parse('http://34.76.21.186:8080/users/$nombreUsuario'));
+        .get(Uri.parse('http://localhost:8080/users/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Usuario.fromJson(jsonData);
@@ -47,7 +47,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
 
   Future<Alergias> getAlergiasById(String nombreUsuario) async {
     final response = await http
-        .get(Uri.parse('http://34.76.21.186:8080/allergies/$nombreUsuario'));
+        .get(Uri.parse('http://localhost:8080/allergies/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Alergias.fromJson(jsonData);
@@ -263,12 +263,16 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                         },
                         items: [
                           DropdownMenuItem(
-                            value: 'nada activo',
-                            child: Text('Nada activo'),
+                            value: 'sedentario',
+                            child: Text('Sedentario'),
                           ),
                           DropdownMenuItem(
                             value: 'poco activo',
                             child: Text('Poco activo'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'moderadamente activo',
+                            child: Text('Moderadamente Activo'),
                           ),
                           DropdownMenuItem(
                             value: 'activo',
@@ -326,6 +330,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                                         _nivelActividadSeleccionado == '')
                                     ? usuario.activity
                                     : _nivelActividadSeleccionado,
+                                usuario.objective //luego hay q cambiar esto
                               );
 
                               dataBaseHelper.updateAlergias(

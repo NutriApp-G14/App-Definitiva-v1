@@ -7,11 +7,12 @@ class Usuario {
   final String weight;
   final String gender;
   final String activity;
+  final String objective;
   //final List<String> allergies;
 
 
   Usuario( this.nombre, this.nombreUsuario, this.password,  this.age,
-             this.height, this.weight, this.gender, this.activity);
+             this.height, this.weight, this.gender, this.activity, this.objective);
 
   factory Usuario.fromJson(Map<String, dynamic> json) {
     return Usuario(
@@ -23,7 +24,7 @@ class Usuario {
       json['weight'],
       json['gender'],
       json['activity'],
-      //json['allergies']
+      json['objective']
 
 
     );

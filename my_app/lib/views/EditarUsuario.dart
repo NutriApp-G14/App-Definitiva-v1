@@ -35,8 +35,8 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   }
 
   Future<Usuario> getUsuarioById(String nombreUsuario) async {
-    final response =
-        await http.get(Uri.parse('http://localhost:8080/users/$nombreUsuario'));
+    final response = await http
+        .get(Uri.parse('http://34.76.21.186:8080/users/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Usuario.fromJson(jsonData);
@@ -47,7 +47,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
 
   Future<Alergias> getAlergiasById(String nombreUsuario) async {
     final response = await http
-        .get(Uri.parse('http://localhost:8080/allergies/$nombreUsuario'));
+        .get(Uri.parse('http://34.76.21.186:8080/allergies/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Alergias.fromJson(jsonData);
@@ -293,8 +293,6 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                             onPressed: () {
                               print(seleccionadas);
                               dataBaseHelper.updateUsuario(
-                                _navigateUsuarioPage(context),
-                                context,
                                 (nombreController.text.trim() == null ||
                                         nombreController.text.trim() == '')
                                     ? usuario.nombre
@@ -331,8 +329,6 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                               );
 
                               dataBaseHelper.updateAlergias(
-                                _navigateUsuarioPage(context),
-                                context,
                                 (nombreController.text.trim() == null ||
                                         nombreController.text.trim() == '')
                                     ? usuario.nombre
@@ -351,9 +347,8 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => UsuarioPage(
+                                  builder: (context) => ListAlimentos(
                                     nombreUsuario: usuario.nombreUsuario,
-                                    nombre: usuario.nombre,
                                   ),
                                 ),
                               );

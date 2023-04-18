@@ -23,7 +23,7 @@ class DataBaseHelper {
       double sodioController,
       double azucarController,
       double fibraController) async {
-    var url = "http://localhost:8080/foods/add";
+    var url = "http://34.76.21.186:8080/foods/add";
     Map data = {
       'name': nameController,
       'unidadesCantidad': unidadesCantidadController,
@@ -57,7 +57,7 @@ class DataBaseHelper {
     String? genderController,
     String? activityController,
   ) async {
-    var url = "http://localhost:8080/users/add";
+    var url = "http://34.76.21.186:8080/users/add";
     Map data = {
       'nombre': nombreController,
       'nombreUsuario': nombreUsuarioController,
@@ -89,7 +89,7 @@ class DataBaseHelper {
       bool mariscosController,
       bool frutosSecosController,
       bool pescadoController) async {
-    var url = "http://localhost:8080/allergies/add";
+    var url = "http://34.76.21.186:8080/allergies/add";
     Map data = {
       'nombreUsuario': nombreUsuarioController,
       'cacahuetes': cacahuetesController,
@@ -114,8 +114,8 @@ class DataBaseHelper {
 
 // Obtener un Usuario al Iniciar sesión comprobando la contraseña
   Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
-    final response =
-        await http.get(Uri.parse('http://localhost:8080/users/$nombreUsuario'));
+    final response = await http
+        .get(Uri.parse('http://34.76.21.186:8080/users/$nombreUsuario'));
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
@@ -129,7 +129,7 @@ class DataBaseHelper {
 
 // Comprueba si el Usuario Ya existe en la BBDD
   Future<bool> usuarioExists(String nombreUsuario) async {
-    var url = Uri.parse("http://localhost:8080/users/$nombreUsuario");
+    var url = Uri.parse("http://34.76.21.186:8080/users/$nombreUsuario");
     var response = await http.get(url);
     if (response.statusCode == 200) {
       // var data = jsonDecode(response.body) as List<dynamic>;
@@ -144,8 +144,8 @@ class DataBaseHelper {
 
 // Obtener un Usuario con el Nombre de Usuario (id)
   Future<Usuario> getUsuarioById(String nombreUsuario) async {
-    final response =
-        await http.get(Uri.parse('http://localhost:8080/users/$nombreUsuario'));
+    final response = await http
+        .get(Uri.parse('http://34.76.21.186:8080/users/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Usuario.fromJson(jsonData);
@@ -156,8 +156,6 @@ class DataBaseHelper {
 
 // Actualizar Usuario
   Future<http.Response> updateUsuario(
-    dynamic function,
-    BuildContext context,
     String nombreController,
     String nombreUsuarioController,
     String passwordController,
@@ -167,7 +165,7 @@ class DataBaseHelper {
     String? genderController,
     String? activityController,
   ) async {
-    var url = "http://localhost:8080/users/$nombreUsuarioController";
+    var url = "http://34.76.21.186:8080/users/$nombreUsuarioController";
     Map data = {
       'nombre': nombreController,
       'nombreUsuario': nombreUsuarioController,
@@ -183,8 +181,6 @@ class DataBaseHelper {
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     print("${response.body}");
-    Navigator.pop(context);
-    function;
     return response;
   }
 
@@ -193,7 +189,7 @@ class DataBaseHelper {
 // Obtienen las Alergía de un Usuario a partir de su nombre de Usuario
   Future<Alergias> getAlergiasById(String nombreUsuario) async {
     final response = await http
-        .get(Uri.parse('http://localhost:8080/allergies/$nombreUsuario'));
+        .get(Uri.parse('http://34.76.21.186:8080/allergies/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Alergias.fromJson(jsonData);
@@ -204,8 +200,6 @@ class DataBaseHelper {
 
 // Actualiza Alergias
   Future<http.Response> updateAlergias(
-      dynamic function,
-      BuildContext context,
       String nombreUsuarioController,
       bool cacahuetesController,
       bool lecheController,
@@ -215,7 +209,7 @@ class DataBaseHelper {
       bool mariscosController,
       bool frutosSecosController,
       bool pescadoController) async {
-    var url = "http://localhost:8080/allergies/$nombreUsuarioController";
+    var url = "http://34.76.21.186:8080/allergies/$nombreUsuarioController";
     Map data = {
       'nombreUsuario': nombreUsuarioController,
       'cacahuetes': cacahuetesController,
@@ -232,8 +226,6 @@ class DataBaseHelper {
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     print("${response.body}");
-    Navigator.pop(context);
-    function;
     return response;
   }
 
@@ -241,7 +233,7 @@ class DataBaseHelper {
 
 // Borrar Alimento
   Future<http.Response> deleteAlimento(int id) async {
-    var url = "http://localhost:8080/foods/{id}";
+    var url = "http://34.76.21.186:8080/foods/{id}";
     var response = await http
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     print("${response.statusCode}");
@@ -252,7 +244,7 @@ class DataBaseHelper {
 // Obtiene los alimentos de un usuario a partir de su nombre de usuario
   Future<List> getData(String nombreUsuario) async {
     final response = await http
-        .get(Uri.parse("http://localhost:8080/foods/user/$nombreUsuario"));
+        .get(Uri.parse("http://34.76.21.186:8080/foods/user/$nombreUsuario"));
     return json.decode(response.body);
   }
 }

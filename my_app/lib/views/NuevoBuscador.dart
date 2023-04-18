@@ -5,24 +5,25 @@ import 'package:http/http.dart' as http;
 import 'package:my_app/views/listviewfood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
-class BuscadorComida extends StatefulWidget {
+class NuevoBuscador extends StatefulWidget {
   final String nombreUsuario;
 
-  const BuscadorComida({required this.nombreUsuario});
+  const NuevoBuscador({required this.nombreUsuario});
 
   @override
-  _BuscadorComidaState createState() => _BuscadorComidaState();
+  _NuevoBuscadorState createState() => _NuevoBuscadorState();
 }
 
-class _BuscadorComidaState extends State<BuscadorComida> {
+class _NuevoBuscadorState extends State<NuevoBuscador> {
   String _query = '';
   List<String> _foodList = [];
   List<Map<String, dynamic>> _foods = [];
-  List<Map<String, dynamic>> _listaDeAlimentos = [];
+  var  _listaDeAlimentos = [];
 
   void _onSubmitSearch() async {
     if (_query.isNotEmpty) {
-      await searchAndDisplayFood(_query);
+     //await searchAndDisplayFood(_query);
+     await searchAndDisplayFoodNuevaAPI(_query);
     }
   }
 
@@ -76,7 +77,7 @@ class _BuscadorComidaState extends State<BuscadorComida> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: _foodList.length,
+              itemCount: _listaDeAlimentos.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   margin:
@@ -104,11 +105,11 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ListTile(
-                          leading: (_foods[index]['image'] != null) &&
-                                  (_foods[index]['image'] != "")
+                          leading: (_listaDeAlimentos[index]['image_url'] != null) &&
+                                  (_listaDeAlimentos[index]['image_url'] != "")
                               ? FutureBuilder(
                                   future: http
-                                      .head(Uri.parse(_foods[index]['image'])),
+                                      .head(Uri.parse(_listaDeAlimentos[index]['image_url'])),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<http.Response> snapshot) {
                                     if (snapshot.hasData &&
@@ -118,7 +119,7 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                                         child: FadeInImage.assetNetwork(
                                           placeholder:
                                               'assets/placeholder_image.png',
-                                          image: _foods[index]['image'],
+                                          image: _listaDeAlimentos[index]['image_url'],
                                           fit: BoxFit.cover,
                                           width: 80,
                                           height: 80,
@@ -131,7 +132,7 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                                 )
                               : SizedBox.shrink(),
                           title: Text(
-                            _foodList[index],
+                            _listaDeAlimentos[index]['product_name'] ?? "" ,
                             style: TextStyle(
                               color: Colors.black87,
                               fontWeight: FontWeight.w500,
@@ -146,25 +147,17 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                             ),
                             onPressed: () {
                               insertarAlimento(
-                                _foods[index]['label'],
-                                _foods[index]['nutrients']['ENERC_KCAL'],
-                                _foods[index]['servingSizes'] != null
-                                    ? _foods[index]['servingSizes'][0]
-                                            ['quantity'] ??
-                                        100.0
-                                    : 100.0,
-                                _foods[index]['servingSizes'] != null
-                                    ? _foods[index]['servingSizes'][0]
-                                            ['label'] ??
-                                        'grams'
-                                    : 'grams',
-                                _foods[index]['nutrients']['CHOCDF'],
-                                _foods[index]['nutrients']['FAT'],
-                                _foods[index]['nutrients']['PROCNT'],
-                                _foods[index]['nutrients']['NA'] ?? 0,
-                                _foods[index]['nutrients']['SUGAR'] ?? 0,
-                                _foods[index]['nutrients']['FIBTG'] ?? 0,
-                                _foods[index]['image'] ?? "",
+                                          _listaDeAlimentos[index]['product_name'] ?? "",
+                                          (_listaDeAlimentos[index]['nutriments']?['energy-kcal_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['energy-kcal_100g']) : _listaDeAlimentos[index]['nutriments']['energy-kcal_100g']?.toDouble() ?? 0.0,
+                                          100.0,
+                                          "grams",
+                                          (_listaDeAlimentos[index]['nutriments']?['fat_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['fat_100g']) : _listaDeAlimentos[index]['nutriments']['fat_100g']?.toDouble() ?? 0.0,
+                                          (_listaDeAlimentos[index]['nutriments']?['proteins_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['proteins_100g']) : _listaDeAlimentos[index]['nutriments']['proteins_100g']?.toDouble() ?? 0.0,
+                                          (_listaDeAlimentos[index]['nutriments']?['carbohydrates_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['carbohydrates_100g']) : _listaDeAlimentos[index]['nutriments']['carbohydrates_100g']?.toDouble() ?? 0.0,
+                                          (_listaDeAlimentos[index]['nutriments']?['sodium_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['sodium_100g']) : _listaDeAlimentos[index]['nutriments']['sodium_100g']?.toDouble() ?? 0.0,
+                                          (_listaDeAlimentos[index]['nutriments']?['sugars_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['sugars_100g']) : _listaDeAlimentos[index]['nutriments']['sugars_100g']?.toDouble() ?? 0.0,
+                                          (_listaDeAlimentos[index]['nutriments']?['fiber_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['fiber_100g']) : _listaDeAlimentos[index]['nutriments']['fiber_100g']?.toDouble() ?? 0.0,
+                                          _listaDeAlimentos[index]['image_url'] ?? "",
                               );
                             },
                           ),
@@ -177,54 +170,23 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                             top: 0), // establece el margen superior en 0
                         child: ElevatedButton(
                           onPressed: () {
-                            print(_foods[index]);
+                            print(_listaDeAlimentos[index]);
+                            print(_listaDeAlimentos[index]['nutriments']['energy-kcal_100g']);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MostrarFood(
-                                          name: _foods[index]['label'],
-                                          cantidad: _foods[index]
-                                                          ['servingSizes'] !=
-                                                      null &&
-                                                  _foods[index]['servingSizes']
-                                                      .isNotEmpty &&
-                                                  _foods[index]['servingSizes']
-                                                          [0] !=
-                                                      null
-                                              ? _foods[index]['servingSizes'][0]
-                                                      ['quantity'] ??
-                                                  100.0
-                                              : 100.0,
-                                          unidadesCantidad: _foods[index]
-                                                          ['servingSizes'] !=
-                                                      null &&
-                                                  _foods[index]['servingSizes']
-                                                      .isNotEmpty &&
-                                                  _foods[index]['servingSizes']
-                                                          [0] !=
-                                                      null
-                                              ? _foods[index]['servingSizes'][0]
-                                                      ['label'] ??
-                                                  'grams'
-                                              : 'grams',
-                                          calorias: _foods[index]['nutrients']
-                                              ['ENERC_KCAL'],
-                                          grasas: _foods[index]['nutrients']
-                                              ['FAT'],
-                                          proteinas: _foods[index]['nutrients']
-                                              ['PROCNT'],
-                                          carbohidratos: _foods[index]
-                                              ['nutrients']['CHOCDF'],
-                                          sodio: _foods[index]['nutrients']
-                                                  ['NA'] ??
-                                              0,
-                                          azucar: _foods[index]['nutrients']
-                                                  ['SUGAR'] ??
-                                              0,
-                                          fibra: _foods[index]['nutrients']
-                                                  ['FIBTG'] ??
-                                              0,
-                                          image: _foods[index]['image'] ?? "",
+                                          name: _listaDeAlimentos[index]['product_name'] ?? "",
+                                          cantidad:  100.0,
+                                          unidadesCantidad: "grams",
+                                          calorias:(_listaDeAlimentos[index]['nutriments']?['energy-kcal_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['energy-kcal_100g']) : _listaDeAlimentos[index]['nutriments']['energy-kcal_100g']?.toDouble() ?? 0.0,
+                                          grasas: (_listaDeAlimentos[index]['nutriments']?['fat_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['fat_100g']) : _listaDeAlimentos[index]['nutriments']['fat_100g']?.toDouble() ?? 0.0,
+                                          proteinas: (_listaDeAlimentos[index]['nutriments']?['proteins_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['proteins_100g']) : _listaDeAlimentos[index]['nutriments']['proteins_100g']?.toDouble() ?? 0.0,
+                                          carbohidratos: (_listaDeAlimentos[index]['nutriments']?['carbohydrates_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['carbohydrates_100g']) : _listaDeAlimentos[index]['nutriments']['carbohydrates_100g']?.toDouble() ?? 0.0,
+                                          sodio: (_listaDeAlimentos[index]['nutriments']?['sodium_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['sodium_100g']) : _listaDeAlimentos[index]['nutriments']['sodium_100g']?.toDouble() ?? 0.0,
+                                          azucar: (_listaDeAlimentos[index]['nutriments']?['sugars_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['sugars_100g']) : _listaDeAlimentos[index]['nutriments']['sugars_100g']?.toDouble() ?? 0.0,
+                                          fibra:(_listaDeAlimentos[index]['nutriments']?['fiber_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['fiber_100g']) : _listaDeAlimentos[index]['nutriments']['fiber_100g']?.toDouble() ?? 0.0,
+                                          image: _listaDeAlimentos[index]['image_url'] ?? "",
                                         )));
                           },
                           style: ElevatedButton.styleFrom(
@@ -288,39 +250,28 @@ class _BuscadorComidaState extends State<BuscadorComida> {
         _foodList = foodList.cast<String>(); // Convert foodList to List<String>
         _foods = foods;
       });
-      // Show food list in UI
-      // ...
     } else {
       print('Error al realizar la búsqueda');
     }
   }
-
-    Future<http.Response> searchFoodNuevaAPI(String searchTerm) async {
-    var url =
-      'https://world.openfoodfacts.org/cgi/search.pl?search_terms=$searchTerm&search_simple=1&action=process&json=true' ;
+  Future<http.Response> searchFoodNuevaAPI(String searchTerm) async {
+    var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=$searchTerm&search_simple=1&action=process&json=true';
     return await http.get(Uri.parse(url));
   }
 
   Future<void> searchAndDisplayFoodNuevaAPI(String searchTerm) async {
-    var response = await searchFood(searchTerm);
-
+    var response = await searchFoodNuevaAPI(searchTerm);
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
-
-      var listaDeAlimentos = body['products']
-          .map((food) => food['food'])
-          .toList()
-          .cast<Map<String, dynamic>>();
-
+      var listaDeAlimentos = body['products'].toList();//.cast<Map<String, dynamic>>();
+      print(listaDeAlimentos);
       setState(() {
         _listaDeAlimentos = listaDeAlimentos;
       });
-
     } else {
       print('Error al realizar la búsqueda');
     }
   }
-
 
   Future<http.Response> insertarAlimento(
       String name,

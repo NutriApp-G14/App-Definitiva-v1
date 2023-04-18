@@ -4,6 +4,7 @@ import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/IniciarSesion.dart';
+import 'package:my_app/views/NuevoBuscador.dart';
 import 'package:my_app/views/UsuarioPage.dart';
 import 'package:my_app/views/buscador.dart';
 import 'package:my_app/views/listviewfood.dart';
@@ -126,8 +127,12 @@ class _NutriAppBarState extends State<NutriAppBar> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => BuscadorComida(
+                    // MaterialPageRoute(
+                    //   builder: (context) => BuscadorComida(
+                    //     nombreUsuario: widget.nombreUsuario,
+                    //   ),
+                       MaterialPageRoute(
+                      builder: (context) => NuevoBuscador(
                         nombreUsuario: widget.nombreUsuario,
                       ),
                     ),

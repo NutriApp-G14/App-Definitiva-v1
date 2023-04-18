@@ -67,7 +67,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
 
   Future<void> deleteData(int id) async {
     final response = await http.delete(
-      Uri.parse("http://localhost:8080/foods/$id"),
+      Uri.parse("http://34.76.21.186:8080/foods/$id"),
     );
     setState(() {});
   }

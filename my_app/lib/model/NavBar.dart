@@ -5,6 +5,7 @@ import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/IniciarSesion.dart';
 import 'package:my_app/views/NuevoBuscador.dart';
+import 'package:my_app/views/RegistroComidas.dart';
 import 'package:my_app/views/UsuarioPage.dart';
 import 'package:my_app/views/buscador.dart';
 import 'package:my_app/views/listviewfood.dart';
@@ -29,14 +30,22 @@ class _NutriAppBarState extends State<NutriAppBar> {
             builder: (context) =>
                 AddAlimentoPage(nombreUsuario: widget.nombreUsuario)));
   }
+  _navigateRegistroComidas(BuildContext context) async{
+    String usuarioNombreUsuario = widget.nombreUsuario;
+
+    Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => RegistroComidasPage(
+          nombreUsuario: usuarioNombreUsuario),
+      transitionDuration: Duration(seconds: 0),
+    ));
+  }
 
   _navigateUsuarioPage(BuildContext context) async {
     Usuario usuario = await dataBaseHelper.getUsuarioById(widget.nombreUsuario);
     String usuarioNombre = usuario.nombre;
     String usuarioNombreUsuario = usuario.nombreUsuario;
     Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(
-          nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),
+      pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),
       transitionDuration: Duration(seconds: 0),
     ));
   }
@@ -171,28 +180,30 @@ class _NutriAppBarState extends State<NutriAppBar> {
                     icon: Icon(Icons.menu_book),
                     color: Colors.black,
                     onPressed: () {
-                      if (widget.isPremium) {
-                        // Código para la acción de estadísticas
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('Sprint 3'),
-                              content: Text(
-                                  'Esta funcionalidad estará disponible en el Sprint 3'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('Aceptar'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
+                      
+                       _navigateRegistroComidas(context);
+                      // if (widget.isPremium) {
+                      //   // Código para la acción de estadísticas
+                      // } else {
+                      //   showDialog(
+                      //     context: context,
+                      //     builder: (BuildContext context) {
+                      //       return AlertDialog(
+                      //         title: Text('Sprint 3'),
+                      //         content: Text(
+                      //             'Esta funcionalidad estará disponible en el Sprint 3'),
+                      //         actions: [
+                      //           TextButton(
+                      //             onPressed: () {
+                      //               Navigator.of(context).pop();
+                      //             },
+                      //             child: Text('Aceptar'),
+                      //           ),
+                      //         ],
+                      //       );
+                      //     },
+                      //   );
+                      // }
                     },
                     highlightColor: Colors
                         .transparent, // desactiva la sombra del botón cuando se presiona

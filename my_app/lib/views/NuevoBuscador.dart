@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
@@ -18,12 +19,12 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
   String _query = '';
   List<String> _foodList = [];
   List<Map<String, dynamic>> _foods = [];
-  var  _listaDeAlimentos = [];
+  var _listaDeAlimentos = [];
 
   void _onSubmitSearch() async {
     if (_query.isNotEmpty) {
-     //await searchAndDisplayFood(_query);
-     await searchAndDisplayFoodNuevaAPI(_query);
+      //await searchAndDisplayFood(_query);
+      await searchAndDisplayFoodNuevaAPI(_query);
     }
   }
 
@@ -105,11 +106,12 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ListTile(
-                          leading: (_listaDeAlimentos[index]['image_url'] != null) &&
+                          leading: (_listaDeAlimentos[index]['image_url'] !=
+                                      null) &&
                                   (_listaDeAlimentos[index]['image_url'] != "")
                               ? FutureBuilder(
-                                  future: http
-                                      .head(Uri.parse(_listaDeAlimentos[index]['image_url'])),
+                                  future: http.head(Uri.parse(
+                                      _listaDeAlimentos[index]['image_url'])),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<http.Response> snapshot) {
                                     if (snapshot.hasData &&
@@ -119,7 +121,8 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                                         child: FadeInImage.assetNetwork(
                                           placeholder:
                                               'assets/placeholder_image.png',
-                                          image: _listaDeAlimentos[index]['image_url'],
+                                          image: _listaDeAlimentos[index]
+                                              ['image_url'],
                                           fit: BoxFit.cover,
                                           width: 80,
                                           height: 80,
@@ -132,7 +135,7 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                                 )
                               : SizedBox.shrink(),
                           title: Text(
-                            _listaDeAlimentos[index]['product_name'] ?? "" ,
+                            _listaDeAlimentos[index]['product_name'] ?? "",
                             style: TextStyle(
                               color: Colors.black87,
                               fontWeight: FontWeight.w500,
@@ -147,17 +150,66 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                             ),
                             onPressed: () {
                               insertarAlimento(
-                                          _listaDeAlimentos[index]['product_name'] ?? "",
-                                          (_listaDeAlimentos[index]['nutriments']?['energy-kcal_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['energy-kcal_100g']) : _listaDeAlimentos[index]['nutriments']['energy-kcal_100g']?.toDouble() ?? 0.0,
-                                          100.0,
-                                          "grams",
-                                          (_listaDeAlimentos[index]['nutriments']?['fat_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['fat_100g']) : _listaDeAlimentos[index]['nutriments']['fat_100g']?.toDouble() ?? 0.0,
-                                          (_listaDeAlimentos[index]['nutriments']?['proteins_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['proteins_100g']) : _listaDeAlimentos[index]['nutriments']['proteins_100g']?.toDouble() ?? 0.0,
-                                          (_listaDeAlimentos[index]['nutriments']?['carbohydrates_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['carbohydrates_100g']) : _listaDeAlimentos[index]['nutriments']['carbohydrates_100g']?.toDouble() ?? 0.0,
-                                          (_listaDeAlimentos[index]['nutriments']?['sodium_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['sodium_100g']) : _listaDeAlimentos[index]['nutriments']['sodium_100g']?.toDouble() ?? 0.0,
-                                          (_listaDeAlimentos[index]['nutriments']?['sugars_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['sugars_100g']) : _listaDeAlimentos[index]['nutriments']['sugars_100g']?.toDouble() ?? 0.0,
-                                          (_listaDeAlimentos[index]['nutriments']?['fiber_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['fiber_100g']) : _listaDeAlimentos[index]['nutriments']['fiber_100g']?.toDouble() ?? 0.0,
-                                          _listaDeAlimentos[index]['image_url'] ?? "",
+                                _listaDeAlimentos[index]['product_name'] ?? "",
+                                (_listaDeAlimentos[index]['nutriments']
+                                        ?['energy-kcal_100g'] is String)
+                                    ? double.parse(_listaDeAlimentos[index]
+                                        ['nutriments']['energy-kcal_100g'])
+                                    : _listaDeAlimentos[index]['nutriments']
+                                                ['energy-kcal_100g']
+                                            ?.toDouble() ??
+                                        0.0,
+                                100.0,
+                                "grams",
+                                (_listaDeAlimentos[index]['nutriments']
+                                        ?['fat_100g'] is String)
+                                    ? double.parse(_listaDeAlimentos[index]
+                                        ['nutriments']['fat_100g'])
+                                    : _listaDeAlimentos[index]['nutriments']
+                                                ['fat_100g']
+                                            ?.toDouble() ??
+                                        0.0,
+                                (_listaDeAlimentos[index]['nutriments']
+                                        ?['proteins_100g'] is String)
+                                    ? double.parse(_listaDeAlimentos[index]
+                                        ['nutriments']['proteins_100g'])
+                                    : _listaDeAlimentos[index]['nutriments']
+                                                ['proteins_100g']
+                                            ?.toDouble() ??
+                                        0.0,
+                                (_listaDeAlimentos[index]['nutriments']
+                                        ?['carbohydrates_100g'] is String)
+                                    ? double.parse(_listaDeAlimentos[index]
+                                        ['nutriments']['carbohydrates_100g'])
+                                    : _listaDeAlimentos[index]['nutriments']
+                                                ['carbohydrates_100g']
+                                            ?.toDouble() ??
+                                        0.0,
+                                (_listaDeAlimentos[index]['nutriments']
+                                        ?['sodium_100g'] is String)
+                                    ? double.parse(_listaDeAlimentos[index]
+                                        ['nutriments']['sodium_100g'])
+                                    : _listaDeAlimentos[index]['nutriments']
+                                                ['sodium_100g']
+                                            ?.toDouble() ??
+                                        0.0,
+                                (_listaDeAlimentos[index]['nutriments']
+                                        ?['sugars_100g'] is String)
+                                    ? double.parse(_listaDeAlimentos[index]
+                                        ['nutriments']['sugars_100g'])
+                                    : _listaDeAlimentos[index]['nutriments']
+                                                ['sugars_100g']
+                                            ?.toDouble() ??
+                                        0.0,
+                                (_listaDeAlimentos[index]['nutriments']
+                                        ?['fiber_100g'] is String)
+                                    ? double.parse(_listaDeAlimentos[index]
+                                        ['nutriments']['fiber_100g'])
+                                    : _listaDeAlimentos[index]['nutriments']
+                                                ['fiber_100g']
+                                            ?.toDouble() ??
+                                        0.0,
+                                _listaDeAlimentos[index]['image_url'] ?? "",
                               );
                             },
                           ),
@@ -171,22 +223,106 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                         child: ElevatedButton(
                           onPressed: () {
                             print(_listaDeAlimentos[index]);
-                            print(_listaDeAlimentos[index]['nutriments']['energy-kcal_100g']);
+                            print(_listaDeAlimentos[index]['nutriments']
+                                ['energy-kcal_100g']);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MostrarFood(
-                                          name: _listaDeAlimentos[index]['product_name'] ?? "",
-                                          cantidad:  100.0,
+                                          name: _listaDeAlimentos[index]
+                                                  ['product_name'] ??
+                                              "",
+                                          cantidad: 100.0,
                                           unidadesCantidad: "grams",
-                                          calorias:(_listaDeAlimentos[index]['nutriments']?['energy-kcal_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['energy-kcal_100g']) : _listaDeAlimentos[index]['nutriments']['energy-kcal_100g']?.toDouble() ?? 0.0,
-                                          grasas: (_listaDeAlimentos[index]['nutriments']?['fat_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['fat_100g']) : _listaDeAlimentos[index]['nutriments']['fat_100g']?.toDouble() ?? 0.0,
-                                          proteinas: (_listaDeAlimentos[index]['nutriments']?['proteins_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['proteins_100g']) : _listaDeAlimentos[index]['nutriments']['proteins_100g']?.toDouble() ?? 0.0,
-                                          carbohidratos: (_listaDeAlimentos[index]['nutriments']?['carbohydrates_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['carbohydrates_100g']) : _listaDeAlimentos[index]['nutriments']['carbohydrates_100g']?.toDouble() ?? 0.0,
-                                          sodio: (_listaDeAlimentos[index]['nutriments']?['sodium_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['sodium_100g']) : _listaDeAlimentos[index]['nutriments']['sodium_100g']?.toDouble() ?? 0.0,
-                                          azucar: (_listaDeAlimentos[index]['nutriments']?['sugars_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['sugars_100g']) : _listaDeAlimentos[index]['nutriments']['sugars_100g']?.toDouble() ?? 0.0,
-                                          fibra:(_listaDeAlimentos[index]['nutriments']?['fiber_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['fiber_100g']) : _listaDeAlimentos[index]['nutriments']['fiber_100g']?.toDouble() ?? 0.0,
-                                          image: _listaDeAlimentos[index]['image_url'] ?? "",
+                                          calorias: (_listaDeAlimentos[index]
+                                                          ['nutriments']
+                                                      ?['energy-kcal_100g']
+                                                  is String)
+                                              ? double.parse(
+                                                  _listaDeAlimentos[index]
+                                                          ['nutriments']
+                                                      ['energy-kcal_100g'])
+                                              : _listaDeAlimentos[index]
+                                                              ['nutriments']
+                                                          ['energy-kcal_100g']
+                                                      ?.toDouble() ??
+                                                  0.0,
+                                          grasas: (_listaDeAlimentos[index]
+                                                      ['nutriments']
+                                                  ?['fat_100g'] is String)
+                                              ? double.parse(
+                                                  _listaDeAlimentos[index]
+                                                          ['nutriments']
+                                                      ['fat_100g'])
+                                              : _listaDeAlimentos[index]
+                                                              ['nutriments']
+                                                          ['fat_100g']
+                                                      ?.toDouble() ??
+                                                  0.0,
+                                          proteinas: (_listaDeAlimentos[index]
+                                                      ['nutriments']
+                                                  ?['proteins_100g'] is String)
+                                              ? double.parse(
+                                                  _listaDeAlimentos[index]
+                                                          ['nutriments']
+                                                      ['proteins_100g'])
+                                              : _listaDeAlimentos[index]
+                                                              ['nutriments']
+                                                          ['proteins_100g']
+                                                      ?.toDouble() ??
+                                                  0.0,
+                                          carbohidratos: (_listaDeAlimentos[
+                                                          index]['nutriments']
+                                                      ?['carbohydrates_100g']
+                                                  is String)
+                                              ? double.parse(
+                                                  _listaDeAlimentos[index]
+                                                          ['nutriments']
+                                                      ['carbohydrates_100g'])
+                                              : _listaDeAlimentos[index]
+                                                              ['nutriments']
+                                                          ['carbohydrates_100g']
+                                                      ?.toDouble() ??
+                                                  0.0,
+                                          sodio: (_listaDeAlimentos[index]
+                                                      ['nutriments']
+                                                  ?['sodium_100g'] is String)
+                                              ? double.parse(
+                                                  _listaDeAlimentos[index]
+                                                          ['nutriments']
+                                                      ['sodium_100g'])
+                                              : _listaDeAlimentos[index]
+                                                              ['nutriments']
+                                                          ['sodium_100g']
+                                                      ?.toDouble() ??
+                                                  0.0,
+                                          azucar: (_listaDeAlimentos[index]
+                                                      ['nutriments']
+                                                  ?['sugars_100g'] is String)
+                                              ? double.parse(
+                                                  _listaDeAlimentos[index]
+                                                          ['nutriments']
+                                                      ['sugars_100g'])
+                                              : _listaDeAlimentos[index]
+                                                              ['nutriments']
+                                                          ['sugars_100g']
+                                                      ?.toDouble() ??
+                                                  0.0,
+                                          fibra: (_listaDeAlimentos[index]
+                                                      ['nutriments']
+                                                  ?['fiber_100g'] is String)
+                                              ? double.parse(
+                                                  _listaDeAlimentos[index]
+                                                          ['nutriments']
+                                                      ['fiber_100g'])
+                                              : _listaDeAlimentos[index]
+                                                              ['nutriments']
+                                                          ['fiber_100g']
+                                                      ?.toDouble() ??
+                                                  0.0,
+                                          image: _listaDeAlimentos[index]
+                                                  ['image_url'] ??
+                                              "",
                                         )));
                           },
                           style: ElevatedButton.styleFrom(
@@ -254,8 +390,10 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
       print('Error al realizar la búsqueda');
     }
   }
+
   Future<http.Response> searchFoodNuevaAPI(String searchTerm) async {
-    var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=$searchTerm&search_simple=1&action=process&json=true';
+    var url =
+        'https://world.openfoodfacts.org/cgi/search.pl?search_terms=$searchTerm&search_simple=1&action=process&json=true';
     return await http.get(Uri.parse(url));
   }
 
@@ -263,7 +401,8 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
     var response = await searchFoodNuevaAPI(searchTerm);
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
-      var listaDeAlimentos = body['products'].toList();//.cast<Map<String, dynamic>>();
+      var listaDeAlimentos =
+          body['products'].toList(); //.cast<Map<String, dynamic>>();
       print(listaDeAlimentos);
       setState(() {
         _listaDeAlimentos = listaDeAlimentos;
@@ -286,7 +425,7 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
       double fibra,
       String image) async {
     final response = await http.post(
-      Uri.parse('http://localhost:8080/foods/add'),
+      Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

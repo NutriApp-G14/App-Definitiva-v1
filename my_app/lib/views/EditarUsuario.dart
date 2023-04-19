@@ -35,8 +35,8 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   }
 
   Future<Usuario> getUsuarioById(String nombreUsuario) async {
-    final response = await http
-        .get(Uri.parse('http://localhost:8080/users/$nombreUsuario'));
+    final response =
+        await http.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Usuario.fromJson(jsonData);
@@ -46,8 +46,8 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   }
 
   Future<Alergias> getAlergiasById(String nombreUsuario) async {
-    final response = await http
-        .get(Uri.parse('http://localhost:8080/allergies/$nombreUsuario'));
+    final response =
+        await http.get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Alergias.fromJson(jsonData);
@@ -297,41 +297,39 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                             onPressed: () {
                               print(seleccionadas);
                               dataBaseHelper.updateUsuario(
-                                (nombreController.text.trim() == null ||
-                                        nombreController.text.trim() == '')
-                                    ? usuario.nombre
-                                    : nombreController.text.trim(),
-                                (nombreUsuarioController.text.trim() == null ||
-                                        nombreUsuarioController.text.trim() ==
-                                            '')
-                                    ? usuario.nombreUsuario
-                                    : nombreUsuarioController.text.trim(),
-                                (passwordController.text.trim() == null ||
-                                        passwordController.text.trim() == '')
-                                    ? usuario.password
-                                    : passwordController.text.trim(),
-                                (ageController.text.trim() == null ||
-                                        ageController.text.trim() == '')
-                                    ? usuario.age
-                                    : ageController.text.trim(),
-                                (alturaSeleccionada == null ||
-                                        alturaSeleccionada.toString() == '')
-                                    ? usuario.height
-                                    : alturaSeleccionada.toString(),
-                                (pesoSeleccionado == null ||
-                                        pesoSeleccionado.toString() == '')
-                                    ? usuario.weight
-                                    : pesoSeleccionado.toString(),
-                                (_generoSeleccionado == null ||
-                                        _generoSeleccionado == '')
-                                    ? usuario.gender
-                                    : _generoSeleccionado,
-                                (_nivelActividadSeleccionado == null ||
-                                        _nivelActividadSeleccionado == '')
-                                    ? usuario.activity
-                                    : _nivelActividadSeleccionado,
-                                usuario.objective //luego hay q cambiar esto
-                              );
+                                  (nombreController.text.trim() == null ||
+                                          nombreController.text.trim() == '')
+                                      ? usuario.nombre
+                                      : nombreController.text.trim(),
+                                  (nombreUsuarioController.text.trim() == null ||
+                                          nombreUsuarioController.text.trim() ==
+                                              '')
+                                      ? usuario.nombreUsuario
+                                      : nombreUsuarioController.text.trim(),
+                                  (passwordController.text.trim() == null ||
+                                          passwordController.text.trim() == '')
+                                      ? usuario.password
+                                      : passwordController.text.trim(),
+                                  (ageController.text.trim() == null ||
+                                          ageController.text.trim() == '')
+                                      ? usuario.age
+                                      : ageController.text.trim(),
+                                  (alturaSeleccionada == null ||
+                                          alturaSeleccionada.toString() == '')
+                                      ? usuario.height
+                                      : alturaSeleccionada.toString(),
+                                  (pesoSeleccionado == null || pesoSeleccionado.toString() == '')
+                                      ? usuario.weight
+                                      : pesoSeleccionado.toString(),
+                                  (_generoSeleccionado == null || _generoSeleccionado == '')
+                                      ? usuario.gender
+                                      : _generoSeleccionado,
+                                  (_nivelActividadSeleccionado == null ||
+                                          _nivelActividadSeleccionado == '')
+                                      ? usuario.activity
+                                      : _nivelActividadSeleccionado,
+                                  usuario.objective //luego hay q cambiar esto
+                                  );
 
                               dataBaseHelper.updateAlergias(
                                 (nombreController.text.trim() == null ||

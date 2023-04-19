@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
@@ -295,9 +296,9 @@ class _BuscadorComidaState extends State<BuscadorComida> {
     }
   }
 
-    Future<http.Response> searchFoodNuevaAPI(String searchTerm) async {
+  Future<http.Response> searchFoodNuevaAPI(String searchTerm) async {
     var url =
-      'https://world.openfoodfacts.org/cgi/search.pl?search_terms=$searchTerm&search_simple=1&action=process&json=true' ;
+        'https://world.openfoodfacts.org/cgi/search.pl?search_terms=$searchTerm&search_simple=1&action=process&json=true';
     return await http.get(Uri.parse(url));
   }
 
@@ -315,12 +316,10 @@ class _BuscadorComidaState extends State<BuscadorComida> {
       setState(() {
         _listaDeAlimentos = listaDeAlimentos;
       });
-
     } else {
       print('Error al realizar la búsqueda');
     }
   }
-
 
   Future<http.Response> insertarAlimento(
       String name,
@@ -335,7 +334,7 @@ class _BuscadorComidaState extends State<BuscadorComida> {
       double fibra,
       String image) async {
     final response = await http.post(
-      Uri.parse('http://localhost:8080/foods/add'),
+      Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

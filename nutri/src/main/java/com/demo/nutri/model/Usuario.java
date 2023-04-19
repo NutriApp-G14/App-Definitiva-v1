@@ -17,8 +17,6 @@ public class Usuario {
     private String gender;
     private String activity;
     private String objective;
-// private Array allergies;
-
 
     public String getPassword() {
         return password;

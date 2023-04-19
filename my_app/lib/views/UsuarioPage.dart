@@ -573,6 +573,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                   if (usuario.objective == "ninguno")...[
                                     Text("No se ha establecido ningún objetivo"),
                                     Text("Introduzca su objetivo para poder ver esta sección"),
+                                    Text("Segun su objetivo se calculara su requerimiento calorico"),
+
                                   ]
                                   else ...[
                                     Row(

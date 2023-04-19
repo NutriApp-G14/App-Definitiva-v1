@@ -75,7 +75,7 @@ public class RegistroComidasController {
     @GetMapping("/registros")
     public List<RegistroComidas> getRegistrosPorDiaYTipoDeComidaYNombreUsuario(
             @RequestBody RegistroComidas RegistroComidas) {
-        return (List<RegistroComidas>) registroComidasRepository.findByDiaAndTipodecomidaAndNombreUsuario(
+        return (List<RegistroComidas>) registroComidasRepository.findByFechaAndTipoDeComidaAndNombreUsuario(
                 RegistroComidas.getFecha(), RegistroComidas.getTipoDeComida(), RegistroComidas.getNombreUsuario());
 
     }

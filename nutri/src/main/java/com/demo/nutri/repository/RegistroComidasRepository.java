@@ -10,5 +10,5 @@ public interface RegistroComidasRepository extends CrudRepository<RegistroComida
     List<RegistroComidas> findByNombreUsuario(String nombreUsuario);
     List<RegistroComidas> findByFecha(String fecha);
     List<RegistroComidas> findByTipoDeComida(String tipoDeComida);
-    List<RegistroComidas> findByDiaAndTipodecomidaAndNombreUsuario(String dia, String tipodecomida, String nombreUsuario);
+    List<RegistroComidas> findByFechaAndTipoDeComidaAndNombreUsuario(String fecha, String tipoDeComida, String nombreUsuario);
 }

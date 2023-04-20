@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/controllers/databasehelpers.dart';
-import 'package:my_app/views/listviewfood.dart';
+import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
 class BuscadorComida extends StatefulWidget {

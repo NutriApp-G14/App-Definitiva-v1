@@ -91,29 +91,38 @@ class MostrarFood extends StatelessWidget {
                               child: Padding(
                                   padding: EdgeInsets.fromLTRB(0, 30, 10, 0),
                                   child: Column(children: [
-                                    FutureBuilder<http.Response>(
-                                      future: http.get(Uri.parse(image)),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                                ConnectionState.done &&
-                                            snapshot.hasData &&
-                                            snapshot.data!.statusCode == 200 &&
-                                            ['http', 'https'].contains(
-                                                Uri.parse(image).scheme)) {
-                                          return FadeInImage.assetNetwork(
-                                            placeholder:
-                                                'assets/placeholder_image.png',
-                                            image: image,
-                                            fit: BoxFit.cover,
-                                          );
-                                        } else {
-                                          return Image.asset(
-                                            'assets/placeholder_image.png',
-                                            fit: BoxFit.cover,
-                                          );
-                                        }
-                                      },
-                                    ),
+                                    image != ""
+                                        ? FutureBuilder<http.Response>(
+                                            future: http.get(Uri.parse(image)),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                      ConnectionState.done &&
+                                                  snapshot.hasData &&
+                                                  snapshot.data!.statusCode ==
+                                                      200 &&
+                                                  ['http', 'https'].contains(
+                                                      Uri.parse(image)
+                                                          .scheme)) {
+                                                return FadeInImage.assetNetwork(
+                                                  placeholder:
+                                                      'assets/placeholder_image.png',
+                                                  image: image,
+                                                  fit: BoxFit.cover,
+                                                );
+                                              } else {
+                                                return Image.asset(
+                                                  'assets/placeholder_image.png',
+                                                  fit: BoxFit.cover,
+                                                );
+                                              }
+                                            },
+                                          )
+                                        : Container(
+                                            child: Image.asset(
+                                              'assets/placeholder_image.png',
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                   ])),
                             )),
                         Expanded(

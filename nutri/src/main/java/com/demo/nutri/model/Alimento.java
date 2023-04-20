@@ -2,9 +2,7 @@ package com.demo.nutri.model;
 
 import java.net.URI;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Alimento {
@@ -20,26 +18,8 @@ public class Alimento {
     private Double carbohidratos;
     private String image; 
     private String nombreUsuario; 
-
-
-    public String getUnidadesCantidad() {
-        return unidadesCantidad;
-    }
-    public void setUnidadesCantidad(String unidadesCantidad) {
-        this.unidadesCantidad = unidadesCantidad;
-    }
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-    public String getImage() {
-        return image;
-    }
-    public void setImage(String image) {
-        this.image = image;
-    }
+    @ManyToOne
+    private Receta receta;
     public Integer getId() {
         return id;
     }
@@ -57,6 +37,12 @@ public class Alimento {
     }
     public void setCantidad(Double cantidad) {
         this.cantidad = cantidad;
+    }
+    public String getUnidadesCantidad() {
+        return unidadesCantidad;
+    }
+    public void setUnidadesCantidad(String unidadesCantidad) {
+        this.unidadesCantidad = unidadesCantidad;
     }
     public Double getCalorias() {
         return calorias;
@@ -82,6 +68,27 @@ public class Alimento {
     public void setCarbohidratos(Double carbohidratos) {
         this.carbohidratos = carbohidratos;
     }
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+    public Receta getReceta() {
+        return receta;
+    }
+    public void setReceta(Receta receta) {
+        this.receta = receta;
+    }
+
+
+
 
 }
 

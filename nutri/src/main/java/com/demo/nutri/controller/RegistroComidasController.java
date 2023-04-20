@@ -72,11 +72,10 @@ public class RegistroComidasController {
         }).orElse(new ResponseEntity<RegistroComidas>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/registros")
-    public List<RegistroComidas> getRegistrosPorDiaYTipoDeComidaYNombreUsuario(
-            @RequestBody RegistroComidas RegistroComidas) {
+    @GetMapping("/registros/{fecha}/{tipoDeComida}/{nombreUsuario}")
+    public List<RegistroComidas> getRegistrosPorDiaYTipoDeComidaYNombreUsuario(@PathVariable String fecha, @PathVariable String tipoDeComida, @PathVariable String nombreUsuario ) {
         return (List<RegistroComidas>) registroComidasRepository.findByFechaAndTipoDeComidaAndNombreUsuario(
-                RegistroComidas.getFecha(), RegistroComidas.getTipoDeComida(), RegistroComidas.getNombreUsuario());
+                fecha, tipoDeComida, nombreUsuario);
 
     }
 }

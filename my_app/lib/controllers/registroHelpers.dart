@@ -46,4 +46,9 @@ class RegistroHelper {
     return response;
   }
 
+  // Obtiene los registros a partir de su nombre de usuario,fecha y tipodeComida
+  Future<List> getRegistroComidas(String nombreUsuario, String tipoDeComida, String fecha) async {
+    final response =  await http.get(Uri.parse("${urlConexion}/registros/{fecha}/{tipoDeComida}/{nombreUsuario}"));
+    return json.decode(response.body);
+  }
 }

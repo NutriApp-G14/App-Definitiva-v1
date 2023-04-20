@@ -48,12 +48,35 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+                        widget.imageUrl != null && widget.imageUrl != ""
+                          ? FutureBuilder(
+                              future: http.head(Uri.parse(widget.imageUrl)),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<http.Response> snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data!.statusCode == 200) {
+                                  return FadeInImage.assetNetwork(
+                                    placeholder: 'assets/placeholder_image.png',
+                                    image: widget.imageUrl,
+                                    height:115 ,
+                                    width:115,
+                                  );
+                                } else {
+                                  return Icon(
+                                    Icons.fastfood,
+                                    color: Color.fromARGB(221, 255, 181, 71),
+                                    size: 115,
+                                  );
+                                }
+                              },
+                            )
+                          : Icon(
+                              Icons.fastfood,
+                              color:  Color.fromARGB(221, 255, 181, 71),
+                              size: 115,
+                            ),
+
              
-              Image.network(
-                widget.imageUrl,
-                height : 115,
-                width: 115,
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(

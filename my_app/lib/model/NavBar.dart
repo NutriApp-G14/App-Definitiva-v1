@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
+import 'package:my_app/views/BuscadorNuevo.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/IniciarSesion.dart';
 import 'package:my_app/views/NuevoBuscador.dart';
@@ -140,8 +141,12 @@ class _NutriAppBarState extends State<NutriAppBar> {
                     //   builder: (context) => BuscadorComida(
                     //     nombreUsuario: widget.nombreUsuario,
                     //   ),
+                      //  MaterialPageRoute(
+                      // builder: (context) => NuevoBuscador(
+                      //   nombreUsuario: widget.nombreUsuario,
+                      // ),
                        MaterialPageRoute(
-                      builder: (context) => NuevoBuscador(
+                      builder: (context) => BuscadorNuevo(
                         nombreUsuario: widget.nombreUsuario,
                       ),
                     ),

@@ -26,7 +26,6 @@ class ListAlimentos extends StatefulWidget {
 
 class _ListAlimentosState extends State<ListAlimentos> {
   DataBaseHelper dataBaseHelper = DataBaseHelper();
-
   late List data;
   bool _showFoods = true;
 

@@ -216,7 +216,6 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                         ),
                       ),
                       SizedBox(height: 0), // Agrega un espacio de altura cero
-
                       Container(
                         margin: EdgeInsets.only(
                             top: 0), // establece el margen superior en 0

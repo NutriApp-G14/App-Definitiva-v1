@@ -67,6 +67,12 @@ flutter:
   assets:
       - assets/placeholder_image.png
       - assets/user.jpeg
+      - assets/Desayuno.png
+      - assets/Almuerzo.png
+      - assets/Comida.png
+      - assets/Merienda.png
+      - assets/Cena.png
+
     
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

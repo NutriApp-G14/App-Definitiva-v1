@@ -364,32 +364,7 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
     );
   }
 
-  Future<http.Response> searchFood(String searchTerm) async {
-    var url =
-        'https://api.edamam.com/api/food-database/v2/parser?app_id=2c2e2462&app_key=7b3486401bec7d7ccd46c6bc6e85b3cc&ingr=$searchTerm';
-    return await http.get(Uri.parse(url));
-  }
 
-  Future<void> searchAndDisplayFood(String searchTerm) async {
-    var response = await searchFood(searchTerm);
-
-    if (response.statusCode == 200) {
-      var body = json.decode(response.body);
-      var foodList =
-          body['hints'].map((food) => food['food']['label']).toList();
-      var foods = body['hints']
-          .map((food) => food['food'])
-          .toList()
-          .cast<Map<String, dynamic>>();
-
-      setState(() {
-        _foodList = foodList.cast<String>(); // Convert foodList to List<String>
-        _foods = foods;
-      });
-    } else {
-      print('Error al realizar la búsqueda');
-    }
-  }
 
   Future<http.Response> searchFoodNuevaAPI(String searchTerm) async {
     var url =

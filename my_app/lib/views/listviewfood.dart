@@ -526,6 +526,7 @@ class ItemList extends StatelessWidget {
           },
         );
       }
-    });
+    }
+    );
   }
 }

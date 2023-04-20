@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
+import 'package:my_app/model/PaginaTipoComida.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/CrearUsuario.dart';
@@ -33,6 +34,18 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
     formattedDate = DateFormat('dd/MM/yyyy').format(now);
     print(formattedDate);
   }
+
+  _navigateMostrarTipoComida(BuildContext context, String fecha, String tipoDeComida, String  nombreUsuario){
+
+    Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => PaginaTipoComida(nombreUsuario: nombreUsuario, tipoDeComida: tipoDeComida, fecha: fecha ),
+      transitionDuration: Duration(seconds: 0),
+    ));
+    print(fecha);
+    print(tipoDeComida);
+    print(nombreUsuario);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +103,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              // _navigateMostrarTipoComida(context);
+                               _navigateMostrarTipoComida(context, formattedDate , widget.tipoDeComida, widget.nombreUsuario);
                             },
                             icon: Icon(
                               Icons.arrow_forward,

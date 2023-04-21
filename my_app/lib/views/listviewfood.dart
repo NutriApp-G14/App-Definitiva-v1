@@ -33,11 +33,10 @@ class _ListAlimentosState extends State<ListAlimentos> {
 
   void _toggleShowFoods() {
     setState(() {
-       print('cambio');
+      print('cambio');
       _showFoods = !_showFoods;
     });
   }
-
 
   _navigateAddReceta(BuildContext context) async {
     Navigator.push(
@@ -181,20 +180,19 @@ class _ListAlimentosState extends State<ListAlimentos> {
                       future: dataBaseHelper.getData(widget.nombreUsuario),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
-                           print(snapshot.error);
+                          print(snapshot.error);
                         } else {
-                          return snapshot.hasData ? 
-                            ItemList(
-                                nombreUsuario: widget.nombreUsuario,
-                                list: snapshot.data!,
-                                deleteItem: deleteData,
-                              )
-                            : const Center(
-                                child: CircularProgressIndicator(),
-                              );
+                          return snapshot.hasData
+                              ? ItemList(
+                                  nombreUsuario: widget.nombreUsuario,
+                                  list: snapshot.data!,
+                                  deleteItem: deleteData,
+                                )
+                              : const Center(
+                                  child: CircularProgressIndicator(),
+                                );
                         }
                         return Column();
-                        
                       },
                     )
                   : FutureBuilder<List>(
@@ -277,7 +275,10 @@ class ItemList extends StatelessWidget {
   final Function(int) deleteItem;
   final String nombreUsuario;
 
-  const ItemList({required this.list, required this.deleteItem, required this.nombreUsuario});
+  const ItemList(
+      {required this.list,
+      required this.deleteItem,
+      required this.nombreUsuario});
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -368,7 +369,8 @@ class ItemList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
-                                  codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
+                                  codigoDeBarras:
+                                      list[i]['codigoDeBarras'] ?? "",
                                   nombreUsuario: nombreUsuario,
                                   name: list[i]['name'],
                                   cantidad: list[i]['cantidad'],
@@ -477,8 +479,9 @@ class ItemList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
-                                codigoDeBarras: list[i]['codigoDeBarras'],
-                                nombreUsuario: nombreUsuario,
+                                  codigoDeBarras:
+                                      list[i]['codigoDeBarras'] ?? "",
+                                  nombreUsuario: nombreUsuario,
                                   name: list[i]['name'],
                                   cantidad: list[i]['cantidad'],
                                   unidadesCantidad: list[i]['unidadesCantidad'],
@@ -584,7 +587,8 @@ class ItemList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
-                                  codigoDeBarras:list[i]['codigoDeBarras'],
+                                  codigoDeBarras:
+                                      list[i]['codigoDeBarras'] ?? "",
                                   nombreUsuario: nombreUsuario,
                                   name: list[i]['name'],
                                   cantidad: list[i]['cantidad'],
@@ -609,8 +613,7 @@ class ItemList extends StatelessWidget {
           },
         );
       }
-    }
-    );
+    });
   }
 }
 

@@ -28,20 +28,16 @@ class ListAlimentos extends StatefulWidget {
 
 class _ListAlimentosState extends State<ListAlimentos> {
   DataBaseHelper dataBaseHelper = DataBaseHelper();
-
   late List data;
   bool _showFoods = true;
 
   void _toggleShowFoods() {
     setState(() {
+       print('cambio');
       _showFoods = !_showFoods;
     });
   }
 
-  @override
-  void initState() {
-    this.dataBaseHelper.getData(widget.nombreUsuario);
-  }
 
   _navigateAddReceta(BuildContext context) async {
     Navigator.push(
@@ -85,7 +81,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
 
   Future<void> deleteData(int id) async {
     final response = await http.delete(
-      Uri.parse("${urlConexion}/foods/$id"),
+      Uri.parse("$urlConexion/foods/$id"),
     );
     setState(() {});
   }
@@ -185,16 +181,20 @@ class _ListAlimentosState extends State<ListAlimentos> {
                       future: dataBaseHelper.getData(widget.nombreUsuario),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
-                          // print(snapshot.error);
-                        }
-                        return snapshot.hasData
-                            ? ItemListFood(
+                           print(snapshot.error);
+                        } else {
+                          return snapshot.hasData ? 
+                            ItemList(
+                                nombreUsuario: widget.nombreUsuario,
                                 list: snapshot.data!,
                                 deleteItem: deleteData,
                               )
                             : const Center(
                                 child: CircularProgressIndicator(),
                               );
+                        }
+                        return Column();
+                        
                       },
                     )
                   : FutureBuilder<List>(
@@ -272,11 +272,12 @@ class _ListAlimentosState extends State<ListAlimentos> {
 }
 
 //Pintar los Alimentos
-class ItemListFood extends StatelessWidget {
+class ItemList extends StatelessWidget {
   final List list;
   final Function(int) deleteItem;
+  final String nombreUsuario;
 
-  const ItemListFood({required this.list, required this.deleteItem});
+  const ItemList({required this.list, required this.deleteItem, required this.nombreUsuario});
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -291,6 +292,7 @@ class ItemListFood extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
+            print("media");
             return SizedBox(
               height: 100.3,
               child: Card(
@@ -360,10 +362,14 @@ class ItemListFood extends StatelessWidget {
                         //color: Color.fromARGB(255, 255, 255, 255),
                         color: Colors.orange,
                         onPressed: () {
+                          print("codigo");
+                          print(list[i]['codigoDeBarras']);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
+                                  codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
+                                  nombreUsuario: nombreUsuario,
                                   name: list[i]['name'],
                                   cantidad: list[i]['cantidad'],
                                   unidadesCantidad: list[i]['unidadesCantidad'],
@@ -465,10 +471,14 @@ class ItemListFood extends StatelessWidget {
                         //color: Color.fromARGB(255, 255, 255, 255),
                         color: Colors.orange,
                         onPressed: () {
+                          print("codigo");
+                          print(list[i]['codigoDeBarras']);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
+                                codigoDeBarras: list[i]['codigoDeBarras'],
+                                nombreUsuario: nombreUsuario,
                                   name: list[i]['name'],
                                   cantidad: list[i]['cantidad'],
                                   unidadesCantidad: list[i]['unidadesCantidad'],
@@ -574,6 +584,8 @@ class ItemListFood extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
+                                  codigoDeBarras:list[i]['codigoDeBarras'],
+                                  nombreUsuario: nombreUsuario,
                                   name: list[i]['name'],
                                   cantidad: list[i]['cantidad'],
                                   unidadesCantidad: list[i]['unidadesCantidad'],
@@ -597,7 +609,8 @@ class ItemListFood extends StatelessWidget {
           },
         );
       }
-    });
+    }
+    );
   }
 }
 

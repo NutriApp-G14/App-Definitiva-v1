@@ -9,7 +9,10 @@ import 'dart:convert';
 
 import 'package:my_app/model/Usuario.dart';
 
+//final urlConexion = 'http://34.77.36.66:8080';
 final urlConexion = 'http://localhost:8080';
+
+//final urlConexion = 'http://localhost:8080';
 
 class DataBaseHelper {
 // Add Alimento
@@ -25,7 +28,8 @@ class DataBaseHelper {
       String nombreUsuarioController,
       double sodioController,
       double azucarController,
-      double fibraController) async {
+      double fibraController,
+      String codigoDeBarrasController)async {
     var url = "${urlConexion}/foods/add";
     Map data = {
       'name': nameController,
@@ -39,13 +43,13 @@ class DataBaseHelper {
       'nombreUsuario': nombreUsuarioController,
       'sodio': sodioController,
       'azucar': azucarController,
-      'fibra': fibraController
+      'fibra': fibraController,
+      'codigoDeBarras': codigoDeBarrasController,
     };
     var body = json.encode(data);
     var response = await http.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 
@@ -75,11 +79,9 @@ class DataBaseHelper {
       //'allergies': allergiesController
     };
     var body = json.encode(data);
-    print(body);
     var response = await http.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 
@@ -107,11 +109,9 @@ class DataBaseHelper {
       'pescado': pescadoController
     };
     var body = json.encode(data);
-    print(body);
     var response = await http.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 
@@ -256,7 +256,6 @@ class DataBaseHelper {
     var response = await http.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 
@@ -301,7 +300,6 @@ class DataBaseHelper {
     var response = await http.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 
@@ -358,13 +356,22 @@ class DataBaseHelper {
 
 // Funciones Para Alimentos
 
+// Obtener un Alimento al añadirlo
+  Future<bool> getAlimento(int id )async {
+    final response =
+        await http.get(Uri.parse('${urlConexion}/foods/$id'));
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
 // Borrar Alimento
   Future<http.Response> deleteAlimento(int id) async {
     var url = "${urlConexion}/foods/{id}";
     var response = await http
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 
@@ -372,6 +379,7 @@ class DataBaseHelper {
   Future<List> getData(String nombreUsuario) async {
     final response =
         await http.get(Uri.parse("${urlConexion}/foods/user/$nombreUsuario"));
+
     return json.decode(response.body);
   }
 }

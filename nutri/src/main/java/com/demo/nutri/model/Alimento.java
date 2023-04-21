@@ -1,5 +1,6 @@
 package com.demo.nutri.model;
 
+
 import java.net.URI;
 
 import javax.persistence.*;
@@ -21,9 +22,17 @@ public class Alimento {
     private Double sodio;
     private String image; 
     private String nombreUsuario; 
+    private String codigoDeBarras;
     @ManyToOne
     private Receta receta;
 
+    public String getCodigoDeBarras() {
+        return codigoDeBarras;
+    }
+    public void setCodigoDeBarras(String codigoDeBarras) {
+        this.codigoDeBarras = codigoDeBarras;
+    }
+    
     public Integer getId() {
         return id;
     }

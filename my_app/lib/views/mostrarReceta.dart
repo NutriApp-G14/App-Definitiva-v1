@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/model/Alimento.dart';
+import 'package:my_app/views/mostrarFood.dart';
 import 'package:pie_chart/pie_chart.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
@@ -13,6 +14,8 @@ class MostrarReceta extends StatelessWidget {
   final int cantidad;
   final String unidadesCantidad;
   final List ingredientes;
+  final String descripcion;
+  final List pasos;
 
   const MostrarReceta({
     required this.name,
@@ -20,19 +23,27 @@ class MostrarReceta extends StatelessWidget {
     required this.cantidad,
     required this.unidadesCantidad,
     required this.ingredientes,
+    required this.descripcion,
+    required this.pasos,
   });
   final bool isPremium = true;
 
   @override
   Widget build(BuildContext context) {
-    double sumCalorias =
-        ingredientes.fold<double>(0, (sum, item) => sum + item['calorias']);
-    double sumGrasas =
-        ingredientes.fold<double>(0, (sum, item) => sum + item['grasas']);
-    double sumProteinas =
-        ingredientes.fold<double>(0, (sum, item) => sum + item['proteinas']);
+    double sumCalorias = ingredientes.fold<double>(
+        0, (sum, item) => sum + (item['calorias'] ?? 0));
+    double sumGrasas = ingredientes.fold<double>(
+        0, (sum, item) => sum + (item['grasas'] ?? 0));
+    double sumProteinas = ingredientes.fold<double>(
+        0, (sum, item) => sum + (item['proteinas'] ?? 0));
     double sumCarbohidratos = ingredientes.fold<double>(
         0, (sum, item) => sum + item['carbohidratos']);
+    double sumFibra =
+        ingredientes.fold<double>(0, (sum, item) => sum + (item['fibra'] ?? 0));
+    double sumAzucares = ingredientes.fold<double>(
+        0, (sum, item) => sum + (item['azucar'] ?? 0));
+    double sumSodio =
+        ingredientes.fold<double>(0, (sum, item) => sum + (item['sodio'] ?? 0));
     Map<String, double> dataMap = {
       "Proteínas": sumProteinas,
       "Hidratos": sumCarbohidratos,
@@ -70,7 +81,8 @@ class MostrarReceta extends StatelessWidget {
             ),
           ),
         ),
-        body: ListView(
+        body: SingleChildScrollView(
+            child: Column(
           children: [
             Padding(
                 padding: const EdgeInsets.fromLTRB(20.0, 0, 20, 5.0),
@@ -225,212 +237,265 @@ class MostrarReceta extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 50.0),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            child: Column(
+                    Card(
+                        child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Descripción:",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.orange,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            ' $descripcion',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    )),
+                    Card(
+                        child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.orange,
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: SizedBox(
-                                              height: 20,
-                                              width: 150,
-                                              child: Center(
-                                                  child: Text(
-                                                'Información nutricional:',
+                                Text(
+                                  "Pasos:",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Column(
+                                  children: pasos.map((paso) {
+                                    return Text(
+                                      paso.toString(),
+                                      style: TextStyle(fontSize: 12),
+                                    );
+                                  }).toList(),
+                                ),
+                              ]),
+                        ],
+                      ),
+                    )),
+                    Card(
+                        child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.orange,
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            child: SizedBox(
+                                                height: 20,
+                                                width: 150,
+                                                child: Center(
+                                                    child: Text(
+                                                  'Información nutricional:',
+                                                  style: TextStyle(
+                                                      fontSize: 13.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.white),
+                                                )))),
+                                        Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.orange,
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            child: SizedBox(
+                                                height: 20,
+                                                width: 100,
+                                                child: Center(
+                                                    child: Text(
+                                                  '${cantidad} ${unidadesCantidad}',
+                                                  style: TextStyle(
+                                                      fontSize: 13.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.white),
+                                                ))))
+                                      ]),
+                                  SizedBox(height: 10),
+                                  Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(4)),
+                                      child: SizedBox(
+                                        height: 3,
+                                        width: double.maxFinite,
+                                      )),
+                                  Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Calorías (Cal)',
                                                 style: TextStyle(
-                                                    fontSize: 13.0,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.white),
-                                              )))),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.orange,
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: SizedBox(
-                                              height: 20,
-                                              width: 100,
-                                              child: Center(
-                                                  child: Text(
-                                                '${cantidad} ${unidadesCantidad}',
+                                                  fontSize: 13.0,
+                                                  color: Color.fromARGB(
+                                                      255, 194, 171, 3),
+                                                ),
+                                              ),
+                                              Text(
+                                                '${sumCalorias} Cal',
                                                 style: TextStyle(
-                                                    fontSize: 13.0,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.white),
-                                              ))))
-                                    ]),
-                                SizedBox(height: 10),
-                                Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius: BorderRadius.circular(4)),
-                                    child: SizedBox(
-                                      height: 3,
-                                      width: double.maxFinite,
-                                    )),
-                                Padding(
-                                  padding: EdgeInsets.all(10.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Calorías (Cal)',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
+                                                  fontSize: 13.0,
+                                                  color: Color.fromARGB(
+                                                      255, 194, 171, 3),
+                                                ),
+                                              )
+                                            ]),
+                                        SizedBox(height: 8.0),
+                                        Container(
+                                            decoration: BoxDecoration(
                                                 color: Color.fromARGB(
-                                                    255, 194, 171, 3),
+                                                    209, 209, 209, 209),
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            child: SizedBox(
+                                              height: 2,
+                                              width: double.maxFinite,
+                                            )),
+                                        SizedBox(height: 8.0),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Proteínas',
+                                                style: TextStyle(
+                                                  fontSize: 13.0,
+                                                  color: Color.fromARGB(
+                                                      238, 126, 185, 217),
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              '${sumCalorias} Cal',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
+                                              Text(
+                                                '${sumProteinas} g',
+                                                style: TextStyle(
+                                                  fontSize: 13.0,
+                                                  color: Color.fromARGB(
+                                                      238, 126, 185, 217),
+                                                ),
+                                              )
+                                            ]),
+                                        SizedBox(height: 8.0),
+                                        Container(
+                                            decoration: BoxDecoration(
                                                 color: Color.fromARGB(
-                                                    255, 194, 171, 3),
+                                                    209, 209, 209, 209),
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            child: SizedBox(
+                                              height: 2,
+                                              width: double.maxFinite,
+                                            )),
+                                        SizedBox(height: 8.0),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Carbohidratos',
+                                                style: TextStyle(
+                                                  fontSize: 13.0,
+                                                  color: Color.fromARGB(
+                                                      253, 10, 133, 16),
+                                                ),
                                               ),
-                                            )
-                                          ]),
-                                      SizedBox(height: 8.0),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  209, 209, 209, 209),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: SizedBox(
-                                            height: 2,
-                                            width: double.maxFinite,
-                                          )),
-                                      SizedBox(height: 8.0),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Proteínas',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
+                                              Text(
+                                                ' ${sumCarbohidratos} g',
+                                                style: TextStyle(
+                                                  fontSize: 13.0,
+                                                  color: Color.fromARGB(
+                                                      253, 10, 133, 16),
+                                                ),
+                                              )
+                                            ]),
+                                        SizedBox(height: 8.0),
+                                        Container(
+                                            decoration: BoxDecoration(
                                                 color: Color.fromARGB(
-                                                    238, 126, 185, 217),
+                                                    209, 209, 209, 209),
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            child: SizedBox(
+                                              height: 2,
+                                              width: double.maxFinite,
+                                            )),
+                                        SizedBox(height: 8.0),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Grasas',
+                                                style: TextStyle(
+                                                  fontSize: 13.0,
+                                                  color: Color.fromARGB(
+                                                      234, 236, 117, 109),
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              '${sumProteinas} g',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
+                                              Text(
+                                                '${sumGrasas} g',
+                                                style: TextStyle(
+                                                  fontSize: 13.0,
+                                                  color: Color.fromARGB(
+                                                      234, 236, 117, 109),
+                                                ),
+                                              )
+                                            ]),
+                                        SizedBox(height: 8.0),
+                                        Container(
+                                            decoration: BoxDecoration(
                                                 color: Color.fromARGB(
-                                                    238, 126, 185, 217),
+                                                    209, 209, 209, 209),
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            child: SizedBox(
+                                              height: 2,
+                                              width: double.maxFinite,
+                                            )),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Sodio',
+                                                style: TextStyle(
+                                                  fontSize: 13.0,
+                                                  color: Colors.grey,
+                                                ),
                                               ),
-                                            )
-                                          ]),
-                                      SizedBox(height: 8.0),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  209, 209, 209, 209),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: SizedBox(
-                                            height: 2,
-                                            width: double.maxFinite,
-                                          )),
-                                      SizedBox(height: 8.0),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Carbohidratos',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
-                                                color: Color.fromARGB(
-                                                    253, 10, 133, 16),
-                                              ),
-                                            ),
-                                            Text(
-                                              ' ${sumCarbohidratos} g',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
-                                                color: Color.fromARGB(
-                                                    253, 10, 133, 16),
-                                              ),
-                                            )
-                                          ]),
-                                      SizedBox(height: 8.0),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  209, 209, 209, 209),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: SizedBox(
-                                            height: 2,
-                                            width: double.maxFinite,
-                                          )),
-                                      SizedBox(height: 8.0),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Grasas',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
-                                                color: Color.fromARGB(
-                                                    234, 236, 117, 109),
-                                              ),
-                                            ),
-                                            Text(
-                                              '${sumGrasas} g',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
-                                                color: Color.fromARGB(
-                                                    234, 236, 117, 109),
-                                              ),
-                                            )
-                                          ]),
-                                      SizedBox(height: 8.0),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  209, 209, 209, 209),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: SizedBox(
-                                            height: 2,
-                                            width: double.maxFinite,
-                                          )),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Sodio',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            if (isPremium) ...[
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  'no idea g',
+                                                  '${sumSodio} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -438,84 +503,32 @@ class MostrarReceta extends StatelessWidget {
                                                 ),
                                                 SizedBox(height: 8.0)
                                               ])
-                                            ] else ...[
-                                              IconButton(
-                                                icon: Icon(
-                                                    Icons.workspace_premium),
-                                                color: Colors.amber,
-                                                iconSize: 15.0,
-                                                onPressed: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Row(children: [
-                                                          Text(
-                                                              'Solo para premium'),
-                                                          Icon(
-                                                              Icons
-                                                                  .workspace_premium,
-                                                              color: Colors
-                                                                  .amberAccent)
-                                                        ]),
-                                                        content: Text(
-                                                            'Esta funcionalidad está disponible solo para usuarios premium'),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Text(
-                                                                'Cancelar'),
-                                                          ),
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Text(
-                                                                'Comprar premium'),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                hoverColor: Colors.transparent,
-                                                mouseCursor: MouseCursor.defer,
+                                            ]),
+                                        Container(
+                                            decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    209, 209, 209, 209),
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            child: SizedBox(
+                                              height: 2,
+                                              width: double.maxFinite,
+                                            )),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Azúcar',
+                                                style: TextStyle(
+                                                  fontSize: 13.0,
+                                                  color: Colors.grey,
+                                                ),
                                               ),
-                                            ],
-                                          ]),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  209, 209, 209, 209),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: SizedBox(
-                                            height: 2,
-                                            width: double.maxFinite,
-                                          )),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Azúcar',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            if (isPremium) ...[
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  'no idea g',
+                                                  '${sumAzucares} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -523,84 +536,32 @@ class MostrarReceta extends StatelessWidget {
                                                 ),
                                                 SizedBox(height: 8.0)
                                               ])
-                                            ] else ...[
-                                              IconButton(
-                                                icon: Icon(
-                                                    Icons.workspace_premium),
-                                                color: Colors.amber,
-                                                iconSize: 15.0,
-                                                onPressed: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Row(children: [
-                                                          Text(
-                                                              'Solo para premium'),
-                                                          Icon(
-                                                              Icons
-                                                                  .workspace_premium,
-                                                              color: Colors
-                                                                  .amberAccent)
-                                                        ]),
-                                                        content: Text(
-                                                            'Esta funcionalidad está disponible solo para usuarios premium'),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Text(
-                                                                'Cancelar'),
-                                                          ),
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Text(
-                                                                'Comprar premium'),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                hoverColor: Colors.transparent,
-                                                mouseCursor: MouseCursor.defer,
+                                            ]),
+                                        Container(
+                                            decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    209, 209, 209, 209),
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            child: SizedBox(
+                                              height: 2,
+                                              width: double.maxFinite,
+                                            )),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Fibra',
+                                                style: TextStyle(
+                                                  fontSize: 13.0,
+                                                  color: Colors.grey,
+                                                ),
                                               ),
-                                            ],
-                                          ]),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  209, 209, 209, 209),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: SizedBox(
-                                            height: 2,
-                                            width: double.maxFinite,
-                                          )),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Fibra',
-                                              style: TextStyle(
-                                                fontSize: 13.0,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            if (isPremium) ...[
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  'no idea g',
+                                                  '${sumFibra} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -608,85 +569,35 @@ class MostrarReceta extends StatelessWidget {
                                                 ),
                                                 SizedBox(height: 8.0)
                                               ])
-                                            ] else ...[
-                                              IconButton(
-                                                icon: Icon(
-                                                    Icons.workspace_premium),
-                                                color: Colors.amber,
-                                                iconSize: 15.0,
-                                                onPressed: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Row(children: [
-                                                          Text(
-                                                              'Solo para premium'),
-                                                          Icon(
-                                                              Icons
-                                                                  .workspace_premium,
-                                                              color: Colors
-                                                                  .amberAccent)
-                                                        ]),
-                                                        content: Text(
-                                                            'Esta funcionalidad está disponible solo para usuarios premium'),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Text(
-                                                                'Cancelar'),
-                                                          ),
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Text(
-                                                                'Comprar premium'),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                hoverColor: Colors.transparent,
-                                                mouseCursor: MouseCursor.defer,
-                                              ),
-                                            ],
-                                          ]),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  209, 209, 209, 209),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: SizedBox(
-                                            height: 2,
-                                            width: double.maxFinite,
-                                          )),
-                                      SizedBox(height: 10.0),
-                                    ],
+                                            ]),
+                                        Container(
+                                            decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    209, 209, 209, 209),
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            child: SizedBox(
+                                              height: 2,
+                                              width: double.maxFinite,
+                                            )),
+                                        SizedBox(height: 10.0),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 0, 5, 150),
-                                  child: Text(""),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 5, 150),
+                                    child: Text(""),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ))
                   ],
                 ))
           ],
-        ));
+        )));
   }
 }

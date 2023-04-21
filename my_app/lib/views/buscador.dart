@@ -1,10 +1,18 @@
 // import 'dart:convert';
 
+<<<<<<< HEAD
 // import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
 // import 'package:my_app/controllers/databasehelpers.dart';
 // import 'package:my_app/views/listviewfood.dart';
 // import 'package:my_app/views/mostrarFood.dart';
+=======
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:my_app/controllers/databasehelpers.dart';
+import 'package:my_app/views/listviewFood.dart';
+import 'package:my_app/views/mostrarFood.dart';
+>>>>>>> antonio
 
 // class BuscadorComida extends StatefulWidget {
 //   final String nombreUsuario;

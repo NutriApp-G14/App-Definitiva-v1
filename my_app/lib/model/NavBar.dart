@@ -9,7 +9,7 @@ import 'package:my_app/views/NuevoBuscador.dart';
 import 'package:my_app/views/RegistroComidas.dart';
 import 'package:my_app/views/UsuarioPage.dart';
 import 'package:my_app/views/buscador.dart';
-import 'package:my_app/views/listviewfood.dart';
+import 'package:my_app/views/listviewFood.dart';
 
 class NutriAppBar extends StatefulWidget {
   final String nombreUsuario;
@@ -141,11 +141,15 @@ class _NutriAppBarState extends State<NutriAppBar> {
                     //   builder: (context) => BuscadorComida(
                     //     nombreUsuario: widget.nombreUsuario,
                     //   ),
+<<<<<<< HEAD
                       //  MaterialPageRoute(
                       // builder: (context) => NuevoBuscador(
                       //   nombreUsuario: widget.nombreUsuario,
                       // ),
                        MaterialPageRoute(
+=======
+                    MaterialPageRoute(
+>>>>>>> antonio
                       builder: (context) => NuevoBuscador(
                         nombreUsuario: widget.nombreUsuario,
                       ),

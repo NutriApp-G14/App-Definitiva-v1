@@ -80,6 +80,7 @@ public class AlimentoController {
             alimento.setGrasas(Alimento.getGrasas());
             alimento.setProteinas(Alimento.getProteinas());
             alimento.setImage(Alimento.getImage());
+            alimento.setReceta(Alimento.getReceta());
             repository.save(alimento);
             return ResponseEntity.ok().body(alimento);
         }).orElse(new ResponseEntity<Alimento>(HttpStatus.NOT_FOUND));

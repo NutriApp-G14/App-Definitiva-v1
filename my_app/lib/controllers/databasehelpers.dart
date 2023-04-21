@@ -1,6 +1,5 @@
 import 'dart:core';
 import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/model/Alergias.dart';
@@ -8,7 +7,7 @@ import 'dart:convert';
 
 import 'package:my_app/model/Usuario.dart';
 
-final urlConexion = 'http://34.77.36.66:8080';
+final urlConexion = 'http://34.78.233.129:8080';
 
 class DataBaseHelper {
 // Add Alimento

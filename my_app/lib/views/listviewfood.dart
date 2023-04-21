@@ -53,6 +53,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
     Usuario usuario = await dataBaseHelper.getUsuarioById(widget.nombreUsuario);
     String usuarioNombre = usuario.nombre;
     String usuarioNombreUsuario = usuario.nombreUsuario;
+    String imageProfile = usuario.imageProfile;
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(
           nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),
@@ -303,7 +304,8 @@ class ItemList extends StatelessWidget {
                                   sodio: list[i]['sodio'] ?? 0.0,
                                   azucar: list[i]['azucar'] ?? 0.0,
                                   fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['image']),
+                                  image: list[i]['image'],
+                                  ),
                             ),
                           );
                         },
@@ -408,7 +410,8 @@ class ItemList extends StatelessWidget {
                                   sodio: list[i]['sodio'] ?? 0.0,
                                   azucar: list[i]['azucar'] ?? 0.0,
                                   fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['image']),
+                                  image: list[i]['image'],
+                                  ),
                             ),
                           );
                         },
@@ -513,7 +516,8 @@ class ItemList extends StatelessWidget {
                                   sodio: list[i]['sodio'] ?? 0.0,
                                   azucar: list[i]['azucar'] ?? 0.0,
                                   fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['image']),
+                                  image: list[i]['image'],
+                                  ),
                             ),
                           );
                         },

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pie_chart/pie_chart.dart';
 import 'mostrarFood.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
 class MostrarFood extends StatelessWidget {
@@ -19,6 +20,7 @@ class MostrarFood extends StatelessWidget {
   final double azucar;
   final double fibra;
   final String image;
+
 
   const MostrarFood({
     required this.name,
@@ -666,13 +668,8 @@ class MostrarFood extends StatelessWidget {
                                             height: 2,
                                             width: double.maxFinite,
                                           )),
-                                      SizedBox(height: 10.0),
                                     ],
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 0, 5, 150),
-                                  child: Text(""),
                                 ),
                               ],
                             ),
@@ -681,7 +678,8 @@ class MostrarFood extends StatelessWidget {
                       ],
                     ),
                   ],
-                ))
+                )),
+            
           ],
         ));
   }

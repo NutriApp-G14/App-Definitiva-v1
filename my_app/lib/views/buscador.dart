@@ -225,7 +225,7 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                                           fibra: _foods[index]['nutrients']
                                                   ['FIBTG'] ??
                                               0,
-                                          image: _foods[index]['image'] ?? "",
+                                          image: _foods[index]['image'] ?? ""
                                         )));
                           },
                           style: ElevatedButton.styleFrom(

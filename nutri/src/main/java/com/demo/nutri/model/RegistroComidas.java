@@ -6,7 +6,7 @@ public class RegistroComidas {
     @Id
     @GeneratedValue
     private Integer id;
-    private Integer codigoDeBarras;
+    private String codigoDeBarras;
     private Double cantidad;
     private String nombreUsuario;
     private String fecha;
@@ -18,10 +18,10 @@ public class RegistroComidas {
     public void setId(Integer id) {
         this.id = id;
     }
-    public Integer getCodigoDeBarras() {
+    public String getCodigoDeBarras() {
         return codigoDeBarras;
     }
-    public void setCodigoDeBarras(Integer codigoDeBarras) {
+    public void setCodigoDeBarras(String codigoDeBarras) {
         this.codigoDeBarras = codigoDeBarras;
     }
     public Double getCantidad() {

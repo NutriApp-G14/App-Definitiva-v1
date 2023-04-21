@@ -132,7 +132,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                             itemBuilder: (context, i) {
 
                             var nombreUsuario = widget.nombreUsuario;
-                            var codigoDeBarras = int.parse(_listaDeAlimentos[i]['_id'])?? 0;
+                            var codigoDeBarras = _listaDeAlimentos[i]['_id']??"" ;
                             var cantidad = 100.0;
                             var nombreAlimento = _listaDeAlimentos[i]['product_name'] ?? "";
                             var imageUrl =  _listaDeAlimentos[i]['image_url'] ??"";
@@ -215,6 +215,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
   }
 
   Future<http.Response> insertarAlimento(
+      String codigoDeBarras,
       String name,
       double calorias,
       double cantidad,
@@ -243,7 +244,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
         'sodio': sodio,
         'azucar': azucar,
         'image': image,
-        'nombreUsuario': widget.nombreUsuario
+        'nombreUsuario': widget.nombreUsuario,
+        'codigoDeBarras': codigoDeBarras
       }),
     );
     Navigator.pop(context);

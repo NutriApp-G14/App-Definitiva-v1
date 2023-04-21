@@ -1,7 +1,5 @@
 package com.demo.nutri.model;
 
-import java.net.URI;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,8 +18,14 @@ public class Alimento {
     private Double carbohidratos;
     private String image; 
     private String nombreUsuario; 
+    private String codigoDeBarras;
 
-
+    public String getCodigoDeBarras() {
+        return codigoDeBarras;
+    }
+    public void setCodigoDeBarras(String codigoDeBarras) {
+        this.codigoDeBarras = codigoDeBarras;
+    }
     public String getUnidadesCantidad() {
         return unidadesCantidad;
     }

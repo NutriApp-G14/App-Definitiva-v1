@@ -1,13 +1,22 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
+import 'dart:ffi' as ffi;
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:my_app/controllers/registroHelpers.dart';
+import 'package:my_app/views/listviewfood.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'mostrarFood.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
-class MostrarFood extends StatelessWidget {
+
+
+class MostrarFood extends StatefulWidget {
+  final String codigoDeBarras;
+  final String nombreUsuario;
   final String name;
   final double cantidad;
   final String unidadesCantidad;
@@ -21,6 +30,8 @@ class MostrarFood extends StatelessWidget {
   final String image;
 
   const MostrarFood({
+    required this.codigoDeBarras,
+    required this.nombreUsuario,
     required this.name,
     required this.cantidad,
     required this.unidadesCantidad,
@@ -33,14 +44,38 @@ class MostrarFood extends StatelessWidget {
     required this.fibra,
     required this.image,
   });
+    @override
+  _MostrarFoodState createState() => _MostrarFoodState();
+}
+
+
+class _MostrarFoodState extends State<MostrarFood> {
+  RegistroHelper registrohelper = RegistroHelper();
+  DateTime now = DateTime.now();
+  late String formattedDate;
+
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    formattedDate = DateFormat('dd-MM-yyyy').format(now);
+  }
+
+  _navigateListAlimento(BuildContext context) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+  }
   final bool isPremium = false;
 
   @override
   Widget build(BuildContext context) {
     Map<String, double> dataMap = {
-      "Proteínas": proteinas,
-      "Hidratos": carbohidratos,
-      "Grasas": grasas,
+      "Proteínas": widget.proteinas,
+      "Hidratos": widget.carbohidratos,
+      "Grasas": widget.grasas,
     };
     return Scaffold(
         appBar: AppBar(
@@ -92,18 +127,18 @@ class MostrarFood extends StatelessWidget {
                                   padding: EdgeInsets.fromLTRB(0, 30, 10, 0),
                                   child: Column(children: [
                                     FutureBuilder<http.Response>(
-                                      future: http.get(Uri.parse(image)),
+                                      future: http.get(Uri.parse(widget.image)),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                                 ConnectionState.done &&
                                             snapshot.hasData &&
                                             snapshot.data!.statusCode == 200 &&
                                             ['http', 'https'].contains(
-                                                Uri.parse(image).scheme)) {
+                                                Uri.parse(widget.image).scheme)) {
                                           return FadeInImage.assetNetwork(
                                             placeholder:
                                                 'assets/placeholder_image.png',
-                                            image: image,
+                                            image: widget.image,
                                             fit: BoxFit.cover,
                                           );
                                         } else {
@@ -125,7 +160,7 @@ class MostrarFood extends StatelessWidget {
                                 SizedBox(height: 15),
                                 Wrap(children: [
                                   Text(
-                                    name,
+                                    widget.name,
                                     style: TextStyle(
                                         fontSize: 17.0,
                                         fontWeight: FontWeight.bold,
@@ -141,28 +176,28 @@ class MostrarFood extends StatelessWidget {
                                       color: Colors.black),
                                 ),
                                 Text(
-                                  '$cantidad $unidadesCantidad',
+                                  '$widget.cantidad $widget.unidadesCantidad',
                                   style: TextStyle(
                                     fontSize: 15.0,
                                   ),
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'Proteinas: ${proteinas} ',
+                                  'Proteinas: ${widget.proteinas} ',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
                                           238, 104, 201, 253)),
                                 ),
                                 Text(
-                                  'Carbohidratos: ${carbohidratos} ',
+                                  'Carbohidratos: ${widget.carbohidratos} ',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
                                           251, 93, 223, 54)),
                                 ),
                                 Text(
-                                  'Grasas: ${grasas}',
+                                  'Grasas: ${widget.grasas}',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
@@ -274,7 +309,7 @@ class MostrarFood extends StatelessWidget {
                                               width: 80,
                                               child: Center(
                                                   child: Text(
-                                                '${cantidad} ${unidadesCantidad}',
+                                                '${widget.cantidad} ${widget.unidadesCantidad}',
                                                 style: TextStyle(
                                                     fontSize: 13.0,
                                                     fontWeight: FontWeight.w500,
@@ -309,7 +344,7 @@ class MostrarFood extends StatelessWidget {
                                               ),
                                             ),
                                             Text(
-                                              '${calorias.toStringAsFixed(2)} Cal',
+                                              '${widget.calorias.toStringAsFixed(2)} Cal',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -317,7 +352,7 @@ class MostrarFood extends StatelessWidget {
                                               ),
                                             ),
                                             Text(
-                                              '${calorias.toStringAsFixed(2)} Cal',
+                                              '${widget.calorias.toStringAsFixed(2)} Cal',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -350,7 +385,7 @@ class MostrarFood extends StatelessWidget {
                                               ),
                                             ),
                                             Text(
-                                              '${proteinas.toStringAsFixed(2)} g',
+                                              '${widget.proteinas.toStringAsFixed(2)} g',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -358,7 +393,7 @@ class MostrarFood extends StatelessWidget {
                                               ),
                                             ),
                                             Text(
-                                              '${proteinas.toStringAsFixed(2)} g',
+                                              '${widget.proteinas.toStringAsFixed(2)} g',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -391,7 +426,7 @@ class MostrarFood extends StatelessWidget {
                                               ),
                                             ),
                                             Text(
-                                              '${carbohidratos.toStringAsFixed(2)} g',
+                                              '${widget.carbohidratos.toStringAsFixed(2)} g',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -399,7 +434,7 @@ class MostrarFood extends StatelessWidget {
                                               ),
                                             ),
                                             Text(
-                                              '${carbohidratos.toStringAsFixed(2)} g',
+                                              '${widget.carbohidratos.toStringAsFixed(2)} g',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -432,7 +467,7 @@ class MostrarFood extends StatelessWidget {
                                               ),
                                             ),
                                             Text(
-                                              '${grasas.toStringAsFixed(2)} g',
+                                              '${widget.grasas.toStringAsFixed(2)} g',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -440,7 +475,7 @@ class MostrarFood extends StatelessWidget {
                                               ),
                                             ),
                                             Text(
-                                              '${grasas.toStringAsFixed(2)} g',
+                                              '${widget.grasas.toStringAsFixed(2)} g',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -474,7 +509,7 @@ class MostrarFood extends StatelessWidget {
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  '${sodio.toStringAsFixed(2)} g',
+                                                  '${widget.sodio.toStringAsFixed(2)} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -537,7 +572,7 @@ class MostrarFood extends StatelessWidget {
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  '${sodio.toStringAsFixed(2)} g',
+                                                  '${widget.sodio.toStringAsFixed(2)} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -622,7 +657,7 @@ class MostrarFood extends StatelessWidget {
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  '${azucar.toStringAsFixed(2)} g',
+                                                  '${widget.azucar.toStringAsFixed(2)} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -685,7 +720,7 @@ class MostrarFood extends StatelessWidget {
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  '${azucar.toStringAsFixed(2)} g',
+                                                  '${widget.azucar.toStringAsFixed(2)} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -770,7 +805,7 @@ class MostrarFood extends StatelessWidget {
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  '${fibra.toStringAsFixed(2)} g',
+                                                  '${widget.fibra.toStringAsFixed(2)} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -833,7 +868,7 @@ class MostrarFood extends StatelessWidget {
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  '${fibra.toStringAsFixed(2)} g',
+                                                  '${widget.fibra.toStringAsFixed(2)} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -921,13 +956,30 @@ class MostrarFood extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                             insertarAlimento(
+                                widget.nombreUsuario,
+                                widget.name,
+                                widget.calorias,
+                                widget.cantidad,
+                                widget.unidadesCantidad,
+                                widget.grasas,
+                                widget.proteinas,
+                                widget.carbohidratos,
+                                widget.sodio,
+                                widget.azucar,
+                                widget.fibra,
+                                widget.image,
+                                widget.codigoDeBarras
+                              );
+                          },
+
                           child: Text('Añadir "Mis alimentos"'),
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
-                            minimumSize: Size(100, 40),
+                           /// minimumSize: //Size(100, 40),
                           ),
                         ),
                         ElevatedButton(
@@ -945,14 +997,16 @@ class MostrarFood extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            registrohelper.addRegistro(widget.codigoDeBarras.trim().toLowerCase(), widget.cantidad, widget.nombreUsuario.trim().toLowerCase(), formattedDate.trim().toLowerCase() , 'Desayuno'.trim().toLowerCase());
+                                          },
                                           child: Text('Desayuno'),
                                           style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                             ),
-                                            minimumSize: Size(100, 40),
+                                          //  minimumSize: Size(100, 40),
                                           ),
                                         )
                                       ],
@@ -961,14 +1015,16 @@ class MostrarFood extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            registrohelper.addRegistro(widget.codigoDeBarras.trim().toLowerCase(), widget.cantidad, widget.nombreUsuario.trim().toLowerCase(), formattedDate.trim().toLowerCase() , 'Almuerzo'.trim().toLowerCase());
+                                          },
                                           child: Text('Almuerzo'),
                                           style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                             ),
-                                            minimumSize: Size(100, 40),
+                                            //minimumSize: Size(100, 40),
                                           ),
                                         )
                                       ],
@@ -977,14 +1033,16 @@ class MostrarFood extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            registrohelper.addRegistro(widget.codigoDeBarras.trim().toLowerCase(), widget.cantidad, widget.nombreUsuario.trim().toLowerCase(), formattedDate.trim().toLowerCase() , 'Comida'.trim().toLowerCase());
+                                          },
                                           child: Text('Comida'),
                                           style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                             ),
-                                            minimumSize: Size(100, 40),
+                                           // minimumSize: Size(100, 40),
                                           ),
                                         )
                                       ],
@@ -993,14 +1051,16 @@ class MostrarFood extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            registrohelper.addRegistro(widget.codigoDeBarras.trim().toLowerCase(), widget.cantidad, widget.nombreUsuario.trim().toLowerCase(), formattedDate.trim().toLowerCase() , 'Merienda'.trim().toLowerCase());
+                                          },
                                           child: Text('Merienda'),
                                           style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                             ),
-                                            minimumSize: Size(100, 40),
+                                           // minimumSize: Size(100, 40),
                                           ),
                                         )
                                       ],
@@ -1009,14 +1069,16 @@ class MostrarFood extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            registrohelper.addRegistro(widget.codigoDeBarras.trim().toLowerCase(), widget.cantidad, widget.nombreUsuario.trim().toLowerCase(), formattedDate.trim().toLowerCase() , 'Cena'.trim().toLowerCase());
+                                          },
                                           child: Text('Cena'),
                                           style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                             ),
-                                            minimumSize: Size(100, 40),
+                                           // minimumSize: Size(100, 40),
                                           ),
                                         )
                                       ],
@@ -1029,7 +1091,7 @@ class MostrarFood extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
-                            minimumSize: Size(100, 40),
+                           // minimumSize: ffi.Size(100, 40),
                           ),
                         ),
                       ],
@@ -1039,5 +1101,45 @@ class MostrarFood extends StatelessWidget {
                 ))
           ],
         ));
+  }
+
+  Future<http.Response> insertarAlimento(
+      String nombreUsuario,
+      String name,
+      double calorias,
+      double cantidad,
+      String unidadesCantidad,
+      double carbohidratos,
+      double grasas,
+      double proteinas,
+      double sodio,
+      double azucar,
+      double fibra,
+      String image,
+      String codigoDeBarras) async {
+    final response = await http.post(
+      Uri.parse('${urlConexion}/foods/add'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': name,
+        'calorias': calorias,
+        'cantidad': cantidad,
+        'unidadesCantidad': unidadesCantidad,
+        'carbohidratos': carbohidratos,
+        'grasas': grasas,
+        'fibra': fibra,
+        'proteinas': proteinas,
+        'sodio': sodio,
+        'azucar': azucar,
+        'image': image,
+        'nombreUsuario': nombreUsuario,
+        'codigoDeBarras':codigoDeBarras
+      }),
+    );
+    Navigator.pop(context);
+    _navigateListAlimento(context);
+    return response;
   }
 }

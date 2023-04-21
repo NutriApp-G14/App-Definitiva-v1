@@ -29,9 +29,8 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    formattedDate = DateFormat('dd/MM/yyyy').format(now);
+    formattedDate = DateFormat('dd-MM-yyyy').format(now);
     print(formattedDate);
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'dart:convert';
 
@@ -23,10 +22,14 @@ class PaginaTipoComida extends StatefulWidget {
   _PaginaTipoComidaState createState() => _PaginaTipoComidaState();
 }
 
+
+
 class _PaginaTipoComidaState extends State<PaginaTipoComida> {
   RegistroHelper dataBaseHelper = RegistroHelper();
   late List _registros;
   
+
+
 
   _navigateAddAlimento(BuildContext context) async {
     Navigator.push(
@@ -48,9 +51,13 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
           ),
         ),
         body: FutureBuilder<List>(
-            future: dataBaseHelper.getRegistroComidas(widget.nombreUsuario, widget.tipoDeComida, widget.fecha),
+            future: dataBaseHelper.getRegistroComidas(widget.nombreUsuario.trim().toLowerCase(), widget.tipoDeComida.trim().toLowerCase(), widget.fecha..trim().toLowerCase()),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
+              }else if(snapshot.hasData){
+                print("napshot.hasData is true");
+                 _registros = snapshot.data!;
+                 print(_registros);
               }
               return snapshot.hasData
                   ? Column(
@@ -102,10 +109,10 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                         itemBuilder: (context, i) {
                                           return TarjetaAlimento(
                                             nombreUsuario: widget.nombreUsuario,
-                                            codigoDeBarras: 3017620422003,
+                                            codigoDeBarras:_registros[i]['codigoDeBarras'],
                                             cantidad: 100.0,
                                             nombreAlimento:
-                                                'Confitura de fresa 0% azúcares añadidos - Hacendado - 380 g',
+                                                _registros[i]['codigoDeBarras'],
                                             imageUrl:
                                                 'https://images.openfoodfacts.org/images/products/848/000/015/0936/front_es.42.200.jpg',
                                             scoreImages: [
@@ -136,7 +143,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                         itemBuilder: (context, i) {
                                           return TarjetaAlimento(
                                             nombreUsuario: widget.nombreUsuario,
-                                            codigoDeBarras: 3017620422003,
+                                            codigoDeBarras:_registros[i]['codigoDeBarras'],
                                             cantidad: 100.0,
                                             nombreAlimento:
                                                 'Confitura de fresa 0% azúcares añadidos - Hacendado - 380 g',
@@ -170,7 +177,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                         itemBuilder: (context, i) {
                                           return TarjetaAlimento(
                                             nombreUsuario: widget.nombreUsuario,
-                                            codigoDeBarras: 3017620422003,
+                                            codigoDeBarras:_registros[i]['codigoDeBarras'],
                                             cantidad: 100.0,
                                             nombreAlimento:
                                                 'Confitura de fresa 0% azúcares añadidos - Hacendado - 380 g',
@@ -195,26 +202,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                             child: SizedBox(
                               height: 56,
                               child: Center(
-                                child: ElevatedButton(
-                                  onPressed: () =>
-                                      _navigateAddAlimento(context),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 8.0),
-                                    decoration: BoxDecoration(
-                                        color: Colors.orange
-                                        //borderRadius: BorderRadius.circular(20.0),
-                                        ),
-                                    child: Text(
-                                      'Añadir alimento',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                
                               ),
                             )),
                       ],
@@ -225,3 +213,5 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
             }));
   }
 }
+
+ 

@@ -16,6 +16,7 @@ class NuevoBuscador extends StatefulWidget {
 }
 
 class _NuevoBuscadorState extends State<NuevoBuscador> {
+  DataBaseHelper dataBaseHelper = DataBaseHelper();
   String _query = '';
   List<String> _foodList = [];
   List<Map<String, dynamic>> _foods = [];
@@ -148,8 +149,9 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                               Icons.add,
                               color: Colors.white,
                             ),
-                            onPressed: () {
-                              insertarAlimento(
+                            onPressed: () async {
+                              print("Añadir");
+                         insertarAlimento(    
                                 _listaDeAlimentos[index]['product_name'] ?? "",
                                 (_listaDeAlimentos[index]['nutriments']
                                         ?['energy-kcal_100g'] is String)
@@ -210,7 +212,9 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                                             ?.toDouble() ??
                                         0.0,
                                 _listaDeAlimentos[index]['image_url'] ?? "",
-                              );
+                                _listaDeAlimentos[index]['_id']
+                                ,
+                              );                     
                             },
                           ),
                         ),
@@ -228,6 +232,8 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MostrarFood(
+                                      codigoDeBarras:  _listaDeAlimentos[index]['_id'],
+                                      nombreUsuario: widget.nombreUsuario,
                                           name: _listaDeAlimentos[index]
                                                   ['product_name'] ??
                                               "",
@@ -397,7 +403,9 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
       double sodio,
       double azucar,
       double fibra,
-      String image) async {
+      String image,
+      String codigoDeBarras
+      ) async {
     final response = await http.post(
       Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
@@ -415,9 +423,12 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
         'sodio': sodio,
         'azucar': azucar,
         'image': image,
-        'nombreUsuario': widget.nombreUsuario
+        'nombreUsuario': widget.nombreUsuario,
+        'codigoDeBarras': codigoDeBarras
       }),
     );
+    print(response.statusCode);
+    print("insertado");
     Navigator.pop(context);
     _navigateListAlimento(context);
     return response;

@@ -31,14 +31,11 @@ class _ListAlimentosState extends State<ListAlimentos> {
 
   void _toggleShowFoods() {
     setState(() {
+       print('cambio');
       _showFoods = !_showFoods;
     });
   }
 
-  @override
-  void initState() {
-    this.dataBaseHelper.getData(widget.nombreUsuario);
-  }
 
   _navigateAddAlimento(BuildContext context) async {
     Navigator.push(
@@ -48,25 +45,10 @@ class _ListAlimentosState extends State<ListAlimentos> {
                 AddAlimentoPage(nombreUsuario: widget.nombreUsuario)));
   }
 
-  _navigateUsuarioPage(BuildContext context) async {
-    Usuario usuario = await dataBaseHelper.getUsuarioById(widget.nombreUsuario);
-    String usuarioNombre = usuario.nombre;
-    String usuarioNombreUsuario = usuario.nombreUsuario;
-    Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(
-          nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),
-      transitionDuration: Duration(seconds: 0),
-    ));
-  }
-
-  _navigateCrearUsuarioPage(BuildContext context) async {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CrearUsuarioPage()));
-  }
 
   Future<void> deleteData(int id) async {
     final response = await http.delete(
-      Uri.parse("${urlConexion}/foods/$id"),
+      Uri.parse("$urlConexion/foods/$id"),
     );
     setState(() {});
   }
@@ -157,16 +139,21 @@ class _ListAlimentosState extends State<ListAlimentos> {
                       future: dataBaseHelper.getData(widget.nombreUsuario),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
-                          // print(snapshot.error);
-                        }
-                        return snapshot.hasData
-                            ? ItemList(
+                           print(snapshot.error);
+                        } else {
+                          return snapshot.hasData ? 
+                            ItemList(
+                                nombreUsuario: widget.nombreUsuario,
                                 list: snapshot.data!,
                                 deleteItem: deleteData,
+
                               )
                             : const Center(
                                 child: CircularProgressIndicator(),
                               );
+                        }
+                        return Column();
+                        
                       },
                     )
                   : Container(),
@@ -203,8 +190,9 @@ class _ListAlimentosState extends State<ListAlimentos> {
 class ItemList extends StatelessWidget {
   final List list;
   final Function(int) deleteItem;
+  final String nombreUsuario;
 
-  const ItemList({required this.list, required this.deleteItem});
+  const ItemList({required this.list, required this.deleteItem, required this.nombreUsuario});
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -219,6 +207,7 @@ class ItemList extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
+            print("media");
             return SizedBox(
               height: 100.3,
               child: Card(
@@ -288,10 +277,14 @@ class ItemList extends StatelessWidget {
                         //color: Color.fromARGB(255, 255, 255, 255),
                         color: Colors.orange,
                         onPressed: () {
+                          print("codigo");
+                          print(list[i]['codigoDeBarras']);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
+                                  codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
+                                  nombreUsuario: nombreUsuario,
                                   name: list[i]['name'],
                                   cantidad: list[i]['cantidad'],
                                   unidadesCantidad: list[i]['unidadesCantidad'],
@@ -393,10 +386,14 @@ class ItemList extends StatelessWidget {
                         //color: Color.fromARGB(255, 255, 255, 255),
                         color: Colors.orange,
                         onPressed: () {
+                          print("codigo");
+                          print(list[i]['codigoDeBarras']);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
+                                codigoDeBarras: list[i]['codigoDeBarras'],
+                                nombreUsuario: nombreUsuario,
                                   name: list[i]['name'],
                                   cantidad: list[i]['cantidad'],
                                   unidadesCantidad: list[i]['unidadesCantidad'],
@@ -502,6 +499,8 @@ class ItemList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
+                                  codigoDeBarras:list[i]['codigoDeBarras'],
+                                  nombreUsuario: nombreUsuario,
                                   name: list[i]['name'],
                                   cantidad: list[i]['cantidad'],
                                   unidadesCantidad: list[i]['unidadesCantidad'],

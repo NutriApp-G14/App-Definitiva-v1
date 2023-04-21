@@ -12,12 +12,13 @@ class RegistroHelper {
 
     // Add Registro
   Future<http.Response> addRegistro(
-    Int codigoDeBarrasController,
-    Double cantidadController,
+    String codigoDeBarrasController,
+    double cantidadController,
     String nombreUsuarioController,
     String fechaController,
     String tipoDeComidaController,
   ) async {
+    print("Funcion ejecutada");
     var url = "${urlConexion}/registro/add";
     Map data = {
       'codigoDeBarras' : codigoDeBarrasController,
@@ -28,6 +29,7 @@ class RegistroHelper {
 
     };
     var body = json.encode(data);
+    
     print(body);
     var response = await http.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
@@ -48,7 +50,17 @@ class RegistroHelper {
 
   // Obtiene los registros a partir de su nombre de usuario,fecha y tipodeComida
   Future<List> getRegistroComidas(String nombreUsuario, String tipoDeComida, String fecha) async {
-    final response =  await http.get(Uri.parse("${urlConexion}/registros/{fecha}/{tipoDeComida}/{nombreUsuario}"));
+    print("buscando registros...");
+    print(nombreUsuario);
+    print(tipoDeComida);
+    print(fecha);
+
+    final response =  await http.get(Uri.parse("${urlConexion}/registro/registros/$fecha/$tipoDeComida/$nombreUsuario"));
+    print("termino de buscar");
+    print(response.body);
     return json.decode(response.body);
   }
+
+
+
 }

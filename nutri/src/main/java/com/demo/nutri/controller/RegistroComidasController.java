@@ -73,7 +73,7 @@ public class RegistroComidasController {
     }
 
     @GetMapping("/registros/{fecha}/{tipoDeComida}/{nombreUsuario}")
-    public List<RegistroComidas> getRegistrosPorDiaYTipoDeComidaYNombreUsuario(@PathVariable String fecha, @PathVariable String tipoDeComida, @PathVariable String nombreUsuario ) {
+    public List<RegistroComidas> getRegistrosByFechaAndTipoDeComidaAndNombreUsuario(@PathVariable String fecha, @PathVariable String tipoDeComida, @PathVariable String nombreUsuario ) {
         return (List<RegistroComidas>) registroComidasRepository.findByFechaAndTipoDeComidaAndNombreUsuario(
                 fecha, tipoDeComida, nombreUsuario);
 

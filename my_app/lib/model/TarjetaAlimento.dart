@@ -12,7 +12,7 @@ class TarjetaAlimento extends StatefulWidget {
   final String imageUrl;
   final List<String> scoreTitles;
   final List<String> scoreImages;
-  final int codigoDeBarras;
+  final String codigoDeBarras;
   final double cantidad;
 
   const TarjetaAlimento(
@@ -58,14 +58,14 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                                   return FadeInImage.assetNetwork(
                                     placeholder: 'assets/placeholder_image.png',
                                     image: widget.imageUrl,
-                                    height:115 ,
-                                    width:115,
+                                    height:100 ,
+                                    width:100,
                                   );
                                 } else {
                                   return Icon(
                                     Icons.fastfood,
                                     color: Color.fromARGB(221, 255, 181, 71),
-                                    size: 115,
+                                    size: 100,
                                   );
                                 }
                               },
@@ -73,7 +73,7 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                           : Icon(
                               Icons.fastfood,
                               color:  Color.fromARGB(221, 255, 181, 71),
-                              size: 115,
+                              size: 100,
                             ),
 
              
@@ -123,77 +123,3 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
     );
   }
 }
-
-// @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       decoration: BoxDecoration(
-//         borderRadius: BorderRadius.circular(8.0),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withOpacity(0.25),
-//             blurRadius: 4.0,
-//             offset: Offset(0, 4),
-//           ),
-//         ],
-//       ),
-//       child: Material(
-//         borderRadius: BorderRadius.circular(8.0),
-//         color: Colors.white,
-//         child: InkWell(
-//           borderRadius: BorderRadius.circular(8.0),
-//           onTap: () {
-//             // Handle card tap
-//           },
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.stretch,
-//             children: [
-//               Image.network(
-//                 imageUrl,
-//                 height: 150,
-//                 fit: BoxFit.cover,
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text(
-//                       name,
-//                       style: TextStyle(
-//                         fontWeight: FontWeight.bold,
-//                         fontSize: 16.0,
-//                       ),
-//                     ),
-//                     SizedBox(height: 4.0),
-//                     Row(
-//                       children: [
-//                         for (int i = 0; i < scoreTitles.length; i++)
-//                           Padding(
-//                             padding: const EdgeInsets.only(right: 8.0),
-//                             child: Tooltip(
-//                               message: scoreTitles[i],
-//                               child: Image.network(
-//                                 scoreImages[i],
-//                                 height: 20.0,
-//                               ),
-//                             ),
-//                           ),
-//                       ],
-//                     ),
-//                     SizedBox(height: 4.0),
-//                     Text(
-//                       barcode,
-//                       style: TextStyle(
-//                         color: Colors.grey,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }

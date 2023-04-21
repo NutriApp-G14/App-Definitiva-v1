@@ -1,14 +1,9 @@
 package com.demo.nutri.model;
 
-<<<<<<< HEAD
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-=======
+
 import java.net.URI;
 
 import javax.persistence.*;
->>>>>>> antonio
 
 @Entity
 public class Alimento {
@@ -24,8 +19,9 @@ public class Alimento {
     private Double carbohidratos;
     private String image; 
     private String nombreUsuario; 
-<<<<<<< HEAD
     private String codigoDeBarras;
+    @ManyToOne
+    private Receta receta;
 
     public String getCodigoDeBarras() {
         return codigoDeBarras;
@@ -33,28 +29,7 @@ public class Alimento {
     public void setCodigoDeBarras(String codigoDeBarras) {
         this.codigoDeBarras = codigoDeBarras;
     }
-    public String getUnidadesCantidad() {
-        return unidadesCantidad;
-    }
-    public void setUnidadesCantidad(String unidadesCantidad) {
-        this.unidadesCantidad = unidadesCantidad;
-    }
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-    public String getImage() {
-        return image;
-    }
-    public void setImage(String image) {
-        this.image = image;
-    }
-=======
-    @ManyToOne
-    private Receta receta;
->>>>>>> antonio
+    
     public Integer getId() {
         return id;
     }

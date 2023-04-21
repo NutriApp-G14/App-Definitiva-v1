@@ -141,15 +141,11 @@ class _NutriAppBarState extends State<NutriAppBar> {
                     //   builder: (context) => BuscadorComida(
                     //     nombreUsuario: widget.nombreUsuario,
                     //   ),
-<<<<<<< HEAD
                       //  MaterialPageRoute(
                       // builder: (context) => NuevoBuscador(
                       //   nombreUsuario: widget.nombreUsuario,
                       // ),
                        MaterialPageRoute(
-=======
-                    MaterialPageRoute(
->>>>>>> antonio
                       builder: (context) => NuevoBuscador(
                         nombreUsuario: widget.nombreUsuario,
                       ),

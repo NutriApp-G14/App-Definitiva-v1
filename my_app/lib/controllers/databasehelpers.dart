@@ -9,13 +9,10 @@ import 'dart:convert';
 
 import 'package:my_app/model/Usuario.dart';
 
-<<<<<<< HEAD
 //final urlConexion = 'http://34.77.36.66:8080';
 final urlConexion = 'http://localhost:8080';
 
-=======
-final urlConexion = 'http://localhost:8080';
->>>>>>> antonio
+//final urlConexion = 'http://localhost:8080';
 
 class DataBaseHelper {
 // Add Alimento

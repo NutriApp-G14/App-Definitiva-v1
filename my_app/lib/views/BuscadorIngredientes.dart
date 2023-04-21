@@ -204,6 +204,9 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MostrarFood(
+                                        nombreUsuario: widget.nombreUsuario,
+                                        codigoDeBarras: _listaDeAlimentos[index]
+                                                  ['codigoDeBarras'] ?? "",
                                           name: _listaDeAlimentos[index]
                                                   ['product_name'] ??
                                               "",

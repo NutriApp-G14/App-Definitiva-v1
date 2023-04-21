@@ -55,8 +55,6 @@ class _ListAlimentosState extends State<ListAlimentos> {
                 AddAlimentoPage(nombreUsuario: widget.nombreUsuario)));
   }
 
-<<<<<<< HEAD
-=======
   _navigateListViewRecetas(BuildContext context) async {
     Navigator.push(
         context,
@@ -80,7 +78,6 @@ class _ListAlimentosState extends State<ListAlimentos> {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => CrearUsuarioPage()));
   }
->>>>>>> antonio
 
   Future<void> deleteData(int id) async {
     final response = await http.delete(
@@ -184,21 +181,13 @@ class _ListAlimentosState extends State<ListAlimentos> {
                       future: dataBaseHelper.getData(widget.nombreUsuario),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
-<<<<<<< HEAD
                            print(snapshot.error);
                         } else {
                           return snapshot.hasData ? 
                             ItemList(
                                 nombreUsuario: widget.nombreUsuario,
-=======
-                          // print(snapshot.error);
-                        }
-                        return snapshot.hasData
-                            ? ItemListFood(
->>>>>>> antonio
                                 list: snapshot.data!,
                                 deleteItem: deleteData,
-
                               )
                             : const Center(
                                 child: CircularProgressIndicator(),
@@ -283,16 +272,12 @@ class _ListAlimentosState extends State<ListAlimentos> {
 }
 
 //Pintar los Alimentos
-class ItemListFood extends StatelessWidget {
+class ItemList extends StatelessWidget {
   final List list;
   final Function(int) deleteItem;
   final String nombreUsuario;
 
-<<<<<<< HEAD
   const ItemList({required this.list, required this.deleteItem, required this.nombreUsuario});
-=======
-  const ItemListFood({required this.list, required this.deleteItem});
->>>>>>> antonio
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

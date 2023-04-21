@@ -13,3 +13,4 @@ public interface AlimentoRepository extends CrudRepository<Alimento, Integer> {
     List<Alimento> findByNombreUsuario(String nombreUsuario);
     Alimento findByCodigoDeBarrasAndNombreUsuario(String codigoDeBarras ,String nombreUsuario);
 }
+

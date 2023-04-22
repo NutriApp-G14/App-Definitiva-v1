@@ -151,7 +151,7 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                             ),
                             onPressed: () async {
                               print("Añadir");
-                         insertarAlimento(    
+                              insertarAlimento(
                                 _listaDeAlimentos[index]['product_name'] ?? "",
                                 (_listaDeAlimentos[index]['nutriments']
                                         ?['energy-kcal_100g'] is String)
@@ -212,9 +212,8 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                                             ?.toDouble() ??
                                         0.0,
                                 _listaDeAlimentos[index]['image_url'] ?? "",
-                                _listaDeAlimentos[index]['_id']
-                                ,
-                              );                     
+                                _listaDeAlimentos[index]['_id'],
+                              );
                             },
                           ),
                         ),
@@ -232,8 +231,10 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MostrarFood(
-                                      codigoDeBarras:  _listaDeAlimentos[index]['_id'],
-                                      nombreUsuario: widget.nombreUsuario,
+                                          id: 0,
+                                          codigoDeBarras:
+                                              _listaDeAlimentos[index]['_id'],
+                                          nombreUsuario: widget.nombreUsuario,
                                           name: _listaDeAlimentos[index]
                                                   ['product_name'] ??
                                               "",
@@ -369,8 +370,6 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
     );
   }
 
-
-
   Future<http.Response> searchFoodNuevaAPI(String searchTerm) async {
     var url =
         'https://world.openfoodfacts.org/cgi/search.pl?search_terms=$searchTerm&search_simple=1&action=process&json=true';
@@ -404,8 +403,7 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
       double azucar,
       double fibra,
       String image,
-      String codigoDeBarras
-      ) async {
+      String codigoDeBarras) async {
     final response = await http.post(
       Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{

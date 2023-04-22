@@ -29,7 +29,7 @@ class DataBaseHelper {
       double sodioController,
       double azucarController,
       double fibraController,
-      String codigoDeBarrasController)async {
+      String codigoDeBarrasController) async {
     var url = "${urlConexion}/foods/add";
     Map data = {
       'name': nameController,
@@ -273,6 +273,46 @@ class DataBaseHelper {
     }
   }
 
+  //actualizaAlimentos
+  Future<http.Response> updateAlimento(
+      int idController,
+      String nameController,
+      double cantidadController,
+      String unidadesCantidadController,
+      double caloriasController,
+      double grasasController,
+      double proteinasController,
+      double carbohidratosController,
+      String imageController,
+      String nombreUsuarioController,
+      double sodioController,
+      double azucarController,
+      double fibraController,
+      String codigoDeBarrasController) async {
+    var url = "${urlConexion}/foods/$idController";
+    Map data = {
+      'name': nameController,
+      'cantidad': cantidadController,
+      'unidadesCantidad': unidadesCantidadController,
+      'calorias': caloriasController,
+      'grasas': grasasController,
+      'proteinas': proteinasController,
+      'carbohidratos': carbohidratosController,
+      'image': imageController,
+      'nombreUsuario': nombreUsuarioController,
+      'sodio': sodioController,
+      'azucar': azucarController,
+      'fibra': fibraController,
+      'codigoDeBarras': codigoDeBarrasController,
+    };
+    var body = json.encode(data);
+    var response = await http.put(Uri.parse(url),
+        headers: {"Content-Type": "application/json"}, body: body);
+    print("${response.body}");
+    //Navigator.pop(context);
+    return response;
+  }
+
 // Actualiza Alergias
   Future<http.Response> updateAlergias(
       String nombreUsuarioController,
@@ -357,9 +397,8 @@ class DataBaseHelper {
 // Funciones Para Alimentos
 
 // Obtener un Alimento al añadirlo
-  Future<bool> getAlimento(int id )async {
-    final response =
-        await http.get(Uri.parse('${urlConexion}/foods/$id'));
+  Future<bool> getAlimento(int id) async {
+    final response = await http.get(Uri.parse('${urlConexion}/foods/$id'));
     if (response.statusCode == 200) {
       return true;
     }

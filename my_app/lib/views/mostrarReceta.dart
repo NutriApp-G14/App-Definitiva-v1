@@ -164,21 +164,21 @@ class MostrarReceta extends StatelessWidget {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'Proteinas: ${sumProteinas}',
+                                  'Proteinas: ${sumProteinas.toStringAsFixed(2)}',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
                                           238, 104, 201, 253)),
                                 ),
                                 Text(
-                                  'Carbohidratos: ${sumCarbohidratos}',
+                                  'Carbohidratos: ${sumCarbohidratos.toStringAsFixed(2)}',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
                                           251, 93, 223, 54)),
                                 ),
                                 Text(
-                                  'Grasas: ${sumGrasas}',
+                                  'Grasas: ${sumGrasas.toStringAsFixed(2)}',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
@@ -363,7 +363,7 @@ class MostrarReceta extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                '${sumCalorias} Cal',
+                                                '${sumCalorias.toStringAsFixed(2)} Cal',
                                                 style: TextStyle(
                                                   fontSize: 13.0,
                                                   color: Color.fromARGB(
@@ -396,7 +396,7 @@ class MostrarReceta extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                '${sumProteinas} g',
+                                                '${sumProteinas.toStringAsFixed(2)} g',
                                                 style: TextStyle(
                                                   fontSize: 13.0,
                                                   color: Color.fromARGB(
@@ -429,7 +429,7 @@ class MostrarReceta extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                ' ${sumCarbohidratos} g',
+                                                ' ${sumCarbohidratos.toStringAsFixed(2)} g',
                                                 style: TextStyle(
                                                   fontSize: 13.0,
                                                   color: Color.fromARGB(
@@ -462,7 +462,7 @@ class MostrarReceta extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                '${sumGrasas} g',
+                                                '${sumGrasas.toStringAsFixed(2)} g',
                                                 style: TextStyle(
                                                   fontSize: 13.0,
                                                   color: Color.fromARGB(
@@ -495,7 +495,7 @@ class MostrarReceta extends StatelessWidget {
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  '${sumSodio} g',
+                                                  '${sumSodio.toStringAsFixed(2)} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -528,7 +528,7 @@ class MostrarReceta extends StatelessWidget {
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  '${sumAzucares} g',
+                                                  '${sumAzucares.toStringAsFixed(2)} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -561,7 +561,7 @@ class MostrarReceta extends StatelessWidget {
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  '${sumFibra} g',
+                                                  '${sumFibra.toStringAsFixed(2)} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -583,10 +583,6 @@ class MostrarReceta extends StatelessWidget {
                                         SizedBox(height: 10.0),
                                       ],
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 5, 150),
-                                    child: Text(""),
                                   ),
                                 ],
                               ),

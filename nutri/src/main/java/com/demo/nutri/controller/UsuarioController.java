@@ -68,6 +68,7 @@ public class UsuarioController {
             usuario.setGender(Usuario.getGender());
             usuario.setActivity(Usuario.getActivity());
             usuario.setObjective(Usuario.getObjective());
+            usuario.setImageString(Usuario.getImageString());
             usuarioRepository.save(usuario);
             return ResponseEntity.ok().body(usuario);
         }).orElse(new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND));

@@ -79,6 +79,9 @@ public class AlimentoController {
             alimento.setCarbohidratos(Alimento.getCarbohidratos());
             alimento.setGrasas(Alimento.getGrasas());
             alimento.setProteinas(Alimento.getProteinas());
+            alimento.setAzucar(Alimento.getAzucar());
+            alimento.setFibra(Alimento.getFibra());
+            alimento.setSodio(Alimento.getSodio());
             alimento.setImage(Alimento.getImage());
             alimento.setReceta(Alimento.getReceta());
             repository.save(alimento);

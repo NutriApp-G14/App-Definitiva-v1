@@ -6,6 +6,7 @@ import 'dart:ffi' as ffi;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -13,6 +14,7 @@ import 'mostrarFood.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
 class MostrarFood extends StatefulWidget {
+  final int id;
   final String codigoDeBarras;
   final String nombreUsuario;
   final String name;
@@ -28,6 +30,7 @@ class MostrarFood extends StatefulWidget {
   final String image;
 
   const MostrarFood({
+    required this.id,
     required this.codigoDeBarras,
     required this.nombreUsuario,
     required this.name,
@@ -50,7 +53,7 @@ class _MostrarFoodState extends State<MostrarFood> {
   RegistroHelper registrohelper = RegistroHelper();
   DateTime now = DateTime.now();
   late String formattedDate;
-
+  DataBaseHelper dataBaseHelper = DataBaseHelper();
   @override
   void initState() {
     // TODO: implement initState
@@ -86,6 +89,14 @@ class _MostrarFoodState extends State<MostrarFood> {
   @override
   Widget build(BuildContext context) {
     var nueva_cantidad = cantidad != 0.0 ? cantidad : widget.cantidad;
+    calorias = _recalucularInformacion(widget.calorias, nueva_cantidad, 100);
+    proteinas = _recalucularInformacion(widget.proteinas, nueva_cantidad, 100);
+    carbohidratos =
+        _recalucularInformacion(widget.carbohidratos, nueva_cantidad, 100);
+    grasas = _recalucularInformacion(widget.grasas, nueva_cantidad, 100);
+    azucar = _recalucularInformacion(widget.azucar, nueva_cantidad, 100);
+    sodio = _recalucularInformacion(widget.sodio, nueva_cantidad, 100);
+    fibra = _recalucularInformacion(widget.fibra, nueva_cantidad, 100);
     double calculoCalorias = cantidad != 0.0 ? calorias : widget.calorias;
     double calculoProteinas = cantidad != 0.0 ? proteinas : widget.proteinas;
     double calculoCarbohidratos =
@@ -223,36 +234,38 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             cantidad = (value.isNotEmpty
                                                 ? double.tryParse(value)
                                                 : 0.0)!;
+                                            var nueva_cantidad = cantidad != 0.0
+                                                ? cantidad
+                                                : widget.cantidad;
                                             calorias = _recalucularInformacion(
                                                 widget.calorias,
                                                 nueva_cantidad,
-                                                widget.cantidad);
+                                                100);
                                             proteinas = _recalucularInformacion(
                                                 widget.proteinas,
                                                 nueva_cantidad,
-                                                widget.cantidad);
+                                                100);
                                             carbohidratos =
                                                 _recalucularInformacion(
                                                     widget.carbohidratos,
                                                     nueva_cantidad,
-                                                    widget.cantidad);
+                                                    100);
                                             grasas = _recalucularInformacion(
                                                 widget.grasas,
                                                 nueva_cantidad,
-                                                widget.cantidad);
+                                                100);
                                             azucar = _recalucularInformacion(
                                                 widget.azucar,
                                                 nueva_cantidad,
-                                                widget.cantidad);
+                                                100);
                                             sodio = _recalucularInformacion(
                                                 widget.sodio,
                                                 nueva_cantidad,
-                                                widget.cantidad);
+                                                100);
                                             fibra = _recalucularInformacion(
                                                 widget.fibra,
                                                 nueva_cantidad,
-                                                widget.cantidad);
-                                            print(proteinas);
+                                                100);
                                           });
                                         },
                                       ),
@@ -284,21 +297,21 @@ class _MostrarFoodState extends State<MostrarFood> {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'Proteinas: ${calculoProteinas} ',
+                                  'Proteinas: ${calculoProteinas.toStringAsFixed(2)} ',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
                                           238, 104, 201, 253)),
                                 ),
                                 Text(
-                                  'Carbohidratos: ${calculoCarbohidratos} ',
+                                  'Carbohidratos: ${calculoCarbohidratos.toStringAsFixed(2)} ',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
                                           251, 93, 223, 54)),
                                 ),
                                 Text(
-                                  'Grasas: ${calculoGrasas}',
+                                  'Grasas: ${calculoGrasas.toStringAsFixed(2)}',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
@@ -1115,184 +1128,184 @@ class _MostrarFoodState extends State<MostrarFood> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            // Lógica para el botón Registro
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (BuildContext context) => AlertDialog(
-                            //       title: Text('Elija un Registro'),
-                            //       content: Column(
-                            //           mainAxisAlignment:
-                            //               MainAxisAlignment.spaceEvenly,
-                            //           crossAxisAlignment:
-                            //               CrossAxisAlignment.center,
-                            //           children: [
-                            //             Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.center,
-                            //               children: [
-                            //                 ElevatedButton(
-                            //                   onPressed: () {
-                            //                     registrohelper.addRegistro(
-                            //                         widget.codigoDeBarras
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         widget.cantidad,
-                            //                         widget.nombreUsuario
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         formattedDate
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         'Desayuno'
-                            //                             .trim()
-                            //                             .toLowerCase());
-                            //                   },
-                            //                   child: Text('Desayuno'),
-                            //                   style: ElevatedButton.styleFrom(
-                            //                     shape: RoundedRectangleBorder(
-                            //                       borderRadius:
-                            //                           BorderRadius.circular(
-                            //                               8.0),
-                            //                     ),
-                            //                     //  minimumSize: Size(100, 40),
-                            //                   ),
-                            //                 )
-                            //               ],
-                            //             ),
-                            //             Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.center,
-                            //               children: [
-                            //                 ElevatedButton(
-                            //                   onPressed: () {
-                            //                     registrohelper.addRegistro(
-                            //                         widget.codigoDeBarras
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         widget.cantidad,
-                            //                         widget.nombreUsuario
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         formattedDate
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         'Almuerzo'
-                            //                             .trim()
-                            //                             .toLowerCase());
-                            //                   },
-                            //                   child: Text('Almuerzo'),
-                            //                   style: ElevatedButton.styleFrom(
-                            //                     shape: RoundedRectangleBorder(
-                            //                       borderRadius:
-                            //                           BorderRadius.circular(
-                            //                               8.0),
-                            //                     ),
-                            //                     //minimumSize: Size(100, 40),
-                            //                   ),
-                            //                 )
-                            //               ],
-                            //             ),
-                            //             Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.center,
-                            //               children: [
-                            //                 ElevatedButton(
-                            //                   onPressed: () {
-                            //                     registrohelper.addRegistro(
-                            //                         widget.codigoDeBarras
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         widget.cantidad,
-                            //                         widget.nombreUsuario
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         formattedDate
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         'Comida'
-                            //                             .trim()
-                            //                             .toLowerCase());
-                            //                   },
-                            //                   child: Text('Comida'),
-                            //                   style: ElevatedButton.styleFrom(
-                            //                     shape: RoundedRectangleBorder(
-                            //                       borderRadius:
-                            //                           BorderRadius.circular(
-                            //                               8.0),
-                            //                     ),
-                            //                     // minimumSize: Size(100, 40),
-                            //                   ),
-                            //                 )
-                            //               ],
-                            //             ),
-                            //             Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.center,
-                            //               children: [
-                            //                 ElevatedButton(
-                            //                   onPressed: () {
-                            //                     registrohelper.addRegistro(
-                            //                         widget.codigoDeBarras
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         widget.cantidad,
-                            //                         widget.nombreUsuario
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         formattedDate
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         'Merienda'
-                            //                             .trim()
-                            //                             .toLowerCase());
-                            //                   },
-                            //                   child: Text('Merienda'),
-                            //                   style: ElevatedButton.styleFrom(
-                            //                     shape: RoundedRectangleBorder(
-                            //                       borderRadius:
-                            //                           BorderRadius.circular(
-                            //                               8.0),
-                            //                     ),
-                            //                     // minimumSize: Size(100, 40),
-                            //                   ),
-                            //                 )
-                            //               ],
-                            //             ),
-                            //             Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.center,
-                            //               children: [
-                            //                 ElevatedButton(
-                            //                   onPressed: () {
-                            //                     registrohelper.addRegistro(
-                            //                         widget.codigoDeBarras
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         widget.cantidad,
-                            //                         widget.nombreUsuario
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         formattedDate
-                            //                             .trim()
-                            //                             .toLowerCase(),
-                            //                         'Cena'
-                            //                             .trim()
-                            //                             .toLowerCase());
-                            //                   },
-                            //                   child: Text('Cena'),
-                            //                   style: ElevatedButton.styleFrom(
-                            //                     shape: RoundedRectangleBorder(
-                            //                       borderRadius:
-                            //                           BorderRadius.circular(
-                            //                               8.0),
-                            //                     ),
-                            //                     // minimumSize: Size(100, 40),
-                            //                   ),
-                            //                 )
-                            //               ],
-                            //             ),
-                            //           ])),
-                            // );
+                            //Lógica para el botón Registro
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                  title: Text('Elija un Registro'),
+                                  content: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                registrohelper.addRegistro(
+                                                    widget.codigoDeBarras
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.cantidad,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    formattedDate
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    'Desayuno'
+                                                        .trim()
+                                                        .toLowerCase());
+                                              },
+                                              child: Text('Desayuno'),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                //  minimumSize: Size(100, 40),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                registrohelper.addRegistro(
+                                                    widget.codigoDeBarras
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.cantidad,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    formattedDate
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    'Almuerzo'
+                                                        .trim()
+                                                        .toLowerCase());
+                                              },
+                                              child: Text('Almuerzo'),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                //minimumSize: Size(100, 40),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                registrohelper.addRegistro(
+                                                    widget.codigoDeBarras
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.cantidad,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    formattedDate
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    'Comida'
+                                                        .trim()
+                                                        .toLowerCase());
+                                              },
+                                              child: Text('Comida'),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                // minimumSize: Size(100, 40),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                registrohelper.addRegistro(
+                                                    widget.codigoDeBarras
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.cantidad,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    formattedDate
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    'Merienda'
+                                                        .trim()
+                                                        .toLowerCase());
+                                              },
+                                              child: Text('Merienda'),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                // minimumSize: Size(100, 40),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                registrohelper.addRegistro(
+                                                    widget.codigoDeBarras
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.cantidad,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    formattedDate
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    'Cena'
+                                                        .trim()
+                                                        .toLowerCase());
+                                              },
+                                              child: Text('Cena'),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                // minimumSize: Size(100, 40),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ])),
+                            );
                           },
                           child: Text('Registro'),
                           style: ElevatedButton.styleFrom(
@@ -1303,6 +1316,32 @@ class _MostrarFoodState extends State<MostrarFood> {
                           ),
                         ),
                       ],
+                    ),
+                    SizedBox(height: 10),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          // Lógica para actualizar alimento
+                          dataBaseHelper.updateAlimento(
+                              widget.id,
+                              widget.name,
+                              nueva_cantidad,
+                              widget.unidadesCantidad,
+                              widget.calorias,
+                              widget.grasas,
+                              widget.proteinas,
+                              widget.carbohidratos,
+                              widget.image,
+                              widget.nombreUsuario,
+                              widget.sodio,
+                              widget.azucar,
+                              widget.fibra,
+                              widget.codigoDeBarras);
+                          Navigator.pop(context);
+                          //print(nueva_cantidad);
+                        },
+                        child: Text('Guardar cambios'),
+                      ),
                     ),
                     SizedBox(height: 20)
                   ],
@@ -1326,7 +1365,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       String image,
       String codigoDeBarras) async {
     final response = await http.post(
-      Uri.parse('${urlConexion}/foods/add'),
+      Uri.parse('${urlConection}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

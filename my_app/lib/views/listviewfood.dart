@@ -369,6 +369,7 @@ class ItemList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
+                                  id: list[i]['id'] ?? 0,
                                   codigoDeBarras:
                                       list[i]['codigoDeBarras'] ?? "",
                                   nombreUsuario: nombreUsuario,
@@ -479,6 +480,7 @@ class ItemList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
+                                  id: list[i]['id'] ?? 0.0,
                                   codigoDeBarras:
                                       list[i]['codigoDeBarras'] ?? "",
                                   nombreUsuario: nombreUsuario,
@@ -587,6 +589,7 @@ class ItemList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
+                                  id: list[i]['id'] ?? 0.0,
                                   codigoDeBarras:
                                       list[i]['codigoDeBarras'] ?? "",
                                   nombreUsuario: nombreUsuario,

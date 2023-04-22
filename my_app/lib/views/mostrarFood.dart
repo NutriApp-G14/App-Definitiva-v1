@@ -12,6 +12,7 @@ import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'mostrarFood.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
 class MostrarFood extends StatefulWidget {
@@ -1084,7 +1085,6 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             height: 2,
                                             width: double.maxFinite,
                                           )),
-                                      SizedBox(height: 10.0),
                                     ],
                                   ),
                                 ),
@@ -1348,7 +1348,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                     ),
                     SizedBox(height: 20)
                   ],
-                ))
+                )),
           ],
         ));
   }

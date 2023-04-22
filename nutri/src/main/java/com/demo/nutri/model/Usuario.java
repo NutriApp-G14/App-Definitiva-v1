@@ -19,6 +19,12 @@ public class Usuario {
     private String objective;
     private String imageString;
 
+    public String getImageProfile() {
+        return imageProfile;
+    }
+    public void setImageProfile(String imageProfile) {
+        this.imageProfile = imageProfile;
+    }
     public String getPassword() {
         return password;
     }

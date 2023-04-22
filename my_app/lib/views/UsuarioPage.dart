@@ -1,6 +1,6 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
+zimport 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/model/NavBar.dart';
@@ -10,7 +10,9 @@ import 'package:my_app/views/EditarUsuario.dart';
 import 'package:my_app/views/buscador.dart';
 import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/model/Alergias.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'dart:io';
 
 List<String> alergias_ = [];
 List<String> _alergias(Alergias alergia) {
@@ -58,6 +60,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
   var _sexo;
   var _objectiveSeleccionado;
   late Map<String, dynamic> requerimientoCalorico;
+  late File? _profileImage = null;
+  String? _profileImageURL;
 
   DataBaseHelper dataBaseHelper = DataBaseHelper();
 
@@ -194,6 +198,67 @@ class _UsuarioPageState extends State<UsuarioPage> {
     };
   }
 
+  
+  void showSnackBar(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _pickImageFromGallery() async {
+    final ImagePicker picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+        _profileImageURL = null;
+      });
+    } else {
+      showSnackBar('No se ha seleccionado ninguna imagen');
+    }
+  }
+
+  Future<void> _showUrlDialog() async {
+    String url = '';
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Ingresa la URL de la imagen'),
+          content: TextField(
+            onChanged: (value) {
+              url = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  _profileImage = null;
+                  _profileImageURL = null;
+                });
+              },
+            ),
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  _profileImage = null;
+                  _profileImageURL = url;
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -288,10 +353,66 @@ class _UsuarioPageState extends State<UsuarioPage> {
                             SizedBox(height: 8),
                             Row(
                               children: [
-                                CircleAvatar(
-                                  radius: 60,
-                                  backgroundImage:
-                                      AssetImage("assets/user.jpeg"),
+                                GestureDetector(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                          child: Wrap(
+                                            children: <Widget>[
+                                              ListTile(
+                                                leading:
+                                                    Icon(Icons.photo_library),
+                                                title: Text(
+                                                    'Seleccionar imagen de galería'),
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                  _pickImageFromGallery();
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(Icons.link),
+                                                title:
+                                                    Text('Pegar URL de imagen'),
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                  _showUrlDialog();
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 60,
+                                    backgroundImage: _profileImage != null
+                                        ? FileImage(_profileImage!)
+                                            as ImageProvider<Object>?
+                                        : _profileImageURL != null
+                                            ? NetworkImage(_profileImageURL!)
+                                                as ImageProvider<Object>?
+                                            : AssetImage("assets/user.jpeg")
+                                                as ImageProvider<Object>?,
+                                    child: Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Container(
+                                        width: 24,
+                                        height: 24,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.add,
+                                          color: Colors.blue,
+                                          size: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 30,
@@ -380,7 +501,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Altura:",
+                                      "Sexo:",
                                       style: TextStyle(fontSize: 16),
                                     ),
                                     Text(
@@ -397,70 +518,55 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                     if (snapshot.hasData) {
                                       final alergia = snapshot.data!;
                                       final listaAlergias = _alergias(alergia);
-                                      return Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                          child: Card(
-                                              child: Padding(
-                                                  padding: EdgeInsets.all(16),
-                                                  child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text('Alergias:',
-                                                            style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        Wrap(
-                                                          children: [
-                                                            for (String item
-                                                                in listaAlergias)
-                                                              Container(
-                                                                margin: EdgeInsets
-                                                                    .fromLTRB(
-                                                                        0,
-                                                                        10,
-                                                                        5,
-                                                                        0),
-                                                                padding: EdgeInsets
-                                                                    .symmetric(
-                                                                        horizontal:
-                                                                            8,
-                                                                        vertical:
-                                                                            4),
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          248,
-                                                                          220,
-                                                                          179),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10),
-                                                                  border: Border.all(
-                                                                      color: Color.fromARGB(
-                                                                          255,
-                                                                          255,
-                                                                          119,
-                                                                          0),
-                                                                      width: 2),
-                                                                ),
-                                                                child: Text(
-                                                                  item,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          14),
-                                                                ),
-                                                              )
-                                                          ],
-                                                        )
-                                                      ]))));
+                                      return Row(
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Alergias:',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              Wrap(
+                                                spacing: 0,
+                                                children: [
+                                                  for (String item
+                                                      in listaAlergias)
+                                                    Container(
+                                                      margin:
+                                                          EdgeInsets.fromLTRB(
+                                                              0, 10, 5, 0),
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 8,
+                                                              vertical: 4),
+                                                      decoration: BoxDecoration(
+                                                        color: Color.fromARGB(
+                                                            255, 248, 220, 179),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        border: Border.all(
+                                                          color: Color.fromARGB(
+                                                              255, 255, 119, 0),
+                                                          width: 2,
+                                                        ),
+                                                      ),
+                                                      child: Text(
+                                                        item,
+                                                        style: TextStyle(
+                                                            fontSize: 14),
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
                                     } else if (snapshot.hasError) {
                                       return Center(
                                         child: Text("Error: ${snapshot.error}"),

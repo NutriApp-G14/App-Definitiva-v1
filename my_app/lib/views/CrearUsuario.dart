@@ -320,7 +320,8 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                             pesoSeleccionado.toString(),
                             _generoSeleccionado,
                             _nivelActividadSeleccionado,
-                            "ninguno");
+                            "ninguno",
+                            "");
                         Map<String, bool> alergiasSeleccionadas =
                             seleccionarAlergias(alergias, seleccionadas);
                         bool cacahuetesController =

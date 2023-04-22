@@ -1,6 +1,7 @@
 import 'dart:core';
 //import 'dart:ffi';
 
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/model/Alergias.dart';
@@ -11,9 +12,8 @@ import 'package:my_app/model/Usuario.dart';
 
 //final urlConexion = 'http://34.77.36.66:8080';
 //final urlConexion = 'http://35.241.179.64:8080';
-
-//final urlConexion = 'http://localhost:8080';
 final urlConexion = 'http://localhost:8080';
+//final urlConexion = 'http://localhost:8080';
 
 class DataBaseHelper {
 // Add Alimento
@@ -65,6 +65,7 @@ class DataBaseHelper {
     String? genderController,
     String? activityController,
     String? objectiveController,
+    String? imageController,
   ) async {
     var url = "${urlConexion}/users/add";
     Map data = {
@@ -76,7 +77,8 @@ class DataBaseHelper {
       'weight': weightController,
       'gender': genderController,
       'activity': activityController,
-      'objective': objectiveController
+      'objective': objectiveController,
+      'imageString': imageController,
       //'allergies': allergiesController
     };
     var body = json.encode(data);
@@ -157,7 +159,6 @@ class DataBaseHelper {
     var response = await http.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 
@@ -191,7 +192,6 @@ class DataBaseHelper {
   Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
     final response =
         await http.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
-
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
       final usuario = Usuario.fromJson(json);
@@ -205,6 +205,7 @@ class DataBaseHelper {
 // Comprueba si el Usuario Ya existe en la BBDD
   Future<bool> usuarioExists(String nombreUsuario) async {
     var url = Uri.parse("${urlConexion}/users/$nombreUsuario");
+    //print(await http.get(url));
     var response = await http.get(url);
     if (response.statusCode == 200) {
       // var data = jsonDecode(response.body) as List<dynamic>;
@@ -274,6 +275,45 @@ class DataBaseHelper {
     }
   }
 
+  //actualizaAlimentos
+  Future<http.Response> updateAlimento(
+      int idController,
+      String nameController,
+      double cantidadController,
+      String unidadesCantidadController,
+      double caloriasController,
+      double grasasController,
+      double proteinasController,
+      double carbohidratosController,
+      String imageController,
+      String nombreUsuarioController,
+      double sodioController,
+      double azucarController,
+      double fibraController,
+      String codigoDeBarrasController) async {
+    var url = "${urlConexion}/foods/$idController";
+    Map data = {
+      'name': nameController,
+      'cantidad': cantidadController,
+      'unidadesCantidad': unidadesCantidadController,
+      'calorias': caloriasController,
+      'grasas': grasasController,
+      'proteinas': proteinasController,
+      'carbohidratos': carbohidratosController,
+      'image': imageController,
+      'nombreUsuario': nombreUsuarioController,
+      'sodio': sodioController,
+      'azucar': azucarController,
+      'fibra': fibraController,
+      'codigoDeBarras': codigoDeBarrasController,
+    };
+    var body = json.encode(data);
+    var response = await http.put(Uri.parse(url),
+        headers: {"Content-Type": "application/json"}, body: body);
+    //Navigator.pop(context);
+    return response;
+  }
+
 // Actualiza Alergias
   Future<http.Response> updateAlergias(
       String nombreUsuarioController,
@@ -312,7 +352,6 @@ class DataBaseHelper {
     var response = await http
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 
@@ -351,7 +390,6 @@ class DataBaseHelper {
     var response = await http.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 

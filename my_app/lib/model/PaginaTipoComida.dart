@@ -142,6 +142,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                     ),
                                     itemBuilder: (context, i) {
                                       return TarjetaAlimento(
+                                        id: widget.registros[i]['id'],
                                         nombreUsuario: widget.nombreUsuario,
                                         codigoDeBarras: widget.registros[i]
                                             ['codigoDeBarras'],
@@ -177,6 +178,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                       mainAxisSpacing: 10.0,
                                     ),
                                     itemBuilder: (context, i) {
+
                           var nombreUsuario = widget.nombreUsuario;
                           var codigoDeBarras = alimentos[i][0]['_id'];
                           var cantidad = 100.0;
@@ -187,7 +189,8 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                           var ecoscore = alimentos[i][0]['ecoscore_grade'] ?? "";
 
                           return TarjetaAlimento(
-                            nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras,
+                              id: widget.registros[i]['id'],
+                              nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras,
                               cantidad: cantidad,
                               nombreAlimento: nombreAlimento , imageUrl: imageUrl,
                               scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'],
@@ -211,6 +214,8 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                     ),
                                     itemBuilder: (context, i) {
                                       return TarjetaAlimento(
+                                        id: widget.registros[i]
+                                            ['id'],
                                         nombreUsuario: widget.nombreUsuario,
                                         codigoDeBarras: widget.registros[i]
                                             ['codigoDeBarras'],

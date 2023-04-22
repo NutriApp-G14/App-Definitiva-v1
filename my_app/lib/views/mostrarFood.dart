@@ -6,13 +6,19 @@ import 'dart:ffi' as ffi;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
+import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'mostrarFood.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
+final urlConexion1 = 'http://localhost:8080';
+
 class MostrarFood extends StatefulWidget {
+  final int id;
   final String codigoDeBarras;
   final String nombreUsuario;
   final String name;
@@ -28,6 +34,7 @@ class MostrarFood extends StatefulWidget {
   final String image;
 
   const MostrarFood({
+    required this.id,
     required this.codigoDeBarras,
     required this.nombreUsuario,
     required this.name,
@@ -51,6 +58,9 @@ class _MostrarFoodState extends State<MostrarFood> {
   DateTime now = DateTime.now();
   late String formattedDate;
 
+
+
+  DataBaseHelper dataBaseHelper = DataBaseHelper();
   @override
   void initState() {
     // TODO: implement initState
@@ -86,14 +96,22 @@ class _MostrarFoodState extends State<MostrarFood> {
   @override
   Widget build(BuildContext context) {
     var nueva_cantidad = cantidad != 0.0 ? cantidad : widget.cantidad;
-    double calculoCalorias = cantidad != 0.0 ? calorias : widget.calorias;
-    double calculoProteinas = cantidad != 0.0 ? proteinas : widget.proteinas;
-    double calculoCarbohidratos =
-        cantidad != 0.0 ? carbohidratos : widget.carbohidratos;
-    double calculoGrasas = cantidad != 0.0 ? grasas : widget.grasas;
-    double calculoSodio = cantidad != 0.0 ? sodio : widget.sodio;
-    double calculoFibra = cantidad != 0.0 ? fibra : widget.fibra;
-    double calculoAzucar = cantidad != 0.0 ? azucar : widget.azucar;
+
+    calorias = _recalucularInformacion(widget.calorias, nueva_cantidad, 100);
+    proteinas = _recalucularInformacion(widget.proteinas, nueva_cantidad, 100);
+    carbohidratos =
+        _recalucularInformacion(widget.carbohidratos, nueva_cantidad, 100);
+    grasas = _recalucularInformacion(widget.grasas, nueva_cantidad, 100);
+    azucar = _recalucularInformacion(widget.azucar, nueva_cantidad, 100);
+    sodio = _recalucularInformacion(widget.sodio, nueva_cantidad, 100);
+    fibra = _recalucularInformacion(widget.fibra, nueva_cantidad, 100);
+    double calculoCalorias = calorias;
+    double calculoProteinas = proteinas;
+    double calculoCarbohidratos = carbohidratos;
+    double calculoGrasas = grasas;
+    double calculoSodio = sodio;
+    double calculoFibra = fibra;
+    double calculoAzucar = azucar;
     Map<String, double> dataMap = {
       "Proteínas": calculoProteinas,
       "Hidratos": calculoCarbohidratos,
@@ -223,36 +241,38 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             cantidad = (value.isNotEmpty
                                                 ? double.tryParse(value)
                                                 : 0.0)!;
+                                            var nueva_cantidad = cantidad != 0.0
+                                                ? cantidad
+                                                : widget.cantidad;
                                             calorias = _recalucularInformacion(
                                                 widget.calorias,
                                                 nueva_cantidad,
-                                                widget.cantidad);
+                                                100);
                                             proteinas = _recalucularInformacion(
                                                 widget.proteinas,
                                                 nueva_cantidad,
-                                                widget.cantidad);
+                                                100);
                                             carbohidratos =
                                                 _recalucularInformacion(
                                                     widget.carbohidratos,
                                                     nueva_cantidad,
-                                                    widget.cantidad);
+                                                    100);
                                             grasas = _recalucularInformacion(
                                                 widget.grasas,
                                                 nueva_cantidad,
-                                                widget.cantidad);
+                                                100);
                                             azucar = _recalucularInformacion(
                                                 widget.azucar,
                                                 nueva_cantidad,
-                                                widget.cantidad);
+                                                100);
                                             sodio = _recalucularInformacion(
                                                 widget.sodio,
                                                 nueva_cantidad,
-                                                widget.cantidad);
+                                                100);
                                             fibra = _recalucularInformacion(
                                                 widget.fibra,
                                                 nueva_cantidad,
-                                                widget.cantidad);
-                                            print(proteinas);
+                                                100);
                                           });
                                         },
                                       ),
@@ -284,21 +304,21 @@ class _MostrarFoodState extends State<MostrarFood> {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'Proteinas: ${calculoProteinas} ',
+                                  'Proteinas: ${calculoProteinas.toStringAsFixed(2)} ',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
                                           238, 104, 201, 253)),
                                 ),
                                 Text(
-                                  'Carbohidratos: ${calculoCarbohidratos} ',
+                                  'Carbohidratos: ${calculoCarbohidratos.toStringAsFixed(2)} ',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
                                           251, 93, 223, 54)),
                                 ),
                                 Text(
-                                  'Grasas: ${calculoGrasas}',
+                                  'Grasas: ${calculoGrasas.toStringAsFixed(2)}',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
@@ -413,7 +433,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                               width: 80,
                                               child: Center(
                                                   child: Text(
-                                                '${widget.cantidad} ${widget.unidadesCantidad}',
+                                                '100 ${widget.unidadesCantidad}',
                                                 style: TextStyle(
                                                     fontSize: 13.0,
                                                     fontWeight: FontWeight.w500,
@@ -1070,7 +1090,6 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             height: 2,
                                             width: double.maxFinite,
                                           )),
-                                      SizedBox(height: 10.0),
                                     ],
                                   ),
                                 ),
@@ -1115,6 +1134,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                         ),
                         ElevatedButton(
                           onPressed: () {
+                            //Lógica para el botón Registro
                             showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
@@ -1144,7 +1164,9 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                         .toLowerCase(),
                                                     'Desayuno'
                                                         .trim()
-                                                        .toLowerCase());
+                                                        .toLowerCase(),
+                                                      widget.name.trim());
+
                                               },
                                               child: Text('Desayuno'),
                                               style: ElevatedButton.styleFrom(
@@ -1177,7 +1199,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                         .toLowerCase(),
                                                     'Almuerzo'
                                                         .trim()
-                                                        .toLowerCase());
+                                                        .toLowerCase(),
+                                                    widget.name.trim());
                                               },
                                               child: Text('Almuerzo'),
                                               style: ElevatedButton.styleFrom(
@@ -1210,7 +1233,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                         .toLowerCase(),
                                                     'Comida'
                                                         .trim()
-                                                        .toLowerCase());
+                                                        .toLowerCase(),
+                                                      widget.name.trim());
                                               },
                                               child: Text('Comida'),
                                               style: ElevatedButton.styleFrom(
@@ -1243,7 +1267,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                         .toLowerCase(),
                                                     'Merienda'
                                                         .trim()
-                                                        .toLowerCase());
+                                                        .toLowerCase(),
+                                                      widget.name.trim());
                                               },
                                               child: Text('Merienda'),
                                               style: ElevatedButton.styleFrom(
@@ -1276,7 +1301,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                         .toLowerCase(),
                                                     'Cena'
                                                         .trim()
-                                                        .toLowerCase());
+                                                        .toLowerCase(),
+                                                      widget.name.trim());
                                               },
                                               child: Text('Cena'),
                                               style: ElevatedButton.styleFrom(
@@ -1303,11 +1329,82 @@ class _MostrarFoodState extends State<MostrarFood> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 10),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          // Lógica para actualizar alimento
+                          updateAlimento(
+                              widget.id,
+                              widget.name,
+                              nueva_cantidad,
+                              widget.unidadesCantidad,
+                              widget.calorias,
+                              widget.grasas,
+                              widget.proteinas,
+                              widget.carbohidratos,
+                              widget.image,
+                              widget.nombreUsuario,
+                              widget.sodio,
+                              widget.azucar,
+                              widget.fibra,
+                              widget.codigoDeBarras);
+
+                          cantidad == 0;
+
+                        },
+                        child: Text('Guardar cambios'),
+                      ),
+                    ),
                     SizedBox(height: 20)
                   ],
-                ))
+                )),
           ],
         ));
+  }
+
+  Future<http.Response> updateAlimento(
+      int idController,
+      String nameController,
+      double cantidadController,
+      String unidadesCantidadController,
+      double caloriasController,
+      double grasasController,
+      double proteinasController,
+      double carbohidratosController,
+      String imageController,
+      String nombreUsuarioController,
+      double sodioController,
+      double azucarController,
+      double fibraController,
+      String codigoDeBarrasController) async {
+    var url = "${urlConexion1}/foods/$idController";
+    Map data = {
+      'name': nameController,
+      'cantidad': cantidadController,
+      'unidadesCantidad': unidadesCantidadController,
+      'calorias': caloriasController,
+      'grasas': grasasController,
+      'proteinas': proteinasController,
+      'carbohidratos': carbohidratosController,
+      'image': imageController,
+      'nombreUsuario': nombreUsuarioController,
+      'sodio': sodioController,
+      'azucar': azucarController,
+      'fibra': fibraController,
+      'codigoDeBarras': codigoDeBarrasController,
+    };
+    var body = json.encode(data);
+    var response = await http.put(Uri.parse(url),
+        headers: {"Content-Type": "application/json"}, body: body);
+    //Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+    return response;
   }
 
   Future<http.Response> insertarAlimento(
@@ -1325,7 +1422,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       String image,
       String codigoDeBarras) async {
     final response = await http.post(
-      Uri.parse('${urlConexion}/foods/add'),
+      Uri.parse('${urlConexion1}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

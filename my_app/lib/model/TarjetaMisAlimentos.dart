@@ -7,10 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
-//final urlConexion = 'http://35.241.179.64:8080';
+//final urlConexion1 = 'http://35.241.179.64:8080';
 final urlConexion1 = 'http://localhost:8080';
-
-
 
 class TarjetaMisAlimento extends StatefulWidget {
   final int id;
@@ -25,34 +23,39 @@ class TarjetaMisAlimento extends StatefulWidget {
   final double carbohidratos;
   final double sodio;
   final double azucar;
-  final double fibra; 
+  final double fibra;
   final String unidadesCantidad;
 
-  const TarjetaMisAlimento(
-      {
-      required this.codigoDeBarras,
-      required this.imageUrl,
-      required this.nombreAlimento, 
-      required this.id, required this.nombreUsuario, 
-      required this.cantidad, required this.calorias, 
-      required this.grasas, required this.proteinas, 
-      required this.carbohidratos, required this.sodio, 
-      required this.azucar, required this.fibra, required this.unidadesCantidad,});
+  const TarjetaMisAlimento({
+    required this.codigoDeBarras,
+    required this.imageUrl,
+    required this.nombreAlimento,
+    required this.id,
+    required this.nombreUsuario,
+    required this.cantidad,
+    required this.calorias,
+    required this.grasas,
+    required this.proteinas,
+    required this.carbohidratos,
+    required this.sodio,
+    required this.azucar,
+    required this.fibra,
+    required this.unidadesCantidad,
+  });
 
   @override
   _TarjetaMisAlimentoState createState() => _TarjetaMisAlimentoState();
 }
 
 class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
-
-    Future<void> deleteData(int id) async {
+  Future<void> deleteData(int id) async {
     final response = await http.delete(
       Uri.parse("$urlConexion1/foods/$id"),
     );
     _navigateAlimentos(context);
   }
-    _navigateAlimentos(BuildContext context) async {
-      print("navegando");
+
+  _navigateAlimentos(BuildContext context) async {
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
@@ -81,42 +84,50 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
         child: InkWell(
           borderRadius: BorderRadius.circular(8.0),
           onTap: () {
-     Navigator.push(
-      context,
-      MaterialPageRoute(
-           builder: (context) =>
-            MostrarFood(name: widget.nombreAlimento, 
-            cantidad: widget.cantidad, unidadesCantidad: widget.unidadesCantidad, 
-            calorias: widget.calorias, grasas: widget.grasas, proteinas: widget.proteinas, 
-            carbohidratos: widget.carbohidratos, sodio: widget.sodio, 
-            azucar: widget.azucar, fibra: widget.fibra, image: widget.imageUrl, 
-            codigoDeBarras: widget.codigoDeBarras, nombreUsuario: widget.nombreUsuario)
-      ));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MostrarFood(
+                          name: widget.nombreAlimento,
+                          cantidad: widget.cantidad,
+                          unidadesCantidad: widget.unidadesCantidad,
+                          calorias: widget.calorias,
+                          grasas: widget.grasas,
+                          proteinas: widget.proteinas,
+                          carbohidratos: widget.carbohidratos,
+                          sodio: widget.sodio,
+                          azucar: widget.azucar,
+                          fibra: widget.fibra,
+                          image: widget.imageUrl,
+                          codigoDeBarras: widget.codigoDeBarras,
+                          nombreUsuario: widget.nombreUsuario,
+                          id: 0,
+                        )));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Align(
-                      alignment: Alignment.topRight,
-                      heightFactor: 0.5,
-                      child: IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.black,
-                        onPressed: () {
-                          deleteData(widget.id);
-                        },
-                      ),
-                    ),
-                    SizedBox(height:11),
+                alignment: Alignment.topRight,
+                heightFactor: 0.5,
+                child: IconButton(
+                  icon: Icon(Icons.delete_outline),
+                  color: Colors.black,
+                  onPressed: () {
+                    deleteData(widget.id);
+                  },
+                ),
+              ),
+              SizedBox(height: 11),
               widget.imageUrl != null && widget.imageUrl != ""
-                  ? FutureBuilder(
+                  ? Expanded(child: FutureBuilder(
                       future: http.head(Uri.parse(widget.imageUrl)),
                       builder: (BuildContext context,
                           AsyncSnapshot<http.Response> snapshot) {
                         if (snapshot.hasData &&
                             snapshot.data!.statusCode == 200) {
                           return Padding(
-                              padding: EdgeInsets.fromLTRB(22, 0, 30, 0),
+                              padding: EdgeInsets.fromLTRB(20, 0, 28, 0),
                               child: SizedBox(
                                 height: 140,
                                 child: ClipRRect(
@@ -137,6 +148,7 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                         }
                       },
                     )
+                  )
                   : Icon(
                       Icons.fastfood,
                       color: Color.fromARGB(221, 255, 181, 71),

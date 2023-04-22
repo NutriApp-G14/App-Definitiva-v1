@@ -11,7 +11,14 @@ public class RegistroComidas {
     private String nombreUsuario;
     private String fecha;
     private String tipoDeComida;
+    private String nombreAlimento;
     
+    public String getNombreAlimento() {
+        return nombreAlimento;
+    }
+    public void setNombreAlimento(String nombreAlimento) {
+        this.nombreAlimento = nombreAlimento;
+    }
     public Integer getId() {
         return id;
     }

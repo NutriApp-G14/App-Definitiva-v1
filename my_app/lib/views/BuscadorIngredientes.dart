@@ -197,13 +197,12 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
                             top: 0), // establece el margen superior en 0
                         child: ElevatedButton(
                           onPressed: () {
-                            print(_listaDeAlimentos[index]);
-                            print(_listaDeAlimentos[index]['nutriments']
-                                ['energy-kcal_100g']);
+                            ;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MostrarFood(
+                                      id: 0,
                                         nombreUsuario: widget.nombreUsuario,
                                         codigoDeBarras: _listaDeAlimentos[index]
                                                   ['codigoDeBarras'] ?? "",
@@ -354,7 +353,6 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
       var body = json.decode(response.body);
       var listaDeAlimentos =
           body['products'].toList(); //.cast<Map<String, dynamic>>();
-      print(listaDeAlimentos);
       setState(() {
         _listaDeAlimentos = listaDeAlimentos;
       });

@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/controllers/databasehelpers.dart';
@@ -21,11 +21,30 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
   List<String> _foodList = [];
   List<Map<String, dynamic>> _foods = [];
   var _listaDeAlimentos = [];
+  var alimentoCodBar = [];
 
   void _onSubmitSearch() async {
     if (_query.isNotEmpty) {
       //await searchAndDisplayFood(_query);
       await searchAndDisplayFoodNuevaAPI(_query);
+    }
+  }
+
+  String _barcode = '';
+
+  Future<void> _scanBarcode() async {
+    try {
+      String barcode = await FlutterBarcodeScanner.scanBarcode(
+          '#FF0000', 'Cancel', true, ScanMode.BARCODE);
+
+      if (barcode != '-1') {
+        setState(() {
+          _barcode = barcode;
+        });
+        await _fetchFood(_barcode);
+      }
+    } catch (e) {
+      print('Error al escanear el código de barras: $e');
     }
   }
 
@@ -70,6 +89,10 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
               hintText: 'Introduce el nombre de la comida',
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              suffixIcon: IconButton(
+                icon: Icon(Icons.barcode_reader),
+                onPressed: _scanBarcode,
+              ),
             ),
           ),
           SizedBox(height: 10),
@@ -225,15 +248,16 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                             top: 0), // establece el margen superior en 0
                         child: ElevatedButton(
                           onPressed: () {
-                            print(_listaDeAlimentos[index]);
-                            print(_listaDeAlimentos[index]['nutriments']
-                                ['energy-kcal_100g']);
+                           
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MostrarFood(
                                       codigoDeBarras:  _listaDeAlimentos[index]['_id'],
                                       nombreUsuario: widget.nombreUsuario,
+                                          id: 0,
+                                          
+                                         
                                           name: _listaDeAlimentos[index]
                                                   ['product_name'] ??
                                               "",
@@ -383,9 +407,86 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
       var body = json.decode(response.body);
       var listaDeAlimentos =
           body['products'].toList(); //.cast<Map<String, dynamic>>();
-      print(listaDeAlimentos);
       setState(() {
         _listaDeAlimentos = listaDeAlimentos;
+      });
+    } else {
+      print('Error al realizar la búsqueda');
+    }
+  }
+
+  Future<http.Response> searchFoodNuevaAPIBarCode(String barcode) async {
+    var url1 = 'https://world.openfoodfacts.org/api/v0/product/$barcode.json';
+    return await http.get(Uri.parse(url1));
+  }
+
+  Future<void> _fetchFood(barcode) async {
+    var response = await searchFoodNuevaAPIBarCode(barcode);
+    if (response.statusCode == 200) {
+      var body = json.decode(response.body);
+      var alimentoCodBar = body['product'];
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MostrarFood(
+                    id: 0,
+                    codigoDeBarras: alimentoCodBar['_id'],
+                    nombreUsuario: widget.nombreUsuario,
+                    name: alimentoCodBar['product_name'] ?? "",
+                    cantidad: 100.0,
+                    unidadesCantidad: "grams",
+                    calorias: (alimentoCodBar['nutriments']?['energy-kcal_100g']
+                            is String)
+                        ? double.parse(
+                            alimentoCodBar['nutriments']['energy-kcal_100g'])
+                        : alimentoCodBar['nutriments']['energy-kcal_100g']
+                                ?.toDouble() ??
+                            0.0,
+                    grasas: (alimentoCodBar['nutriments']?['fat_100g']
+                            is String)
+                        ? double.parse(alimentoCodBar['nutriments']['fat_100g'])
+                        : alimentoCodBar['nutriments']['fat_100g']
+                                ?.toDouble() ??
+                            0.0,
+                    proteinas: (alimentoCodBar['nutriments']?['proteins_100g']
+                            is String)
+                        ? double.parse(
+                            alimentoCodBar['nutriments']['proteins_100g'])
+                        : alimentoCodBar['nutriments']['proteins_100g']
+                                ?.toDouble() ??
+                            0.0,
+                    carbohidratos: (alimentoCodBar['nutriments']
+                            ?['carbohydrates_100g'] is String)
+                        ? double.parse(
+                            alimentoCodBar['nutriments']['carbohydrates_100g'])
+                        : alimentoCodBar['nutriments']['carbohydrates_100g']
+                                ?.toDouble() ??
+                            0.0,
+                    sodio:
+                        (alimentoCodBar['nutriments']?['sodium_100g'] is String)
+                            ? double.parse(
+                                alimentoCodBar['nutriments']['sodium_100g'])
+                            : alimentoCodBar['nutriments']['sodium_100g']
+                                    ?.toDouble() ??
+                                0.0,
+                    azucar:
+                        (alimentoCodBar['nutriments']?['sugars_100g'] is String)
+                            ? double.parse(
+                                alimentoCodBar['nutriments']['sugars_100g'])
+                            : alimentoCodBar['nutriments']['sugars_100g']
+                                    ?.toDouble() ??
+                                0.0,
+                    fibra:
+                        (alimentoCodBar['nutriments']?['fiber_100g'] is String)
+                            ? double.parse(
+                                alimentoCodBar['nutriments']['fiber_100g'])
+                            : alimentoCodBar['nutriments']['fiber_100g']
+                                    ?.toDouble() ??
+                                0.0,
+                    image: alimentoCodBar['image_url'] ?? "",
+                  )));
+      setState(() {
+        _listaDeAlimentos = alimentoCodBar;
       });
     } else {
       print('Error al realizar la búsqueda');
@@ -428,7 +529,6 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
       }),
     );
     print(response.statusCode);
-    print("insertado");
     Navigator.pop(context);
     _navigateListAlimento(context);
     return response;

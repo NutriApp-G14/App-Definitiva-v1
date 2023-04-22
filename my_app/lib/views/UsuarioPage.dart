@@ -551,7 +551,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                         usuario.weight,
                                         usuario.gender,
                                         usuario.activity,
-                                        _objectiveSeleccionado);
+                                        _objectiveSeleccionado,
+                                        usuario.imageString);
 
                                     requerimientoCalorico = _factorActividad(
                                         usuario.activity,

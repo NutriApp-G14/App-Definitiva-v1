@@ -46,10 +46,9 @@ public class RegistroComidasController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RegistroComidas> getRegistroComidas(@PathVariable String id) {
+    public ResponseEntity<RegistroComidas> getRegistroComida(@PathVariable String id) {
         return registroComidasRepository.findById(id).map(
-                registroComidas -> ResponseEntity.ok().body(registroComidas))
-                .orElse(new ResponseEntity<RegistroComidas>(HttpStatus.NOT_FOUND));
+                registroComidas -> ResponseEntity.ok().body(registroComidas)).orElse(new ResponseEntity<RegistroComidas>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/{id}")
@@ -77,5 +76,10 @@ public class RegistroComidasController {
         return (List<RegistroComidas>) registroComidasRepository.findByFechaAndTipoDeComidaAndNombreUsuario(
                 fecha, tipoDeComida, nombreUsuario);
 
+    }
+
+    @GetMapping("/user/{nombreUsuario}")
+    public List<RegistroComidas> getRegistroUsuario(@PathVariable String nombreUsuario) {
+        return (List<RegistroComidas>) registroComidasRepository.findByNombreUsuario(nombreUsuario);
     }
 }

@@ -328,7 +328,8 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                                           _nivelActividadSeleccionado == '')
                                       ? usuario.activity
                                       : _nivelActividadSeleccionado,
-                                  usuario.objective //luego hay q cambiar esto
+                                  usuario.objective,
+                                  usuario.imageString //luego hay q cambiar esto
                                   );
 
                               dataBaseHelper.updateAlergias(

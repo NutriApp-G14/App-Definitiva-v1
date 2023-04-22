@@ -1,4 +1,4 @@
-zimport 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -198,7 +198,6 @@ class _UsuarioPageState extends State<UsuarioPage> {
     };
   }
 
-  
   void showSnackBar(String message) {
     final snackBar = SnackBar(
       content: Text(message),
@@ -649,16 +648,16 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                       _objectiveSeleccionado = value;
                                     });
                                     dataBaseHelper.updateUsuario(
-                                        usuario.nombre,
-                                        usuario.nombreUsuario,
-                                        usuario.password,
-                                        usuario.age,
-                                        usuario.height,
-                                        usuario.weight,
-                                        usuario.gender,
-                                        usuario.activity,
-                                        _objectiveSeleccionado,
-                                        usuario.imageString);
+                                      usuario.nombre,
+                                      usuario.nombreUsuario,
+                                      usuario.password,
+                                      usuario.age,
+                                      usuario.height,
+                                      usuario.weight,
+                                      usuario.gender,
+                                      usuario.activity,
+                                      _objectiveSeleccionado,
+                                    );
 
                                     requerimientoCalorico = _factorActividad(
                                         usuario.activity,

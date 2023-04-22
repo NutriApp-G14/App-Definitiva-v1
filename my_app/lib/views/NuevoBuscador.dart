@@ -353,7 +353,6 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                                           image: _listaDeAlimentos[index]
                                                   ['image_url'] ??
                                               "",
-                                          
                                         )));
                           },
                           style: ElevatedButton.styleFrom(
@@ -432,6 +431,9 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
           context,
           MaterialPageRoute(
               builder: (context) => MostrarFood(
+                    id: 0,
+                    codigoDeBarras: alimentoCodBar['_id'],
+                    nombreUsuario: widget.nombreUsuario,
                     name: alimentoCodBar['product_name'] ?? "",
                     cantidad: 100.0,
                     unidadesCantidad: "grams",
@@ -484,7 +486,6 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                                     ?.toDouble() ??
                                 0.0,
                     image: alimentoCodBar['image_url'] ?? "",
-                    
                   )));
       setState(() {
         _listaDeAlimentos = alimentoCodBar;

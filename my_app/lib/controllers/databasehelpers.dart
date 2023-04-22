@@ -233,16 +233,16 @@ class DataBaseHelper {
 
 // Actualizar Usuario
   Future<http.Response> updateUsuario(
-      String nombreController,
-      String nombreUsuarioController,
-      String passwordController,
-      String? ageController,
-      String? heightController,
-      String? weightController,
-      String? genderController,
-      String? activityController,
-      String? objectiveController,
-      String? imageController) async {
+    String nombreController,
+    String nombreUsuarioController,
+    String passwordController,
+    String? ageController,
+    String? heightController,
+    String? weightController,
+    String? genderController,
+    String? activityController,
+    String? objectiveController,
+  ) async {
     var url = "${urlConexion}/users/$nombreUsuarioController";
     Map data = {
       'nombre': nombreController,
@@ -254,7 +254,6 @@ class DataBaseHelper {
       'gender': genderController,
       'activity': activityController,
       'objective': objectiveController,
-      'imageString': imageController,
     };
     var body = json.encode(data);
     var response = await http.put(Uri.parse(url),

@@ -66,7 +66,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
     Usuario usuario = await dataBaseHelper.getUsuarioById(widget.nombreUsuario);
     String usuarioNombre = usuario.nombre;
     String usuarioNombreUsuario = usuario.nombreUsuario;
-    String imageProfile = usuario.imageProfile;
+    String imageProfile = "";
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(
           nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),

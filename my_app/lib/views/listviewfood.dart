@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_app/model/TarjetaMisAlimentos.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/AddRecetasPage.dart';
 import 'package:my_app/views/CrearUsuario.dart';
@@ -278,6 +279,7 @@ class ItemList extends StatelessWidget {
       {required this.list,
       required this.deleteItem,
       required this.nombreUsuario});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -292,104 +294,32 @@ class ItemList extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
-            print("media");
+          var nombreAlimento = list[i]['name'].toString() ?? "";
+          var codigoDeBarras= list[i]['codigoDeBarras'] ??"";
+          var imageUrl = ""; 
+          var id =  list[i]['id']; 
+          if (list[i]['image'] != null && list[i]['image'] != ""){
+            imageUrl = list[i]['image'];
+          }
+
+          var cantidad= list[i]['cantidad']?? 100.0;
+          var calorias= list[i]['calorias']?? 0.0;
+          var grasas= list[i]['grasas']?? 0.0;
+          var proteinas= list[i]['proteinas']?? 0.0;
+          var carbohidratos= list[i]['carbohidratos']?? 0.0;
+          var sodio=  list[i]['sodio'] ?? 0.0;
+          var azucar=  list[i]['azucar'] ?? 0.0;
+          var fibra=  list[i]['fibra'] ?? 0.0;
+          var unidadesCantidad =  list[i]['unidadesCantidad'] ?? "";
+
             return SizedBox(
               height: 100.3,
-              child: Card(
-                color: Colors.orange[200],
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: list[i]['image'] != null && list[i]['image'] != ""
-                          ? FutureBuilder(
-                              future: http.head(Uri.parse(list[i]['image'])),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<http.Response> snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data!.statusCode == 200) {
-                                  return FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: list[i]['image'],
-                                    fit: BoxFit.cover,
-                                  );
-                                } else {
-                                  return Icon(
-                                    Icons.fastfood,
-                                    color: Colors.white,
-                                    size: 50,
-                                  );
-                                }
-                              },
-                            )
-                          : Icon(
-                              Icons.fastfood,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
-                        onPressed: () {
-                          deleteItem(list[i]['id']);
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          list[i]['name'].toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal,
-                            fontFamily: "Open Sans",
-                            fontSize: 18.0,
-                            // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.remove_red_eye),
-                        //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
-                        onPressed: () {
-                          print("codigo");
-                          print(list[i]['codigoDeBarras']);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MostrarFood(
-                                  codigoDeBarras:
-                                      list[i]['codigoDeBarras'] ?? "",
-                                  nombreUsuario: nombreUsuario,
-                                  name: list[i]['name'],
-                                  cantidad: list[i]['cantidad'],
-                                  unidadesCantidad: list[i]['unidadesCantidad'],
-                                  calorias: list[i]['calorias'],
-                                  grasas: list[i]['grasas'],
-                                  proteinas: list[i]['proteinas'],
-                                  carbohidratos: list[i]['carbohidratos'],
-                                  sodio: list[i]['sodio'] ?? 0.0,
-                                  azucar: list[i]['azucar'] ?? 0.0,
-                                  fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['image']),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child:  TarjetaMisAlimento(nombreAlimento: nombreAlimento 
+              ,codigoDeBarras: codigoDeBarras, imageUrl: imageUrl, id:id,
+               nombreUsuario: nombreUsuario, cantidad:cantidad, calorias: calorias, grasas: grasas,
+               proteinas: proteinas, carbohidratos:carbohidratos, sodio: sodio , azucar: azucar, fibra:fibra,
+               unidadesCantidad: unidadesCantidad,
+            )
             );
           },
         );
@@ -403,103 +333,32 @@ class ItemList extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
+          var nombreAlimento = list[i]['name'].toString() ?? "";
+          var codigoDeBarras= list[i]['codigoDeBarras'] ??"";
+          var imageUrl = ""; 
+          var id =  list[i]['id']; 
+          if (list[i]['image'] != null && list[i]['image'] != ""){
+            imageUrl = list[i]['image'];
+          }
+
+          var cantidad= list[i]['cantidad']?? 100.0;
+          var calorias= list[i]['calorias']?? 0.0;
+          var grasas= list[i]['grasas']?? 0.0;
+          var proteinas= list[i]['proteinas']?? 0.0;
+          var carbohidratos= list[i]['carbohidratos']?? 0.0;
+          var sodio=  list[i]['sodio'] ?? 0.0;
+          var azucar=  list[i]['azucar'] ?? 0.0;
+          var fibra=  list[i]['fibra'] ?? 0.0;
+          var unidadesCantidad =  list[i]['unidadesCantidad'] ?? "";
+
             return SizedBox(
               height: 100.3,
-              child: Card(
-                color: Colors.orange[200],
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: list[i]['image'] != null && list[i]['image'] != ""
-                          ? FutureBuilder(
-                              future: http.head(Uri.parse(list[i]['image'])),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<http.Response> snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data!.statusCode == 200) {
-                                  return FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: list[i]['image'],
-                                    fit: BoxFit.cover,
-                                  );
-                                } else {
-                                  return Icon(
-                                    Icons.fastfood,
-                                    color: Colors.white,
-                                    size: 50,
-                                  );
-                                }
-                              },
-                            )
-                          : Icon(
-                              Icons.fastfood,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
-                        onPressed: () {
-                          deleteItem(list[i]['id']);
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          list[i]['name'].toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal,
-                            fontFamily: "Open Sans",
-                            fontSize: 18.0,
-                            // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.remove_red_eye),
-                        //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
-                        onPressed: () {
-                          print("codigo");
-                          print(list[i]['codigoDeBarras']);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MostrarFood(
-                                  codigoDeBarras:
-                                      list[i]['codigoDeBarras'] ?? "",
-                                  nombreUsuario: nombreUsuario,
-                                  name: list[i]['name'],
-                                  cantidad: list[i]['cantidad'],
-                                  unidadesCantidad: list[i]['unidadesCantidad'],
-                                  calorias: list[i]['calorias'],
-                                  grasas: list[i]['grasas'],
-                                  proteinas: list[i]['proteinas'],
-                                  carbohidratos: list[i]['carbohidratos'],
-                                  sodio: list[i]['sodio'] ?? 0.0,
-                                  azucar: list[i]['azucar'] ?? 0.0,
-                                  fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['image']),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child:  TarjetaMisAlimento(nombreAlimento: nombreAlimento 
+              ,codigoDeBarras: codigoDeBarras, imageUrl: imageUrl, id:id,
+               nombreUsuario: nombreUsuario, cantidad:cantidad, calorias: calorias, grasas: grasas,
+               proteinas: proteinas, carbohidratos:carbohidratos, sodio: sodio , azucar: azucar, fibra:fibra,
+               unidadesCantidad:unidadesCantidad ,
+            )
             );
           },
         );
@@ -513,102 +372,31 @@ class ItemList extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
+          var nombreAlimento = list[i]['name'].toString() ?? "";
+          var codigoDeBarras= list[i]['codigoDeBarras'] ??"";
+          var imageUrl = ""; 
+          var id =  list[i]['id']; 
+          if (list[i]['image'] != null && list[i]['image'] != ""){
+            imageUrl = list[i]['image'];
+          }
+          var cantidad= list[i]['cantidad']?? 100.0;
+          var calorias= list[i]['calorias']?? 0.0;
+          var grasas= list[i]['grasas']?? 0.0;
+          var proteinas= list[i]['proteinas']?? 0.0;
+          var carbohidratos= list[i]['carbohidratos']?? 0.0;
+          var sodio=  list[i]['sodio'] ?? 0.0;
+          var azucar=  list[i]['azucar'] ?? 0.0;
+          var fibra=  list[i]['fibra'] ?? 0.0;
+          var unidadesCantidad =  list[i]['unidadesCantidad'] ?? "";
+
             return SizedBox(
               height: 100.3,
-              child: Card(
-                color: Colors.orange[200],
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: list[i]['image'] != null && list[i]['image'] != ""
-                          ? FutureBuilder(
-                              future: http.head(Uri.parse(list[i]['image'])),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<http.Response> snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data!.statusCode == 200) {
-                                  return FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: list[i]['image'],
-                                    fit: BoxFit.cover,
-                                  );
-                                } else {
-                                  return Icon(
-                                    Icons.fastfood,
-                                    color: Colors.white,
-                                    size: 50,
-                                  );
-                                }
-                              },
-                            )
-                          : Icon(
-                              Icons.fastfood,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
-                        onPressed: () {
-                          deleteItem(list[i]['id']);
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          list[i]['name'].toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal,
-                            fontFamily: "Open Sans",
-                            fontSize: 18.0,
-                            // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.remove_red_eye),
-                        //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MostrarFood(
-                                  codigoDeBarras:
-                                      list[i]['codigoDeBarras'] ?? "",
-                                  nombreUsuario: nombreUsuario,
-                                  name: list[i]['name'],
-                                  cantidad: list[i]['cantidad'],
-                                  unidadesCantidad: list[i]['unidadesCantidad'],
-                                  calorias: list[i]['calorias'],
-                                  grasas: list[i]['grasas'],
-                                  proteinas: list[i]['proteinas'],
-                                  carbohidratos: list[i]['carbohidratos'],
-                                  sodio: list[i]['sodio'] ?? 0.0,
-                                  azucar: list[i]['azucar'] ?? 0.0,
-                                  fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['image']),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+              child: TarjetaMisAlimento(nombreAlimento: nombreAlimento 
+              ,codigoDeBarras: codigoDeBarras, imageUrl: imageUrl, id:id,
+               nombreUsuario: nombreUsuario, cantidad:cantidad, calorias: calorias, grasas: grasas,
+               proteinas: proteinas, carbohidratos:carbohidratos, sodio: sodio , azucar: azucar, fibra:fibra,
+               unidadesCantidad: unidadesCantidad,
+            ));
           },
         );
       }

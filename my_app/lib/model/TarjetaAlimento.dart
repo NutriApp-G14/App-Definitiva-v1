@@ -27,99 +27,109 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
     @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 4.0,
-            offset: Offset(0, 4),
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(8.0),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.25),
+        blurRadius: 4.0,
+        offset: Offset(0, 4),
+      ),
+    ],
+  ),
+  child: Material(
+    borderRadius: BorderRadius.circular(8.0),
+    color: Colors.white,
+    child: InkWell(
+      borderRadius: BorderRadius.circular(8.0),
+      onTap: () {
+        //MostrarFood(name: name, cantidad: cantidad, unidadesCantidad: unidadesCantidad, calorias: calorias, grasas: grasas, proteinas: proteinas, carbohidratos: carbohidratos, sodio: sodio, azucar: azucar, fibra: fibra, image: image)
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          widget.imageUrl != null && widget.imageUrl != ""
+              ? FutureBuilder(
+                  future: http.head(Uri.parse(widget.imageUrl)),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<http.Response> snapshot) {
+                    if (snapshot.hasData &&
+                        snapshot.data!.statusCode == 200) {
+                      return Padding(
+                        padding: EdgeInsets.fromLTRB(30,10,30,0),
+                        child: SizedBox(
+                          height: 140,
+                          child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: FadeInImage.assetNetwork(
+                            placeholder: 'assets/placeholder_image.png',
+                            image: widget.imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
+                      );
+                    } else {
+                      return Icon(
+                        Icons.fastfood,
+                        color: Color.fromARGB(221, 255, 181, 71),
+                        size: 100,
+                      );
+                    }
+                  },
+                )
+              : Icon(
+                  Icons.fastfood,
+                  color: Color.fromARGB(221, 255, 181, 71),
+                  size: 100,
+                ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.nombreAlimento,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                  ),
+                ),
+                SizedBox(height: 4.0),
+                Row(
+                  children: [
+                    for (int i = 0; i < widget.scoreTitles.length; i++)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Tooltip(
+                          message: widget.scoreTitles[i],
+                          child: SvgPicture.network(
+                            widget.scoreImages[i],
+                            placeholderBuilder: (BuildContext context) =>
+                                SizedBox(
+                              height: 20.0,
+                            ),
+                            height: 20.0,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                SizedBox(height: 4.0),
+                Text(
+                  " ${widget.codigoDeBarras}",
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
-      child: Material(
-        borderRadius: BorderRadius.circular(8.0),
-        color: Colors.white,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(8.0),
-          onTap: () {
-            //MostrarFood(name: name, cantidad: cantidad, unidadesCantidad: unidadesCantidad, calorias: calorias, grasas: grasas, proteinas: proteinas, carbohidratos: carbohidratos, sodio: sodio, azucar: azucar, fibra: fibra, image: image)
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-                        widget.imageUrl != null && widget.imageUrl != ""
-                          ? FutureBuilder(
-                              future: http.head(Uri.parse(widget.imageUrl)),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<http.Response> snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data!.statusCode == 200) {
-                                  return FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: widget.imageUrl,
-                                    height:100 ,
-                                    width:100,
-                                  );
-                                } else {
-                                  return Icon(
-                                    Icons.fastfood,
-                                    color: Color.fromARGB(221, 255, 181, 71),
-                                    size: 100,
-                                  );
-                                }
-                              },
-                            )
-                          : Icon(
-                              Icons.fastfood,
-                              color:  Color.fromARGB(221, 255, 181, 71),
-                              size: 100,
-                            ),
+    ),
+  ),
+);
 
-             
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.nombreAlimento,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    SizedBox(height: 4.0),
-                    Row(
-                      children: [
-                        for (int i = 0; i < widget.scoreTitles.length; i++)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Tooltip(
-                              message: widget.scoreTitles[i],
-                               child: SvgPicture.network(
-                                  widget.scoreImages[i],
-                                   placeholderBuilder: (BuildContext context) => CircularProgressIndicator(),
-                                    height: 20.0,
-                               ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    SizedBox(height: 4.0),
-                    Text(
-                     " ${widget.codigoDeBarras}",
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

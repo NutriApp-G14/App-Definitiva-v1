@@ -7,7 +7,6 @@ import 'package:my_app/model/NavBar.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/EditarUsuario.dart';
-import 'package:my_app/views/buscador.dart';
 import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/model/Alergias.dart';
 import 'package:pie_chart/pie_chart.dart';

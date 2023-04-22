@@ -17,8 +17,7 @@ public class Usuario {
     private String gender;
     private String activity;
     private String objective;
-// private Array allergies;
-
+    private String imageString;
 
     public String getPassword() {
         return password;
@@ -97,5 +96,11 @@ public class Usuario {
     }
     public void setObjective(String objective) {
         this.objective = objective;
+    }
+    public String getImageString() {
+        return imageString;
+    }
+    public void setImageString(String imageString) {
+        this.imageString = imageString;
     }
 }

@@ -1,13 +1,22 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
+import 'dart:ffi' as ffi;
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:my_app/controllers/databasehelpers.dart';
+import 'package:my_app/controllers/registroHelpers.dart';
+import 'package:my_app/views/listviewfood.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'mostrarFood.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
-class MostrarFood extends StatelessWidget {
+class MostrarFood extends StatefulWidget {
+  final int id;
+  final String codigoDeBarras;
+  final String nombreUsuario;
   final String name;
   final double cantidad;
   final String unidadesCantidad;
@@ -21,6 +30,9 @@ class MostrarFood extends StatelessWidget {
   final String image;
 
   const MostrarFood({
+    required this.id,
+    required this.codigoDeBarras,
+    required this.nombreUsuario,
     required this.name,
     required this.cantidad,
     required this.unidadesCantidad,
@@ -33,14 +45,70 @@ class MostrarFood extends StatelessWidget {
     required this.fibra,
     required this.image,
   });
+  @override
+  _MostrarFoodState createState() => _MostrarFoodState();
+}
+
+class _MostrarFoodState extends State<MostrarFood> {
+  RegistroHelper registrohelper = RegistroHelper();
+  DateTime now = DateTime.now();
+  late String formattedDate;
+  DataBaseHelper dataBaseHelper = DataBaseHelper();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    formattedDate = DateFormat('dd-MM-yyyy').format(now);
+  }
+
+  _navigateListAlimento(BuildContext context) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+  }
+
+  _recalucularInformacion(
+      double informacion, double cantidad, double cantidadInicial) {
+    return (cantidad * informacion) / cantidadInicial;
+  }
+
   final bool isPremium = false;
+
+  double cantidad = 0.0;
+  var unidadesCantidad = 0.0;
+  double calorias = 0.0;
+  double proteinas = 0.0;
+  double carbohidratos = 0.0;
+  double grasas = 0.0;
+  double fibra = 0.0;
+  double sodio = 0.0;
+  double azucar = 0.0;
 
   @override
   Widget build(BuildContext context) {
+    var nueva_cantidad = cantidad != 0.0 ? cantidad : widget.cantidad;
+    calorias = _recalucularInformacion(widget.calorias, nueva_cantidad, 100);
+    proteinas = _recalucularInformacion(widget.proteinas, nueva_cantidad, 100);
+    carbohidratos =
+        _recalucularInformacion(widget.carbohidratos, nueva_cantidad, 100);
+    grasas = _recalucularInformacion(widget.grasas, nueva_cantidad, 100);
+    azucar = _recalucularInformacion(widget.azucar, nueva_cantidad, 100);
+    sodio = _recalucularInformacion(widget.sodio, nueva_cantidad, 100);
+    fibra = _recalucularInformacion(widget.fibra, nueva_cantidad, 100);
+    double calculoCalorias = cantidad != 0.0 ? calorias : widget.calorias;
+    double calculoProteinas = cantidad != 0.0 ? proteinas : widget.proteinas;
+    double calculoCarbohidratos =
+        cantidad != 0.0 ? carbohidratos : widget.carbohidratos;
+    double calculoGrasas = cantidad != 0.0 ? grasas : widget.grasas;
+    double calculoSodio = cantidad != 0.0 ? sodio : widget.sodio;
+    double calculoFibra = cantidad != 0.0 ? fibra : widget.fibra;
+    double calculoAzucar = cantidad != 0.0 ? azucar : widget.azucar;
     Map<String, double> dataMap = {
-      "Proteínas": proteinas,
-      "Hidratos": carbohidratos,
-      "Grasas": grasas,
+      "Proteínas": calculoProteinas,
+      "Hidratos": calculoCarbohidratos,
+      "Grasas": calculoGrasas,
     };
     return Scaffold(
         appBar: AppBar(
@@ -92,18 +160,19 @@ class MostrarFood extends StatelessWidget {
                                   padding: EdgeInsets.fromLTRB(0, 30, 10, 0),
                                   child: Column(children: [
                                     FutureBuilder<http.Response>(
-                                      future: http.get(Uri.parse(image)),
+                                      future: http.get(Uri.parse(widget.image)),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                                 ConnectionState.done &&
                                             snapshot.hasData &&
                                             snapshot.data!.statusCode == 200 &&
                                             ['http', 'https'].contains(
-                                                Uri.parse(image).scheme)) {
+                                                Uri.parse(widget.image)
+                                                    .scheme)) {
                                           return FadeInImage.assetNetwork(
                                             placeholder:
                                                 'assets/placeholder_image.png',
-                                            image: image,
+                                            image: widget.image,
                                             fit: BoxFit.cover,
                                           );
                                         } else {
@@ -125,7 +194,7 @@ class MostrarFood extends StatelessWidget {
                                 SizedBox(height: 15),
                                 Wrap(children: [
                                   Text(
-                                    name,
+                                    widget.name,
                                     style: TextStyle(
                                         fontSize: 17.0,
                                         fontWeight: FontWeight.bold,
@@ -136,33 +205,113 @@ class MostrarFood extends StatelessWidget {
                                 Text(
                                   'Cantidad: ',
                                   style: TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextFormField(
+                                        style: TextStyle(fontSize: 16.0),
+                                        decoration: InputDecoration(
+                                          hintText: '$nueva_cantidad',
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            borderSide: BorderSide(
+                                              color: Colors.orange,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 5.0),
+                                          isDense: true,
+                                        ),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            cantidad = (value.isNotEmpty
+                                                ? double.tryParse(value)
+                                                : 0.0)!;
+                                            var nueva_cantidad = cantidad != 0.0
+                                                ? cantidad
+                                                : widget.cantidad;
+                                            calorias = _recalucularInformacion(
+                                                widget.calorias,
+                                                nueva_cantidad,
+                                                100);
+                                            proteinas = _recalucularInformacion(
+                                                widget.proteinas,
+                                                nueva_cantidad,
+                                                100);
+                                            carbohidratos =
+                                                _recalucularInformacion(
+                                                    widget.carbohidratos,
+                                                    nueva_cantidad,
+                                                    100);
+                                            grasas = _recalucularInformacion(
+                                                widget.grasas,
+                                                nueva_cantidad,
+                                                100);
+                                            azucar = _recalucularInformacion(
+                                                widget.azucar,
+                                                nueva_cantidad,
+                                                100);
+                                            sodio = _recalucularInformacion(
+                                                widget.sodio,
+                                                nueva_cantidad,
+                                                100);
+                                            fibra = _recalucularInformacion(
+                                                widget.fibra,
+                                                nueva_cantidad,
+                                                100);
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.0),
+                                  ],
                                 ),
                                 Text(
-                                  '$cantidad $unidadesCantidad',
+                                  '$nueva_cantidad ${widget.unidadesCantidad}',
                                   style: TextStyle(
                                     fontSize: 15.0,
                                   ),
+                                  // DropdownButton<String>(
+                                  //   value: unidadesCantidad,
+                                  //   onChanged: (String? newValue) {
+                                  //     setState(() {
+                                  //       unidadesCantidad = newValue ?? '';
+                                  //     });
+                                  //   },
+                                  //   items: ['kg', 'g', 'oz', 'lb']
+                                  //       .map<DropdownMenuItem<String>>(
+                                  //           (String value) {
+                                  //     return DropdownMenuItem<String>(
+                                  //       value: value,
+                                  //       child: Text(value),
+                                  //     );
+                                  //   }).toList(),
+                                  // ),
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'Proteinas: ${proteinas} ',
+                                  'Proteinas: ${calculoProteinas.toStringAsFixed(2)} ',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
                                           238, 104, 201, 253)),
                                 ),
                                 Text(
-                                  'Carbohidratos: ${carbohidratos} ',
+                                  'Carbohidratos: ${calculoCarbohidratos.toStringAsFixed(2)} ',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
                                           251, 93, 223, 54)),
                                 ),
                                 Text(
-                                  'Grasas: ${grasas}',
+                                  'Grasas: ${calculoGrasas.toStringAsFixed(2)}',
                                   style: TextStyle(
                                       fontSize: 10.0,
                                       color: const Color.fromARGB(
@@ -248,6 +397,25 @@ class MostrarFood extends StatelessWidget {
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.white),
                                               )))),
+                                      nueva_cantidad != 100.0
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.orange,
+                                                  borderRadius:
+                                                      BorderRadius.circular(4)),
+                                              child: SizedBox(
+                                                  height: 20,
+                                                  width: 80,
+                                                  child: Center(
+                                                      child: Text(
+                                                    '$nueva_cantidad  ${widget.unidadesCantidad}',
+                                                    style: TextStyle(
+                                                        fontSize: 13.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Colors.white),
+                                                  ))))
+                                          : Container(),
                                       Container(
                                           decoration: BoxDecoration(
                                               color: Colors.orange,
@@ -255,10 +423,10 @@ class MostrarFood extends StatelessWidget {
                                                   BorderRadius.circular(4)),
                                           child: SizedBox(
                                               height: 20,
-                                              width: 100,
+                                              width: 80,
                                               child: Center(
                                                   child: Text(
-                                                '${cantidad} ${unidadesCantidad}',
+                                                '${widget.cantidad} ${widget.unidadesCantidad}',
                                                 style: TextStyle(
                                                     fontSize: 13.0,
                                                     fontWeight: FontWeight.w500,
@@ -285,15 +453,25 @@ class MostrarFood extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Calorías (Cal)',
+                                              'Calorías (Cal):               ',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
                                                     255, 194, 171, 3),
                                               ),
                                             ),
+                                            nueva_cantidad != 100.0
+                                                ? Text(
+                                                    '${calculoCalorias.toStringAsFixed(2)} Cal',
+                                                    style: TextStyle(
+                                                      fontSize: 13.0,
+                                                      color: Color.fromARGB(
+                                                          255, 194, 171, 3),
+                                                    ),
+                                                  )
+                                                : Container(),
                                             Text(
-                                              '${calorias.toStringAsFixed(2)} Cal',
+                                              '${widget.calorias.toStringAsFixed(2)} Cal',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -318,15 +496,25 @@ class MostrarFood extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Proteínas',
+                                              'Proteínas                   ',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
                                                     238, 126, 185, 217),
                                               ),
                                             ),
+                                            nueva_cantidad != 100.0
+                                                ? Text(
+                                                    '${calculoProteinas.toStringAsFixed(2)} g',
+                                                    style: TextStyle(
+                                                      fontSize: 13.0,
+                                                      color: Color.fromARGB(
+                                                          238, 126, 185, 217),
+                                                    ),
+                                                  )
+                                                : Container(),
                                             Text(
-                                              '${proteinas.toStringAsFixed(2)} g',
+                                              '${widget.proteinas.toStringAsFixed(2)} g',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -351,15 +539,25 @@ class MostrarFood extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Carbohidratos',
+                                              'Carbohidratos            ',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
                                                     253, 10, 133, 16),
                                               ),
                                             ),
+                                            nueva_cantidad != 100.0
+                                                ? Text(
+                                                    '${calculoCarbohidratos.toStringAsFixed(2)} g',
+                                                    style: TextStyle(
+                                                      fontSize: 13.0,
+                                                      color: Color.fromARGB(
+                                                          253, 10, 133, 16),
+                                                    ),
+                                                  )
+                                                : Container(),
                                             Text(
-                                              '${carbohidratos.toStringAsFixed(2)} g',
+                                              '${widget.carbohidratos.toStringAsFixed(2)} g',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -384,15 +582,25 @@ class MostrarFood extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Grasas',
+                                              'Grasas                        ',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
                                                     234, 236, 117, 109),
                                               ),
                                             ),
+                                            nueva_cantidad != 100.0
+                                                ? Text(
+                                                    '${calculoGrasas.toStringAsFixed(2)} g',
+                                                    style: TextStyle(
+                                                      fontSize: 13.0,
+                                                      color: Color.fromARGB(
+                                                          234, 236, 117, 109),
+                                                    ),
+                                                  )
+                                                : Container(),
                                             Text(
-                                              '${grasas.toStringAsFixed(2)} g',
+                                              '${widget.grasas.toStringAsFixed(2)} g',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -416,75 +624,145 @@ class MostrarFood extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Sodio',
+                                              'Sodio                           ',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Colors.grey,
                                               ),
                                             ),
-                                            if (isPremium) ...[
-                                              Column(children: [
-                                                SizedBox(height: 8.0),
-                                                Text(
-                                                  '${sodio.toStringAsFixed(2)} g',
-                                                  style: TextStyle(
-                                                    fontSize: 13.0,
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8.0)
-                                              ])
-                                            ] else ...[
-                                              IconButton(
-                                                icon: Icon(
-                                                    Icons.workspace_premium),
-                                                color: Colors.amber,
-                                                iconSize: 15.0,
-                                                onPressed: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Row(children: [
-                                                          Text(
-                                                              'Solo para premium'),
-                                                          Icon(
-                                                              Icons
-                                                                  .workspace_premium,
-                                                              color: Colors
-                                                                  .amberAccent)
-                                                        ]),
-                                                        content: Text(
-                                                            'Esta funcionalidad está disponible solo para usuarios premium'),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Text(
-                                                                'Cancelar'),
+                                            nueva_cantidad != 100.0
+                                                ? (isPremium)
+                                                    ? Column(children: [
+                                                        SizedBox(height: 8.0),
+                                                        Text(
+                                                          '${calculoSodio.toStringAsFixed(2)} g',
+                                                          style: TextStyle(
+                                                            fontSize: 13.0,
+                                                            color: Colors.grey,
                                                           ),
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
+                                                        ),
+                                                        SizedBox(height: 8.0)
+                                                      ])
+                                                    : IconButton(
+                                                        icon: Icon(Icons
+                                                            .workspace_premium),
+                                                        color: Colors.amber,
+                                                        iconSize: 15.0,
+                                                        onPressed: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: Row(
+                                                                    children: [
+                                                                      Text(
+                                                                          'Solo para premium'),
+                                                                      Icon(
+                                                                          Icons
+                                                                              .workspace_premium,
+                                                                          color:
+                                                                              Colors.amberAccent)
+                                                                    ]),
+                                                                content: Text(
+                                                                    'Esta funcionalidad está disponible solo para usuarios premium'),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: Text(
+                                                                        'Cancelar'),
+                                                                  ),
+                                                                  TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: Text(
+                                                                        'Comprar premium'),
+                                                                  ),
+                                                                ],
+                                                              );
                                                             },
-                                                            child: Text(
-                                                                'Comprar premium'),
-                                                          ),
-                                                        ],
+                                                          );
+                                                        },
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        mouseCursor:
+                                                            MouseCursor.defer,
+                                                      )
+                                                : Container(),
+                                            (isPremium)
+                                                ? Column(children: [
+                                                    SizedBox(height: 8.0),
+                                                    Text(
+                                                      '${widget.sodio.toStringAsFixed(2)} g',
+                                                      style: TextStyle(
+                                                        fontSize: 13.0,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 8.0)
+                                                  ])
+                                                : IconButton(
+                                                    icon: Icon(Icons
+                                                        .workspace_premium),
+                                                    color: Colors.amber,
+                                                    iconSize: 15.0,
+                                                    onPressed: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            title:
+                                                                Row(children: [
+                                                              Text(
+                                                                  'Solo para premium'),
+                                                              Icon(
+                                                                  Icons
+                                                                      .workspace_premium,
+                                                                  color: Colors
+                                                                      .amberAccent)
+                                                            ]),
+                                                            content: Text(
+                                                                'Esta funcionalidad está disponible solo para usuarios premium'),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child: Text(
+                                                                    'Cancelar'),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child: Text(
+                                                                    'Comprar premium'),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
                                                       );
                                                     },
-                                                  );
-                                                },
-                                                hoverColor: Colors.transparent,
-                                                mouseCursor: MouseCursor.defer,
-                                              ),
-                                            ],
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    mouseCursor:
+                                                        MouseCursor.defer,
+                                                  ),
                                           ]),
                                       Container(
                                           decoration: BoxDecoration(
@@ -501,75 +779,145 @@ class MostrarFood extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Azúcar',
+                                              'Azúcar                          ',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Colors.grey,
                                               ),
                                             ),
-                                            if (isPremium) ...[
-                                              Column(children: [
-                                                SizedBox(height: 8.0),
-                                                Text(
-                                                  '${azucar.toStringAsFixed(2)} g',
-                                                  style: TextStyle(
-                                                    fontSize: 13.0,
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8.0)
-                                              ])
-                                            ] else ...[
-                                              IconButton(
-                                                icon: Icon(
-                                                    Icons.workspace_premium),
-                                                color: Colors.amber,
-                                                iconSize: 15.0,
-                                                onPressed: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Row(children: [
-                                                          Text(
-                                                              'Solo para premium'),
-                                                          Icon(
-                                                              Icons
-                                                                  .workspace_premium,
-                                                              color: Colors
-                                                                  .amberAccent)
-                                                        ]),
-                                                        content: Text(
-                                                            'Esta funcionalidad está disponible solo para usuarios premium'),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Text(
-                                                                'Cancelar'),
+                                            nueva_cantidad != 100.0
+                                                ? (isPremium)
+                                                    ? Column(children: [
+                                                        SizedBox(height: 8.0),
+                                                        Text(
+                                                          '${calculoAzucar.toStringAsFixed(2)} g',
+                                                          style: TextStyle(
+                                                            fontSize: 13.0,
+                                                            color: Colors.grey,
                                                           ),
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
+                                                        ),
+                                                        SizedBox(height: 8.0)
+                                                      ])
+                                                    : IconButton(
+                                                        icon: Icon(Icons
+                                                            .workspace_premium),
+                                                        color: Colors.amber,
+                                                        iconSize: 15.0,
+                                                        onPressed: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: Row(
+                                                                    children: [
+                                                                      Text(
+                                                                          'Solo para premium'),
+                                                                      Icon(
+                                                                          Icons
+                                                                              .workspace_premium,
+                                                                          color:
+                                                                              Colors.amberAccent)
+                                                                    ]),
+                                                                content: Text(
+                                                                    'Esta funcionalidad está disponible solo para usuarios premium'),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: Text(
+                                                                        'Cancelar'),
+                                                                  ),
+                                                                  TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: Text(
+                                                                        'Comprar premium'),
+                                                                  ),
+                                                                ],
+                                                              );
                                                             },
-                                                            child: Text(
-                                                                'Comprar premium'),
-                                                          ),
-                                                        ],
+                                                          );
+                                                        },
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        mouseCursor:
+                                                            MouseCursor.defer,
+                                                      )
+                                                : Container(),
+                                            (isPremium)
+                                                ? Column(children: [
+                                                    SizedBox(height: 8.0),
+                                                    Text(
+                                                      '${widget.azucar.toStringAsFixed(2)} g',
+                                                      style: TextStyle(
+                                                        fontSize: 13.0,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 8.0)
+                                                  ])
+                                                : IconButton(
+                                                    icon: Icon(Icons
+                                                        .workspace_premium),
+                                                    color: Colors.amber,
+                                                    iconSize: 15.0,
+                                                    onPressed: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            title:
+                                                                Row(children: [
+                                                              Text(
+                                                                  'Solo para premium'),
+                                                              Icon(
+                                                                  Icons
+                                                                      .workspace_premium,
+                                                                  color: Colors
+                                                                      .amberAccent)
+                                                            ]),
+                                                            content: Text(
+                                                                'Esta funcionalidad está disponible solo para usuarios premium'),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child: Text(
+                                                                    'Cancelar'),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child: Text(
+                                                                    'Comprar premium'),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
                                                       );
                                                     },
-                                                  );
-                                                },
-                                                hoverColor: Colors.transparent,
-                                                mouseCursor: MouseCursor.defer,
-                                              ),
-                                            ],
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    mouseCursor:
+                                                        MouseCursor.defer,
+                                                  ),
                                           ]),
                                       Container(
                                           decoration: BoxDecoration(
@@ -586,17 +934,86 @@ class MostrarFood extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Fibra',
+                                              'Fibra                             ',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Colors.grey,
                                               ),
                                             ),
+                                            nueva_cantidad != 100.0
+                                                ? (isPremium)
+                                                    ? Column(children: [
+                                                        SizedBox(height: 8.0),
+                                                        Text(
+                                                          '${calculoFibra.toStringAsFixed(2)} g',
+                                                          style: TextStyle(
+                                                            fontSize: 13.0,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 8.0)
+                                                      ])
+                                                    : IconButton(
+                                                        icon: Icon(Icons
+                                                            .workspace_premium),
+                                                        color: Colors.amber,
+                                                        iconSize: 15.0,
+                                                        onPressed: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: Row(
+                                                                    children: [
+                                                                      Text(
+                                                                          'Solo para premium'),
+                                                                      Icon(
+                                                                          Icons
+                                                                              .workspace_premium,
+                                                                          color:
+                                                                              Colors.amberAccent)
+                                                                    ]),
+                                                                content: Text(
+                                                                    'Esta funcionalidad está disponible solo para usuarios premium'),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: Text(
+                                                                        'Cancelar'),
+                                                                  ),
+                                                                  TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: Text(
+                                                                        'Comprar premium'),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        mouseCursor:
+                                                            MouseCursor.defer,
+                                                      )
+                                                : Container(),
                                             if (isPremium) ...[
                                               Column(children: [
                                                 SizedBox(height: 8.0),
                                                 Text(
-                                                  '${fibra.toStringAsFixed(2)} g',
+                                                  '${widget.fibra.toStringAsFixed(2)} g',
                                                   style: TextStyle(
                                                     fontSize: 13.0,
                                                     color: Colors.grey,
@@ -671,7 +1088,7 @@ class MostrarFood extends StatelessWidget {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 0, 5, 150),
+                                  padding: EdgeInsets.fromLTRB(0, 0, 5, 10),
                                   child: Text(""),
                                 ),
                               ],
@@ -680,9 +1097,296 @@ class MostrarFood extends StatelessWidget {
                         ),
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            insertarAlimento(
+                                widget.nombreUsuario,
+                                widget.name,
+                                widget.calorias,
+                                widget.cantidad,
+                                widget.unidadesCantidad,
+                                widget.grasas,
+                                widget.proteinas,
+                                widget.carbohidratos,
+                                widget.sodio,
+                                widget.azucar,
+                                widget.fibra,
+                                widget.image,
+                                widget.codigoDeBarras);
+                          },
+                          child: Text('Añadir "Mis alimentos"'),
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+
+                            /// minimumSize: //Size(100, 40),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            //Lógica para el botón Registro
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                  title: Text('Elija un Registro'),
+                                  content: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                registrohelper.addRegistro(
+                                                    widget.codigoDeBarras
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.cantidad,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    formattedDate
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    'Desayuno'
+                                                        .trim()
+                                                        .toLowerCase());
+                                              },
+                                              child: Text('Desayuno'),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                //  minimumSize: Size(100, 40),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                registrohelper.addRegistro(
+                                                    widget.codigoDeBarras
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.cantidad,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    formattedDate
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    'Almuerzo'
+                                                        .trim()
+                                                        .toLowerCase());
+                                              },
+                                              child: Text('Almuerzo'),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                //minimumSize: Size(100, 40),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                registrohelper.addRegistro(
+                                                    widget.codigoDeBarras
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.cantidad,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    formattedDate
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    'Comida'
+                                                        .trim()
+                                                        .toLowerCase());
+                                              },
+                                              child: Text('Comida'),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                // minimumSize: Size(100, 40),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                registrohelper.addRegistro(
+                                                    widget.codigoDeBarras
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.cantidad,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    formattedDate
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    'Merienda'
+                                                        .trim()
+                                                        .toLowerCase());
+                                              },
+                                              child: Text('Merienda'),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                // minimumSize: Size(100, 40),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                registrohelper.addRegistro(
+                                                    widget.codigoDeBarras
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.cantidad,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    formattedDate
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    'Cena'
+                                                        .trim()
+                                                        .toLowerCase());
+                                              },
+                                              child: Text('Cena'),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                // minimumSize: Size(100, 40),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ])),
+                            );
+                          },
+                          child: Text('Registro'),
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            // minimumSize: ffi.Size(100, 40),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          // Lógica para actualizar alimento
+                          dataBaseHelper.updateAlimento(
+                              widget.id,
+                              widget.name,
+                              nueva_cantidad,
+                              widget.unidadesCantidad,
+                              widget.calorias,
+                              widget.grasas,
+                              widget.proteinas,
+                              widget.carbohidratos,
+                              widget.image,
+                              widget.nombreUsuario,
+                              widget.sodio,
+                              widget.azucar,
+                              widget.fibra,
+                              widget.codigoDeBarras);
+                          Navigator.pop(context);
+                          //print(nueva_cantidad);
+                        },
+                        child: Text('Guardar cambios'),
+                      ),
+                    ),
+                    SizedBox(height: 20)
                   ],
                 ))
           ],
         ));
+  }
+
+  Future<http.Response> insertarAlimento(
+      String nombreUsuario,
+      String name,
+      double calorias,
+      double cantidad,
+      String unidadesCantidad,
+      double carbohidratos,
+      double grasas,
+      double proteinas,
+      double sodio,
+      double azucar,
+      double fibra,
+      String image,
+      String codigoDeBarras) async {
+    final response = await http.post(
+      Uri.parse('${urlConection}/foods/add'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': name,
+        'calorias': calorias,
+        'cantidad': cantidad,
+        'unidadesCantidad': unidadesCantidad,
+        'carbohidratos': carbohidratos,
+        'grasas': grasas,
+        'fibra': fibra,
+        'proteinas': proteinas,
+        'sodio': sodio,
+        'azucar': azucar,
+        'image': image,
+        'nombreUsuario': nombreUsuario,
+        'codigoDeBarras': codigoDeBarras
+      }),
+    );
+    Navigator.pop(context);
+    _navigateListAlimento(context);
+    return response;
   }
 }

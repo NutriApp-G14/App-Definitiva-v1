@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/views/IniciarSesion.dart';
-import 'package:my_app/views/listviewfood.dart';
+import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/model/Alergias.dart';
 import 'package:intl/intl.dart';
 
@@ -312,16 +312,15 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                         return;
                       } else {
                         dataBaseHelper.addUsuario(
-                          nombreController.text.trim(),
-                          nombreUsuarioController.text.trim(),
-                          passwordController.text.trim(),
-                          ageController.text.trim(),
-                          alturaSeleccionada.toString(),
-                          pesoSeleccionado.toString(),
-                          _generoSeleccionado,
-                          _nivelActividadSeleccionado,
-                          "ninguno"
-                        );
+                            nombreController.text.trim(),
+                            nombreUsuarioController.text.trim(),
+                            passwordController.text.trim(),
+                            ageController.text.trim(),
+                            alturaSeleccionada.toString(),
+                            pesoSeleccionado.toString(),
+                            _generoSeleccionado,
+                            _nivelActividadSeleccionado,
+                            "ninguno");
                         Map<String, bool> alergiasSeleccionadas =
                             seleccionarAlergias(alergias, seleccionadas);
                         bool cacahuetesController =

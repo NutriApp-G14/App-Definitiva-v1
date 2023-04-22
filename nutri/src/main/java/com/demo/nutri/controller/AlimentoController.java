@@ -47,13 +47,19 @@ public class AlimentoController {
     @PostMapping("/add")
     public ResponseEntity<Alimento> createAlimento(@RequestBody Alimento Alimento) throws URISyntaxException {
         Alimento savedAlimento = repository.save(Alimento);
-        return ResponseEntity.created(new URI( savedAlimento.getName())).body(savedAlimento);
+        return ResponseEntity.created(new URI( savedAlimento.getId().toString())).body(savedAlimento);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Alimento>  getAlimento(@PathVariable Integer id) {
         return repository.findById(id).map(
                 alimento -> ResponseEntity.ok().body(alimento)).orElse(new ResponseEntity<Alimento>(HttpStatus.NOT_FOUND));
+                
+    }
+
+    @GetMapping("/{nombreUsuario}/{codigoDeBarras}")
+    public Alimento getAlimento(@PathVariable String nombreUsuario,@PathVariable String codigoDeBarras) {
+                return (Alimento) repository.findByCodigoDeBarrasAndNombreUsuario(codigoDeBarras, nombreUsuario);
     }
 
     @DeleteMapping("/{id}")
@@ -65,6 +71,7 @@ public class AlimentoController {
     @PutMapping("/{id}")
     public ResponseEntity<Alimento>  updateAlimento(@PathVariable Integer id, @RequestBody Alimento Alimento) {
         return repository.findById(id).map(alimento -> {
+            alimento.setCodigoDeBarras(Alimento.getCodigoDeBarras());
             alimento.setName(Alimento.getName());
             alimento.setCalorias(Alimento.getCalorias());
             alimento.setCantidad(Alimento.getCantidad());
@@ -72,7 +79,11 @@ public class AlimentoController {
             alimento.setCarbohidratos(Alimento.getCarbohidratos());
             alimento.setGrasas(Alimento.getGrasas());
             alimento.setProteinas(Alimento.getProteinas());
+            alimento.setAzucar(Alimento.getAzucar());
+            alimento.setFibra(Alimento.getFibra());
+            alimento.setSodio(Alimento.getSodio());
             alimento.setImage(Alimento.getImage());
+            alimento.setReceta(Alimento.getReceta());
             repository.save(alimento);
             return ResponseEntity.ok().body(alimento);
         }).orElse(new ResponseEntity<Alimento>(HttpStatus.NOT_FOUND));
@@ -83,5 +94,9 @@ public class AlimentoController {
             Alimento alimentoGuardado = repository.save(nuevoAlimento);
             return ResponseEntity.status(HttpStatus.CREATED).body(alimentoGuardado);
 }
+
+
+
+
 
 }

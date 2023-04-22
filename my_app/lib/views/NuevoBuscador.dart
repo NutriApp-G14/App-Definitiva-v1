@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/controllers/databasehelpers.dart';
-import 'package:my_app/views/listviewfood.dart';
+import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
 class NuevoBuscador extends StatefulWidget {
@@ -16,6 +16,7 @@ class NuevoBuscador extends StatefulWidget {
 }
 
 class _NuevoBuscadorState extends State<NuevoBuscador> {
+  DataBaseHelper dataBaseHelper = DataBaseHelper();
   String _query = '';
   List<String> _foodList = [];
   List<Map<String, dynamic>> _foods = [];
@@ -148,7 +149,8 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                               Icons.add,
                               color: Colors.white,
                             ),
-                            onPressed: () {
+                            onPressed: () async {
+                              print("Añadir");
                               insertarAlimento(
                                 _listaDeAlimentos[index]['product_name'] ?? "",
                                 (_listaDeAlimentos[index]['nutriments']
@@ -210,13 +212,13 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                                             ?.toDouble() ??
                                         0.0,
                                 _listaDeAlimentos[index]['image_url'] ?? "",
+                                _listaDeAlimentos[index]['_id'],
                               );
                             },
                           ),
                         ),
                       ),
                       SizedBox(height: 0), // Agrega un espacio de altura cero
-
                       Container(
                         margin: EdgeInsets.only(
                             top: 0), // establece el margen superior en 0
@@ -229,6 +231,10 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MostrarFood(
+                                          id: 0,
+                                          codigoDeBarras:
+                                              _listaDeAlimentos[index]['_id'],
+                                          nombreUsuario: widget.nombreUsuario,
                                           name: _listaDeAlimentos[index]
                                                   ['product_name'] ??
                                               "",
@@ -364,33 +370,6 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
     );
   }
 
-  Future<http.Response> searchFood(String searchTerm) async {
-    var url =
-        'https://api.edamam.com/api/food-database/v2/parser?app_id=2c2e2462&app_key=7b3486401bec7d7ccd46c6bc6e85b3cc&ingr=$searchTerm';
-    return await http.get(Uri.parse(url));
-  }
-
-  Future<void> searchAndDisplayFood(String searchTerm) async {
-    var response = await searchFood(searchTerm);
-
-    if (response.statusCode == 200) {
-      var body = json.decode(response.body);
-      var foodList =
-          body['hints'].map((food) => food['food']['label']).toList();
-      var foods = body['hints']
-          .map((food) => food['food'])
-          .toList()
-          .cast<Map<String, dynamic>>();
-
-      setState(() {
-        _foodList = foodList.cast<String>(); // Convert foodList to List<String>
-        _foods = foods;
-      });
-    } else {
-      print('Error al realizar la búsqueda');
-    }
-  }
-
   Future<http.Response> searchFoodNuevaAPI(String searchTerm) async {
     var url =
         'https://world.openfoodfacts.org/cgi/search.pl?search_terms=$searchTerm&search_simple=1&action=process&json=true';
@@ -423,7 +402,8 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
       double sodio,
       double azucar,
       double fibra,
-      String image) async {
+      String image,
+      String codigoDeBarras) async {
     final response = await http.post(
       Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
@@ -441,9 +421,12 @@ class _NuevoBuscadorState extends State<NuevoBuscador> {
         'sodio': sodio,
         'azucar': azucar,
         'image': image,
-        'nombreUsuario': widget.nombreUsuario
+        'nombreUsuario': widget.nombreUsuario,
+        'codigoDeBarras': codigoDeBarras
       }),
     );
+    print(response.statusCode);
+    print("insertado");
     Navigator.pop(context);
     _navigateListAlimento(context);
     return response;

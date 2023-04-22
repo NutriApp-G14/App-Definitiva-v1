@@ -8,6 +8,7 @@ import 'package:my_app/model/TarjetaAlimento.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/views/AddAlimentoPage.dart';
+import 'package:my_app/views/BuscadorAlimentos.dart';
 
 class PaginaTipoComida extends StatefulWidget {
   final String nombreUsuario;
@@ -41,12 +42,12 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
         .toList());
   }
 
-  _navigateAddAlimento(BuildContext context) async {
+  _navigateBuscadorAlimentos(BuildContext context) async {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
-                AddAlimentoPage(nombreUsuario: widget.nombreUsuario)));
+                BuscadorAlimentos(nombreUsuario: widget.nombreUsuario, fecha: widget.fecha, tipoDeComida: widget.tipoDeComida)));
   }
 
   Future<List<dynamic>> searchAndDisplayFoodNuevaAPI(
@@ -102,7 +103,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                           height: 56,
                           child: Center(
                             child: ElevatedButton(
-                              onPressed: () => _navigateAddAlimento(context),
+                              onPressed: () => _navigateBuscadorAlimentos(context),
                               child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 8.0),

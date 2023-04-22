@@ -2,27 +2,24 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_app/controllers/databasehelpers.dart';
-import 'package:my_app/model/Alimento.dart';
+import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/views/mostrarFood.dart';
-import 'package:my_app/views/AddRecetasPage.dart';
 
-class BuscadorIngredientes extends StatefulWidget {
+class BuscadorAlimentos extends StatefulWidget {
   final String nombreUsuario;
-  final List<Alimento> ingredientes;
-  final Function(List<Alimento>) onIngredientesUpdated;
+  final String tipoDeComida;
+  final String fecha; 
 
-  const BuscadorIngredientes(
-      {required this.nombreUsuario,
-      required this.ingredientes,
-      required this.onIngredientesUpdated});
+  const BuscadorAlimentos({required this.nombreUsuario, required this.tipoDeComida, required this.fecha});
 
   @override
-  _BuscadorIngredientesState createState() => _BuscadorIngredientesState();
+  _BuscadorAlimentosState createState() => _BuscadorAlimentosState();
 }
 
-class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
+class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
+  RegistroHelper registrohelper = RegistroHelper();
+
   String _query = '';
   List<String> _foodList = [];
   List<Map<String, dynamic>> _foods = [];
@@ -46,6 +43,21 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Buscador de comidas',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+          // automaticallyImplyLeading: false,
+        ),
+        leading: IconButton(
+          icon: Icon(Icons
+              .arrow_back_ios_new_sharp), // Agrega aquí la imagen personalizada de flecha
+          onPressed: () => Navigator.of(context).pop(),
+          color: Colors.black,
+        ),
+      ),
       body: Column(
         children: [
           TextField(
@@ -58,7 +70,7 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
               _onSubmitSearch();
             },
             decoration: InputDecoration(
-              hintText: 'Introduce el ingrediente',
+              hintText: 'Introduce el nombre de la comida',
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             ),
@@ -140,58 +152,25 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
                               Icons.add,
                               color: Colors.white,
                             ),
-                            onPressed: () {
-                              widget.ingredientes.add(Alimento(
-                                  name: _listaDeAlimentos[index]['product_name'] ??
-                                      "",
-                                  calorias: (_listaDeAlimentos[index]['nutriments']
-                                          ?['energy-kcal_100g'] is String)
-                                      ? double.parse(_listaDeAlimentos[index]
-                                          ['nutriments']['energy-kcal_100g'])
-                                      : _listaDeAlimentos[index]['nutriments']
-                                                  ['energy-kcal_100g']
-                                              ?.toDouble() ??
-                                          0.0,
-                                  cantidad: 100.0,
-                                  unidadesCantidad: "grams",
-                                  grasas: (_listaDeAlimentos[index]['nutriments']?['fat_100g'] is String)
-                                      ? double.parse(_listaDeAlimentos[index]['nutriments']['fat_100g'])
-                                      : _listaDeAlimentos[index]['nutriments']['fat_100g']?.toDouble() ?? 0.0,
-                                  proteinas: (_listaDeAlimentos[index]['nutriments']?['proteins_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['proteins_100g']) : _listaDeAlimentos[index]['nutriments']['proteins_100g']?.toDouble() ?? 0.0,
-                                  carbohidratos: (_listaDeAlimentos[index]['nutriments']?['carbohydrates_100g'] is String) ? double.parse(_listaDeAlimentos[index]['nutriments']['carbohydrates_100g']) : _listaDeAlimentos[index]['nutriments']['carbohydrates_100g']?.toDouble() ?? 0.0,
-                                  sodio:(_listaDeAlimentos[index]['nutriments']
-                                        ?['sodium_100g'] is String)
-                                    ? double.parse(_listaDeAlimentos[index]
-                                        ['nutriments']['sodium_100g'])
-                                    : _listaDeAlimentos[index]['nutriments']
-                                                ['sodium_100g']
-                                            ?.toDouble() ??
-                                        0.0,
-                                azucar:(_listaDeAlimentos[index]['nutriments']
-                                        ?['sugars_100g'] is String)
-                                    ? double.parse(_listaDeAlimentos[index]
-                                        ['nutriments']['sugars_100g'])
-                                    : _listaDeAlimentos[index]['nutriments']
-                                                ['sugars_100g']
-                                            ?.toDouble() ??
-                                        0.0,
-                               fibra: (_listaDeAlimentos[index]['nutriments']
-                                        ?['fiber_100g'] is String)
-                                    ? double.parse(_listaDeAlimentos[index]
-                                        ['nutriments']['fiber_100g'])
-                                    : _listaDeAlimentos[index]['nutriments']
-                                                ['fiber_100g']
-                                            ?.toDouble() ??
-                                        0.0,
-                                  image: _listaDeAlimentos[index]['image_url'] ?? ""));
-                              Navigator.of(context).pop(widget
-                                  .onIngredientesUpdated(widget.ingredientes));
+                            onPressed: () async {
+                              print("Añadir");
+                              registrohelper.addRegistro(
+                                                    _listaDeAlimentos[index]['_id'].trim().toLowerCase(),
+                                                    100,
+                                                    widget.nombreUsuario
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.fecha
+                                                        .trim()
+                                                        .toLowerCase(),
+                                                    widget.tipoDeComida.trim().toLowerCase()
+                                                      );
+                             
                             },
                           ),
                         ),
                       ),
                       SizedBox(height: 0), // Agrega un espacio de altura cero
-
                       Container(
                         margin: EdgeInsets.only(
                             top: 0), // establece el margen superior en 0
@@ -204,9 +183,8 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MostrarFood(
-                                        nombreUsuario: widget.nombreUsuario,
-                                        codigoDeBarras: _listaDeAlimentos[index]
-                                                  ['codigoDeBarras'] ?? "",
+                                      codigoDeBarras:  _listaDeAlimentos[index]['_id'],
+                                      nombreUsuario: widget.nombreUsuario,
                                           name: _listaDeAlimentos[index]
                                                   ['product_name'] ??
                                               "",
@@ -342,6 +320,8 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
     );
   }
 
+
+
   Future<http.Response> searchFoodNuevaAPI(String searchTerm) async {
     var url =
         'https://world.openfoodfacts.org/cgi/search.pl?search_terms=$searchTerm&search_simple=1&action=process&json=true';
@@ -374,7 +354,9 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
       double sodio,
       double azucar,
       double fibra,
-      String image) async {
+      String image,
+      String codigoDeBarras
+      ) async {
     final response = await http.post(
       Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
@@ -392,9 +374,12 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
         'sodio': sodio,
         'azucar': azucar,
         'image': image,
-        'nombreUsuario': widget.nombreUsuario
+        'nombreUsuario': widget.nombreUsuario,
+        'codigoDeBarras': codigoDeBarras
       }),
     );
+    print(response.statusCode);
+    print("insertado");
     Navigator.pop(context);
     _navigateListAlimento(context);
     return response;

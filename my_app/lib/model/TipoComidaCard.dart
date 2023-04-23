@@ -71,7 +71,10 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
             List<dynamic> tamanos = List.generate(alimentos.length, (index) => 0);
             int size = 0;
             if (registroComidas!=null && !registroComidas.isEmpty){
+                  
                   alimentos = registroComidas.map((registro) => registro['nombreAlimento'].toString()).toList();
+                  
+                  print(registroComidas);
                    for (int i = 0; i < alimentos.length; i++){
                           size += alimentos[i].length;
                           tamanos.add(size);

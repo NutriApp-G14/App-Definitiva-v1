@@ -46,6 +46,7 @@ class CrearUsuarioPage extends StatefulWidget {
 }
 
 class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
+  var aceptarTerminos = false;
   DataBaseHelper dataBaseHelper = DataBaseHelper();
 
   final TextEditingController nombreController = TextEditingController();
@@ -311,6 +312,10 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                         );
                         return;
                       } else {
+                        _mostrarDialogoTerminos();
+                        if (aceptarTerminos) {
+                            print("hola");
+                          
                         dataBaseHelper.addUsuario(
                             nombreController.text.trim(),
                             nombreUsuarioController.text.trim(),
@@ -359,7 +364,9 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                                       nombreUsuarioController.text.trim())),
                         );
                       }
+                      }
                     },
+                  
                     style: ElevatedButton.styleFrom(
                       shape: const StadiumBorder(),
                       backgroundColor: Colors.orange,
@@ -367,19 +374,91 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                     ),
                     child: Text('Crear cuenta',
                         style: TextStyle(fontWeight: FontWeight.bold)))),
-            TextButton(
-              onPressed: () {
-                // Lógica para ir a la página de inicio de sesión
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => IniciarSesionPage()));
-              },
-              child: Text('¿Ya tienes cuenta? Inicia sesión'),
-            ),
+                      
+                     Row(children: [
+                       if (aceptarTerminos) 
+                       Center(
+                        
+                        child: Text(
+                          
+                            'Terminos aceptados',
+                          
+                          ),
+                          
+                           )
+
+
+
+                     ],) ,
+                     TextButton(
+                            onPressed: () {
+                              // Lógica para ir a la página de inicio de sesión
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => IniciarSesionPage()));
+                            },
+                            child: Text('¿Ya tienes cuenta? Inicia sesión'),
+                          ),
+
+                         
+                       
           ])
         ],
       ),
     );
   }
+
+  void _mostrarDialogoTerminos() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Términos de uso'),
+        content: Text('Aquí va la información de los términos de uso.'),
+        actions: [
+          TextButton(
+            child: Text('Cancelar'),
+            onPressed: () {
+              setState(() {
+                aceptarTerminos = false;
+              });
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text('Aceptar'),
+            onPressed: () {
+              setState(() {
+                aceptarTerminos = true;
+              });
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+}
+
+
+class TerminosDeUsoPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Términos de uso'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text('Aquí va la información de los términos de uso.'),
+      ),
+    );
+  }
+
+
+
+
+
 }

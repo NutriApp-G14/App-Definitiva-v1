@@ -23,13 +23,21 @@ class TarjetaAlimento extends StatefulWidget {
       required this.imageUrl,
       required this.nombreAlimento,
       required this.scoreImages,
-      required this.scoreTitles, required this.id});
+      required this.scoreTitles, 
+      required this.id});
 
   @override
   _TarjetaAlimentoState createState() => _TarjetaAlimentoState();
 }
 
 class _TarjetaAlimentoState extends State<TarjetaAlimento> {
+
+    Future<void> deleteData(int id) async {
+    final response = await http.delete(
+      Uri.parse("$urlConexion1/foods/$id"),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,11 +57,23 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
         child: InkWell(
           borderRadius: BorderRadius.circular(8.0),
           onTap: () {
+            
             //MostrarFood(name: name, cantidad: cantidad, unidadesCantidad: unidadesCantidad, calorias: calorias, grasas: grasas, proteinas: proteinas, carbohidratos: carbohidratos, sodio: sodio, azucar: azucar, fibra: fibra, image: image)
           },
   child: Column(
   crossAxisAlignment: CrossAxisAlignment.stretch,
   children: [
+      Align(
+                alignment: Alignment.topRight,
+                heightFactor: 0.5,
+                child: IconButton(
+                  icon: Icon(Icons.delete_outline),
+                  color: Colors.black,
+                  onPressed: () {
+                    deleteData(widget.id);
+                  },
+                ),
+              ),
     widget.imageUrl != null && widget.imageUrl != ""
         ? Flexible(
             child: FutureBuilder(

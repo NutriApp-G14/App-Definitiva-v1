@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/controllers/databasehelpers.dart';
-import 'package:my_app/model/TarjetaAlimento.dart';
 import 'package:my_app/model/TarjetaBuscador.dart';
 import 'package:my_app/views/listviewfood.dart';
-import 'package:my_app/views/mostrarFood.dart';
 
 class BuscadorAlimentos extends StatefulWidget {
   final String nombreUsuario;
@@ -50,7 +48,10 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
           ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios_new_sharp),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              _navigateListAlimento(context);
+            },
+            
             color: Colors.black,
           ),
         ),
@@ -109,6 +110,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
 
 
                           return TarjetaBuscador(
+                            tipoDeComida: widget.tipoDeComida,
                             id:0,nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras, cantidad: cantidad,
                               nombreAlimento:nombreAlimento , imageUrl: imageUrl,
                               scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-$nutriscore.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-$novaGroup.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-$ecoscore.svg'],

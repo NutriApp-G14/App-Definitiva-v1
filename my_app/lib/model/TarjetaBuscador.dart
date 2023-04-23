@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -27,6 +28,7 @@ class TarjetaBuscador extends StatefulWidget {
   final double fibra;
   final String unidadesCantidad;
   final bool anadirRegistro;
+  final String tipoDeComida;
 
   const TarjetaBuscador(
       {required this.nombreUsuario,
@@ -35,7 +37,7 @@ class TarjetaBuscador extends StatefulWidget {
       required this.imageUrl,
       required this.nombreAlimento,
       required this.scoreImages,
-      required this.scoreTitles, required this.id, required this.calorias, required this.grasas, required this.proteinas, required this.carbohidratos, required this.sodio, required this.azucar, required this.fibra, required this.unidadesCantidad, required this.anadirRegistro});
+      required this.scoreTitles, required this.id, required this.calorias, required this.grasas, required this.proteinas, required this.carbohidratos, required this.sodio, required this.azucar, required this.fibra, required this.unidadesCantidad, required this.anadirRegistro, required this.tipoDeComida});
 
   @override
   _TarjetaBuscadorState createState() => _TarjetaBuscadorState();
@@ -144,79 +146,95 @@ child: Column(
               fontSize: 16.0,
             ),
           ),
-     Stack(
-        children: [
-          Column(children: [
-              SizedBox(height: 4.0),
-                        Row(
-            children: [
-          for (int i = 0; i < widget.scoreTitles.length; i++) 
-            // Verifica si el enlace de la imagen es válido
-            if (Uri.tryParse(widget.scoreImages[i]) != null) 
-              // El enlace es válido, muestra la imagen
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Tooltip(
-                  message: widget.scoreTitles[i],
-                  child: SvgPicture.network(
-                    widget.scoreImages[i],
-                    placeholderBuilder: (BuildContext context) => SizedBox(
-                      height: 20.0,
+ Stack(
+  children: [
+    Column(
+      children: [
+        SizedBox(height: 4.0),
+        Row(
+          children: [
+            for (int i = 0; i < widget.scoreTitles.length; i++) 
+              // Verifica si el enlace de la imagen es válido
+              if (Uri.tryParse(widget.scoreImages[i]) != null) 
+                // El enlace es válido, muestra la imagen
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Tooltip(
+                    message: widget.scoreTitles[i],
+                    child: Hero(
+                      tag: 'score_image_${Random().nextInt(5000) + 1}',
+                      child: SvgPicture.network(
+                        widget.scoreImages[i],
+                        placeholderBuilder: (BuildContext context) => SizedBox(
+                          height: 20.0,
+                        ),
+                        height: 20.0,
+                      ),
                     ),
-                    height: 20.0,
                   ),
+                )
+          ],
+        ),
+        SizedBox(height: 4.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Text(
+                " ${widget.codigoDeBarras}",
+                style: TextStyle(
+                  color: Colors.grey,
                 ),
-              )
-  
-  
-
-
-            ],
-          ),
-          SizedBox(height: 4.0),
-                    Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Text(
-                  " ${widget.codigoDeBarras}",
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
+              ),
+            ),
+          ],
         ),
       ],
     ),
-
-
-          ],),
-
     Positioned(
       bottom: 0,
       right: 10.0,
       child: FloatingActionButton(
         onPressed: () {
           if(widget.anadirRegistro){
-                              registrohelper.addRegistro(
-                                  widget.codigoDeBarras.trim().toLowerCase(),
-                                  widget.cantidad,
-                                  widget.nombreUsuario.trim().toLowerCase(),
-                                  formattedDate.trim().toLowerCase(),
-                                  'Desayuno'.trim().toLowerCase(),
-                                  widget.nombreAlimento.trim());
-          }else{
-              insertarAlimento( widget.codigoDeBarras, widget.nombreAlimento, widget.calorias, widget.cantidad, widget.unidadesCantidad,
-          widget.carbohidratos, widget.grasas, widget.proteinas, widget.sodio, widget.azucar, widget.fibra, widget.imageUrl );
-          }
-
+            registrohelper.addRegistro(
+              widget.codigoDeBarras.trim().toLowerCase(),
+              widget.cantidad,
+              widget.nombreUsuario.trim().toLowerCase(),
+              formattedDate.trim().toLowerCase(),
+              widget.tipoDeComida.trim().toLowerCase(),
+              widget.nombreAlimento.trim());
+          } else {
+            insertarAlimento(
+              widget.codigoDeBarras, 
+              widget.nombreAlimento, 
+              widget.calorias, 
+              widget.cantidad, 
+              widget.unidadesCantidad,
+              widget.carbohidratos, 
+              widget.grasas, 
+              widget.proteinas, 
+              widget.sodio, 
+              widget.azucar, 
+              widget.fibra, 
+              widget.imageUrl
+            );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                  ListAlimentos(nombreUsuario: widget.nombreUsuario)
+              )
+            );
+          }      
         },
         child: Icon(Icons.add),
-        mini: true, // Ajustar la propiedad mini en true para hacer el botón más pequeño
-
+        mini: true,
       ),
-    ),
+    ),  
   ],
-),
+ )
+
 
         ],
       ),
@@ -264,8 +282,7 @@ child: Column(
         'codigoDeBarras': codigoDeBarras
       }),
     );
-    Navigator.pop(context);
-    _navigateListAlimento(context);
+    
     return response;
   }
 

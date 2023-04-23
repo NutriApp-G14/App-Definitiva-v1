@@ -27,7 +27,8 @@ class TipoComidaCard extends StatefulWidget {
 }
 
 class _TipoComidaCardState extends State<TipoComidaCard> {
-  DateTime now = DateTime.now();
+  
+   DateTime now = DateTime.now();
   late String formattedDate;
   RegistroHelper dataBaseHelper = RegistroHelper();
 
@@ -66,9 +67,15 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             List registroComidas = snapshot.data;
-             List<String> alimentos =[];
+            List<String> alimentos =[];
+            List<dynamic> tamanos = List.generate(alimentos.length, (index) => 0);
+            int size = 0;
             if (registroComidas!=null && !registroComidas.isEmpty){
                   alimentos = registroComidas.map((registro) => registro['nombreAlimento'].toString()).toList();
+                   for (int i = 0; i < alimentos.length; i++){
+                          size += alimentos[i].length;
+                          tamanos.add(size);
+            }
             }
           
 
@@ -115,15 +122,18 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                 ),
                                 SizedBox(height: 10,),
                                 Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                      Text(
+                                      '${registroComidas.length} comidas registradas: '),
                                     Row(
                                     children: [
-                                      Text(
-                                      '${registroComidas.length} comidas registradas : '),
                                 if (registroComidas!=null && !registroComidas.isEmpty)
                                     for (int i = 0; i < alimentos.length; i++)
+                                     if(tamanos[i]< 90)
+                                    
                                     Text(
-                                      '${alimentos[i]} ',
+                                       '${tamanos[i] > 70 ?  '${alimentos[i].substring(0,2)} ...' : alimentos[i]}, ',
                                       style: TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w400,

@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/controllers/databasehelpers.dart';
-import 'package:my_app/model/TarjetaAlimento.dart';
 import 'package:my_app/model/TarjetaBuscador.dart';
 import 'package:my_app/views/listviewfood.dart';
-import 'package:my_app/views/mostrarFood.dart';
 
 class BuscadorNuevo extends StatefulWidget {
   final String nombreUsuario;
@@ -94,7 +92,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                           var nombreAlimento = _listaDeAlimentos[i]['product_name'] ?? "";
                           var imageUrl =  _listaDeAlimentos[i]['image_url'] ??"";
                           var nutriscore = _listaDeAlimentos[i]['nutriscore_grade'] ?? "";
-                          var novaGroup = _listaDeAlimentos[i]['"nova_group"'] ?? "";
+                          var novaGroup = _listaDeAlimentos[i]['nova_group'] ?? "";
                           var ecoscore = _listaDeAlimentos[i]['ecoscore_grade'] ?? "";
 
                           var unidadesCantidad="gramos";
@@ -108,6 +106,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
 
 
                           return TarjetaBuscador(
+                            tipoDeComida: "",
                             id:0,nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras, cantidad: cantidad,
                               nombreAlimento:nombreAlimento , imageUrl: imageUrl,
                               scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-$nutriscore.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-$novaGroup.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-$ecoscore.svg'],

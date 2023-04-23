@@ -69,11 +69,11 @@ void calcularDatos() async {
                 nombreAlimento = widget.nombreAlimento;
                cantidad = widget.cantidad;
                unidadesCantidad = "gramos";
-               calorias = double.parse(alimento[0]['nutriments']['sugars_100g'])?? 0.0;
-               grasas = double.parse(alimento[0]['nutriments']['fat_100g'].toString()) ?? 0.0;
-                proteinas = double.parse(alimento[0]['nutriments']['proteins_100g'].toString()) ?? 0.0;
+               calorias = double.parse(alimento[0]['nutriments']['proteins_100g']?.toString() ?? '0.0' );
+               grasas = double.parse(alimento[0]['nutriments']?['fat_100g']?.toString() ?? '0.0' );
+                proteinas = double.parse(alimento[0]['nutriments']?['proteins_100g']?.toString() ?? '0.0' );
 
-                carbohidratos=double.parse(alimento[0]['nutriments']['carbohydrates_100g'].toString()) ?? 0.0;
+                carbohidratos=double.parse(alimento[0]['nutriments'] ? ['carbohydrates_100g']?.toString() ?? '0.0' );
                  sodio=double.parse(alimento[0]['nutriments']?['sodium_100g']?.toString() ?? '0.0' );
                  azucar=double.parse(alimento[0]['nutriments']?['sugars_100g']?.toString() ?? '0.0' );
                 fibra = double.parse(alimento[0]['nutriments']?['fiber_100g']?.toString() ?? '0.0');

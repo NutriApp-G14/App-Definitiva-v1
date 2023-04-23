@@ -133,20 +133,6 @@ _refreshListAlimentos() {
             ),
            ),
 
-
-
-              // Align(
-              //   alignment: Alignment.topRight,
-              //   heightFactor: 0.3,
-              //   child: IconButton(
-              //     iconSize: 20,
-              //     icon: Icon(Icons.delete_outline),
-              //     color: Colors.black,
-              //     onPressed: () {
-              //       deleteData(widget.id);
-              //     },
-              //   ),
-              // ),
               SizedBox(height: 5),
               widget.imageUrl != null && widget.imageUrl != ""
                   ? Expanded(child: FutureBuilder(
@@ -158,7 +144,7 @@ _refreshListAlimentos() {
                           return Padding(
                               padding: EdgeInsets.fromLTRB(12, 0, 32, 0),
                               child: SizedBox(
-                                height: 130,
+                                height: 90,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
                                   child: FadeInImage.assetNetwork(

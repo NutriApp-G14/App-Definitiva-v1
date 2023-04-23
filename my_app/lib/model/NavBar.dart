@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
@@ -22,6 +23,14 @@ class NutriAppBar extends StatefulWidget {
 
 class _NutriAppBarState extends State<NutriAppBar> {
   DataBaseHelper dataBaseHelper = DataBaseHelper();
+  DateTime now = DateTime.now();
+  late String formattedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    formattedDate = DateFormat('dd-MM-yyyy').format(now);
+  }
 
   _navigateAddAlimento(BuildContext context) async {
     Navigator.push(
@@ -147,6 +156,7 @@ class _NutriAppBarState extends State<NutriAppBar> {
                        MaterialPageRoute(
                       builder: (context) => BuscadorNuevo(
                         nombreUsuario: widget.nombreUsuario,
+                        fecha: formattedDate,
                       ),
                     ),
                   );

@@ -8,8 +8,11 @@ import 'package:my_app/views/listviewfood.dart';
 
 class BuscadorNuevo extends StatefulWidget {
   final String nombreUsuario;
+  final String fecha;
+  final String tipoDeComida ="";
+  
 
-  const BuscadorNuevo({required this.nombreUsuario});
+  const BuscadorNuevo({required this.nombreUsuario, required this.fecha});
 
   @override
   _BuscadorNuevoState createState() => _BuscadorNuevoState();
@@ -48,6 +51,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
             onPressed: () {
               _navigateListAlimento(context);
             },
+            
             color: Colors.black,
           ),
         ),
@@ -96,7 +100,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                           var ecoscore = _listaDeAlimentos[i]['ecoscore_grade'] ?? "";
 
                           var unidadesCantidad="gramos";
-                          var calorias= (_listaDeAlimentos[i]['nutriments']?['energy-kcal_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['sugars_100g'])  : _listaDeAlimentos[i]['nutriments']['sugars_100g'] ?.toDouble() ?? 0.0;
+                          var calorias= (_listaDeAlimentos[i]['nutriments']?['sugars_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['sugars_100g'])  : _listaDeAlimentos[i]['nutriments']['sugars_100g'] ?.toDouble() ?? 0.0;
                           var grasas= (_listaDeAlimentos[i]['nutriments']?['fat_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['fat_100g'])  : _listaDeAlimentos[i]['nutriments']['fat_100g'] ?.toDouble() ?? 0.0;
                           var proteinas= (_listaDeAlimentos[i]['nutriments']?['proteins_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['proteins_100g'])  : _listaDeAlimentos[i]['nutriments']['proteins_100g'] ?.toDouble() ?? 0.0;
                           var carbohidratos= (_listaDeAlimentos[i]['nutriments']?['carbohydrates_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['carbohydrates_100g'])  : _listaDeAlimentos[i]['nutriments']['carbohydrates_100g'] ?.toDouble() ?? 0.0;
@@ -106,7 +110,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
 
 
                           return TarjetaBuscador(
-                            tipoDeComida: "",
+                            tipoDeComida: widget.tipoDeComida,
                             id:0,nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras, cantidad: cantidad,
                               nombreAlimento:nombreAlimento , imageUrl: imageUrl,
                               scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-$nutriscore.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-$novaGroup.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-$ecoscore.svg'],

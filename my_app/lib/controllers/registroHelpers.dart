@@ -6,12 +6,14 @@ import 'dart:convert';
 
 
 //final urlConexion = 'http://34.77.36.66:8080';
+//final urlConection = 'http://35.241.179.64:8080';
+final urlConection = 'http://localhost:8080';
 //final urlConexion = 'http://35.241.179.64:8080';
+
 final urlConexion = 'http://localhost:8080';
 
 class RegistroHelper {
-
-    // Add Registro
+  // Add Registro
   Future<http.Response> addRegistro(
     String codigoDeBarrasController,
     double cantidadController,
@@ -21,10 +23,10 @@ class RegistroHelper {
     String nombreAlimento
   ) async {
     print("Funcion ejecutada");
-    var url = "${urlConexion}/registro/add";
+    var url = "${urlConection}/registro/add";
     Map data = {
-      'codigoDeBarras' : codigoDeBarrasController,
-      'cantidad' : cantidadController,
+      'codigoDeBarras': codigoDeBarrasController,
+      'cantidad': cantidadController,
       'nombreUsuario': nombreUsuarioController,
       'fecha' : fechaController,
       'tipoDeComida' : tipoDeComidaController,

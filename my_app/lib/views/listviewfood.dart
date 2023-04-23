@@ -8,6 +8,7 @@ import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/AddRecetasPage.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/EditarUsuario.dart';
+import 'package:my_app/views/PintarCards.dart';
 import 'package:my_app/views/UsuarioPage.dart';
 import 'package:my_app/model/NavBar.dart';
 

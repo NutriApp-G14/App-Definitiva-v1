@@ -646,15 +646,16 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                       _objectiveSeleccionado = value;
                                     });
                                     dataBaseHelper.updateUsuario(
-                                        usuario.nombre,
-                                        usuario.nombreUsuario,
-                                        usuario.password,
-                                        usuario.age,
-                                        usuario.height,
-                                        usuario.weight,
-                                        usuario.gender,
-                                        usuario.activity,
-                                        _objectiveSeleccionado);
+                                      usuario.nombre,
+                                      usuario.nombreUsuario,
+                                      usuario.password,
+                                      usuario.age,
+                                      usuario.height,
+                                      usuario.weight,
+                                      usuario.gender,
+                                      usuario.activity,
+                                      _objectiveSeleccionado,
+                                    );
 
                                     requerimientoCalorico = _factorActividad(
                                         usuario.activity,

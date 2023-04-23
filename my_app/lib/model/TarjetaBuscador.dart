@@ -209,6 +209,7 @@ child: Column(
               formattedDate.trim().toLowerCase(),
               widget.tipoDeComida.trim().toLowerCase(),
               widget.nombreAlimento.trim());
+
           } else {
             insertarAlimento(
               widget.codigoDeBarras, 

@@ -779,7 +779,7 @@ class ItemListReceta extends StatelessWidget {
             return SizedBox(
               height: 100.3,
               child: Card(
-                color: Colors.orange[200],
+                color: Colors.white,
                 child: Stack(
                   children: [
                     Align(
@@ -800,7 +800,7 @@ class ItemListReceta extends StatelessWidget {
                                 } else {
                                   return Icon(
                                     Icons.fastfood,
-                                    color: Colors.white,
+                                    color: Colors.orange[200],
                                     size: 50,
                                   );
                                 }
@@ -808,7 +808,7 @@ class ItemListReceta extends StatelessWidget {
                             )
                           : Icon(
                               Icons.fastfood,
-                              color: Colors.white,
+                              color: Colors.orange[200],
                               size: 50,
                             ),
                     ),
@@ -816,7 +816,7 @@ class ItemListReceta extends StatelessWidget {
                       alignment: Alignment.topRight,
                       child: IconButton(
                         icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
+                        color: Colors.black,
                         onPressed: () {
                           deleteItem(list[i]['id']);
                         },
@@ -827,14 +827,17 @@ class ItemListReceta extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          list[i]['nombre'].toString(),
+
+                          list[i]['nombre'].toString().length > 16
+                  ? '${list[i]['nombre'].toString().substring(0,15)}...'
+                  : list[i]['nombre'].toString(),
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.normal,
                             fontFamily: "Open Sans",
-                            fontSize: 18.0,
+                            fontSize: 15.0,
                             // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -844,7 +847,7 @@ class ItemListReceta extends StatelessWidget {
                       child: IconButton(
                         icon: Icon(Icons.remove_red_eye),
                         //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
+                        color: Colors.black,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -888,7 +891,7 @@ class ItemListReceta extends StatelessWidget {
             return SizedBox(
               height: 100.3,
               child: Card(
-                color: Colors.orange[200],
+                color: Colors.white,
                 child: Stack(
                   children: [
                     Align(
@@ -904,7 +907,9 @@ class ItemListReceta extends StatelessWidget {
                                   return FadeInImage.assetNetwork(
                                     placeholder: 'assets/placeholder_image.png',
                                     image: list[i]['imagen'],
+                                    height: 90,
                                     fit: BoxFit.cover,
+                                    
                                   );
                                 } else {
                                   return Icon(
@@ -925,7 +930,7 @@ class ItemListReceta extends StatelessWidget {
                       alignment: Alignment.topRight,
                       child: IconButton(
                         icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
+                        color: Colors.black,
                         onPressed: () {
                           deleteItem(list[i]['id']);
                         },
@@ -944,6 +949,7 @@ class ItemListReceta extends StatelessWidget {
                             fontSize: 18.0,
                             // color: Color.fromARGB(255, 255, 255, 255),
                             color: Colors.orange,
+                            backgroundColor: Colors.white,
                           ),
                         ),
                       ),
@@ -1052,7 +1058,7 @@ class ItemListReceta extends StatelessWidget {
                             fontFamily: "Open Sans",
                             fontSize: 18.0,
                             // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -1062,7 +1068,9 @@ class ItemListReceta extends StatelessWidget {
                       child: IconButton(
                         icon: Icon(Icons.remove_red_eye),
                         //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
+                        //color: Colors.orange,
+                        focusColor:Colors.black,
+                        
                         onPressed: () {
                           Navigator.push(
                             context,

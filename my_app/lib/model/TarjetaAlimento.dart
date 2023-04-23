@@ -4,8 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
+import 'package:my_app/model/PaginaTipoComida.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
 class TarjetaAlimento extends StatefulWidget {
@@ -17,6 +17,9 @@ class TarjetaAlimento extends StatefulWidget {
   final List<String> scoreImages;
   final String codigoDeBarras;
   final double cantidad;
+  final String fecha; 
+  final List registros; 
+  final String tipodeComida;
 
   const TarjetaAlimento(
       {required this.nombreUsuario,
@@ -26,7 +29,7 @@ class TarjetaAlimento extends StatefulWidget {
       required this.nombreAlimento,
       required this.scoreImages,
       required this.scoreTitles, 
-      required this.id});
+      required this.id, required this.fecha, required this.registros, required this.tipodeComida});
 
   @override
   _TarjetaAlimentoState createState() => _TarjetaAlimentoState();
@@ -34,25 +37,92 @@ class TarjetaAlimento extends StatefulWidget {
 
 class _TarjetaAlimentoState extends State<TarjetaAlimento> {
   RegistroHelper dataBaseHelper = RegistroHelper();
-  late List<dynamic> _alimento;
-
   // Agregar una variable para almacenar los datos obtenidos del Future
-  late Future<List<dynamic>> _alimentoFuture;
+  
+  late var _alimentoFuture;
+  var nombreAlimento;
+  var cantidad;
+  var calorias; 
+  var carbohidratos;
+  var grasas; 
+  var proteinas;
+  var azucar; 
+  var sodio; 
+  var codigoDeBarras;
+  var fibra;
+  var unidadesCantidad;
+  var nombreDeUsuario;
+  var id; 
 
-  // Llamar al método una sola vez antes de construir la pantalla
+
   @override
   void initState() {
     super.initState();
-    _alimentoFuture = searchAndDisplayFoodNuevaAPI(widget.codigoDeBarras);
-    
+      _alimentoFuture =  searchAndDisplayFoodNuevaAPIList(widget.codigoDeBarras);
+      calcularDatos();
   }
 
+void calcularDatos() async {
+              _alimentoFuture = await searchAndDisplayFoodNuevaAPIList(widget.codigoDeBarras               );
+               var alimento = _alimentoFuture[0];
+          setState(() {
+                nombreAlimento = widget.nombreAlimento;
+               cantidad = widget.cantidad;
+               unidadesCantidad = "gramos";
+               calorias = double.parse(alimento[0]['nutriments']['sugars_100g'])?? 0.0;
+               grasas = double.parse(alimento[0]['nutriments']['fat_100g'].toString()) ?? 0.0;
+                proteinas = double.parse(alimento[0]['nutriments']['proteins_100g'].toString()) ?? 0.0;
 
-    Future<void> deleteData(int id) async {
+                carbohidratos=double.parse(alimento[0]['nutriments']['carbohydrates_100g'].toString()) ?? 0.0;
+                 sodio=double.parse(alimento[0]['nutriments']?['sodium_100g']?.toString() ?? '0.0' );
+                 azucar=double.parse(alimento[0]['nutriments']?['sugars_100g']?.toString() ?? '0.0' );
+                fibra = double.parse(alimento[0]['nutriments']?['fiber_100g']?.toString() ?? '0.0');
+                codigoDeBarras = widget.codigoDeBarras;
+                nombreDeUsuario = widget.nombreUsuario;
+               id = widget.id;
+          });
+
+               
+}
+
+
+  Future<List<dynamic>> searchAndDisplayFoodNuevaAPI( String codigoDeBarras) async {
+    var url =
+        'https://world.openfoodfacts.org/cgi/search.pl?code=$codigoDeBarras&search_simple=1&action=process&json=true';
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      var body = json.decode(response.body);
+      var alimento = body['products'].toList();
+      return alimento;
+    } else {
+      print('Error al realizar la búsqueda');
+      return [];
+    }
+  }
+  // Agregar un nuevo método para llamar al método de búsqueda para varios códigos de barras
+  Future<List<dynamic>> searchAndDisplayFoodNuevaAPIList( String codigoDeBarras) async {
+    var alimentos = [];
+    var alimento = await searchAndDisplayFoodNuevaAPI(codigoDeBarras);
+    alimentos.add(alimento);
+    return alimentos;
+  }
+
+  Future<void> deleteReg(int id) async {
+
+    print(widget.registros);
     final response = await http.delete(
-      Uri.parse("$urlConexion1/foods/$id"),
+      Uri.parse("$urlConexion/registro/reg/$id"),
     );
+    setState(() {});
+    widget.registros.removeWhere((element) => element['id'] == id);
+    print("reg sin el borrado: ${widget.registros}");
+     Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>PaginaTipoComida(nombreUsuario: widget.nombreUsuario,
+            tipoDeComida : widget.tipodeComida , fecha : widget.fecha, registros: widget.registros)));
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,29 +142,28 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
         color: Colors.white,
         child: InkWell(
           borderRadius: BorderRadius.circular(8.0),
-          onTap: () {
-print(_alimentoFuture);
-              // alimento = await 
+          onTap: ()  {
+              print("calorias : ${calorias}");
 
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => MostrarFood(
-              //             name: widget.nombreAlimento,
-              //             cantidad: widget.cantidad,
-              //             unidadesCantidad: widget.unidadesCantidad,
-              //             calorias: widget.calorias,
-              //             grasas: widget.grasas,
-              //             proteinas: widget.proteinas,
-              //             carbohidratos: widget.carbohidratos,
-              //             sodio: widget.sodio,
-              //             azucar: widget.azucar,
-              //             fibra: widget.fibra,
-              //             image: widget.imageUrl,
-              //             codigoDeBarras: widget.codigoDeBarras,
-              //             nombreUsuario: widget.nombreUsuario,
-              //             id: 0,
-              //           ))); 
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MostrarFood(
+                          name: widget.nombreAlimento,
+                          cantidad: widget.cantidad,
+                          unidadesCantidad: unidadesCantidad,
+                          calorias: calorias,
+                          grasas: grasas,
+                          proteinas: proteinas,
+                          carbohidratos: carbohidratos,
+                          sodio: sodio,
+                          azucar: azucar,
+                          fibra: fibra,
+                          image: widget.imageUrl,
+                          codigoDeBarras: codigoDeBarras,
+                          nombreUsuario: nombreDeUsuario,
+                          id: 0,
+                        ))); 
             
             //MostrarFood(name: name, cantidad: cantidad, unidadesCantidad: unidadesCantidad, calorias: calorias, grasas: grasas, proteinas: proteinas, carbohidratos: carbohidratos, sodio: sodio, azucar: azucar, fibra: fibra, image: image)
           },
@@ -103,12 +172,13 @@ print(_alimentoFuture);
   children: [
       Align(
                 alignment: Alignment.topRight,
-                heightFactor: 0.2,
+                heightFactor: 0.4,
                 child: IconButton(
                   icon: Icon(Icons.delete_outline),
                   color: Colors.black,
                   onPressed: () {
-                    deleteData(widget.id);
+                    deleteReg(widget.id);
+                    //_navigatePaginaTipoComida(context, widget.id);
                   },
                 ),
               ),
@@ -132,22 +202,20 @@ print(_alimentoFuture);
                     ),
                   );
                 } else {
-                  return Flexible(
-                    child: Icon(
+                  return Icon(
                     Icons.fastfood,
                     color: Color.fromARGB(221, 255, 181, 71),
                     )
-                  );
+                  ;
                 }
               },
             ),
           )
-        :        Flexible(
-                    child: Icon(
+        :   Icon(
                     Icons.fastfood,
                     color: Color.fromARGB(221, 255, 181, 71),
-                    )
-                  ),
+                    ),
+                  
      Padding(
         padding: const EdgeInsets.all(2.0),
         child: Column(
@@ -199,21 +267,6 @@ print(_alimentoFuture);
     );
   }
 
-  Future<List<dynamic>> searchAndDisplayFoodNuevaAPI(
-      String codigoDeBarras) async {
-    var url =
-        'https://world.openfoodfacts.org/cgi/search.pl?code=$codigoDeBarras&search_simple=1&action=process&json=true';
-    var response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      var body = json.decode(response.body);
-      var alimento = body['products'].toList();
-       setState(() => _alimentoFuture = alimento);
-      return alimento;
-     
-    } else {
-      print('Error al realizar la búsqueda');
-      return [];
-    }
-  }
 
+   
 }

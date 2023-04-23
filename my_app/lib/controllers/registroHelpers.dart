@@ -39,14 +39,17 @@ class RegistroHelper {
     return response;
   }
 
-  // Borrar Registro
+
+// Borrar Registro
   Future<http.Response> deleteRegistro(int id) async {
-    var url = "${urlConexion}/registro/{id}";
+    var url = "${urlConexion}/registro/reg/{id}";
     var response = await http
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     print("${response.statusCode}");
     return response;
   }
+
+
 
   // Obtiene los registros a partir de su nombre de usuario,fecha y tipodeComida
   Future<List> getRegistroComidas(String nombreUsuario, String tipoDeComida, String fecha) async {

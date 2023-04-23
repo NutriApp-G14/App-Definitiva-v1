@@ -52,10 +52,16 @@ public class RegistroComidasController {
     }
 
     @DeleteMapping("/reg/{id}")
-    public ResponseEntity<RegistroComidas> deleteRegistroComidas(@PathVariable String id) {
+    public ResponseEntity<RegistroComidas> deleteRegistroComidas(@PathVariable Integer id) {
         registroComidasRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<Alimento>  deleteAlimento(@PathVariable Integer id) {
+    //     repository.deleteById(id);
+    //     return ResponseEntity.ok().build();
+    // }
 
     @PutMapping("/{id}")
     public ResponseEntity<RegistroComidas> updateRegistroComidas(@PathVariable String id,

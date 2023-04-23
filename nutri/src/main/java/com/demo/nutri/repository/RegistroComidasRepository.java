@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.demo.nutri.model.RegistroComidas;
 
-public interface RegistroComidasRepository extends CrudRepository<RegistroComidas, String> {
+public interface RegistroComidasRepository extends CrudRepository<RegistroComidas, Integer> {
     List<RegistroComidas> findByNombreUsuario(String nombreUsuario);
     Optional<RegistroComidas> findById(Integer id);
     List<RegistroComidas> findByFecha(String fecha);

@@ -74,7 +74,7 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   margin:
-                      EdgeInsets.only(top: 16, right: 16, left: 16, bottom: 10),
+                      EdgeInsets.only(top: 16, right: 5, left: 5, bottom: 10),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
@@ -131,7 +131,7 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
                             style: TextStyle(
                               color: Colors.black87,
                               fontWeight: FontWeight.w500,
-                              fontSize: 20,
+                              fontSize: 12,
                               fontFamily: 'Montserrat',
                             ),
                           ),
@@ -139,6 +139,7 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
                             icon: Icon(
                               Icons.add,
                               color: Colors.white,
+                              size: 20,
                             ),
                             onPressed: () {
                               widget.ingredientes.add(Alimento(

@@ -1,6 +1,7 @@
 import 'dart:core';
 //import 'dart:ffi';
 
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/model/Alergias.dart';
@@ -10,7 +11,7 @@ import 'dart:convert';
 import 'package:my_app/model/Usuario.dart';
 
 //final urlConexion = 'http://34.77.36.66:8080';
-final urlConexion = 'http://localhost:8080';
+final urlConexion = 'http://35.189.241.218:8080';
 
 //final urlConexion = 'http://localhost:8080';
 
@@ -64,6 +65,7 @@ class DataBaseHelper {
     String? genderController,
     String? activityController,
     String? objectiveController,
+    String? imageController,
   ) async {
     var url = "${urlConexion}/users/add";
     Map data = {
@@ -75,7 +77,8 @@ class DataBaseHelper {
       'weight': weightController,
       'gender': genderController,
       'activity': activityController,
-      'objective': objectiveController
+      'objective': objectiveController,
+      'imageString': imageController,
       //'allergies': allergiesController
     };
     var body = json.encode(data);
@@ -190,7 +193,6 @@ class DataBaseHelper {
   Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
     final response =
         await http.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
-
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
       final usuario = Usuario.fromJson(json);
@@ -204,6 +206,7 @@ class DataBaseHelper {
 // Comprueba si el Usuario Ya existe en la BBDD
   Future<bool> usuarioExists(String nombreUsuario) async {
     var url = Uri.parse("${urlConexion}/users/$nombreUsuario");
+    //print(await http.get(url));
     var response = await http.get(url);
     if (response.statusCode == 200) {
       // var data = jsonDecode(response.body) as List<dynamic>;

@@ -7,6 +7,7 @@ import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/AddRecetasPage.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/EditarUsuario.dart';
+import 'package:my_app/views/PintarCards.dart';
 import 'package:my_app/views/UsuarioPage.dart';
 import 'package:my_app/views/buscador.dart';
 import 'package:my_app/model/NavBar.dart';
@@ -66,6 +67,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
     Usuario usuario = await dataBaseHelper.getUsuarioById(widget.nombreUsuario);
     String usuarioNombre = usuario.nombre;
     String usuarioNombreUsuario = usuario.nombreUsuario;
+    String imageProfile = "";
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(
           nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),
@@ -183,7 +185,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
                           print(snapshot.error);
                         } else {
                           return snapshot.hasData
-                              ? ItemList(
+                              ? ItemListAlimento(
                                   nombreUsuario: widget.nombreUsuario,
                                   list: snapshot.data!,
                                   deleteItem: deleteData,
@@ -369,21 +371,21 @@ class ItemList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
-                                  id: list[i]['id'] ?? 0,
-                                  codigoDeBarras:
-                                      list[i]['codigoDeBarras'] ?? "",
-                                  nombreUsuario: nombreUsuario,
-                                  name: list[i]['name'],
-                                  cantidad: list[i]['cantidad'],
-                                  unidadesCantidad: list[i]['unidadesCantidad'],
-                                  calorias: list[i]['calorias'],
-                                  grasas: list[i]['grasas'],
-                                  proteinas: list[i]['proteinas'],
-                                  carbohidratos: list[i]['carbohidratos'],
-                                  sodio: list[i]['sodio'] ?? 0.0,
-                                  azucar: list[i]['azucar'] ?? 0.0,
-                                  fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['image']),
+                                id: list[i]['id'] ?? 0,
+                                codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
+                                nombreUsuario: nombreUsuario,
+                                name: list[i]['name'],
+                                cantidad: list[i]['cantidad'],
+                                unidadesCantidad: list[i]['unidadesCantidad'],
+                                calorias: list[i]['calorias'],
+                                grasas: list[i]['grasas'],
+                                proteinas: list[i]['proteinas'],
+                                carbohidratos: list[i]['carbohidratos'],
+                                sodio: list[i]['sodio'] ?? 0.0,
+                                azucar: list[i]['azucar'] ?? 0.0,
+                                fibra: list[i]['fibra'] ?? 0.0,
+                                image: list[i]['image'],
+                              ),
                             ),
                           );
                         },
@@ -480,21 +482,21 @@ class ItemList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
-                                  id: list[i]['id'] ?? 0.0,
-                                  codigoDeBarras:
-                                      list[i]['codigoDeBarras'] ?? "",
-                                  nombreUsuario: nombreUsuario,
-                                  name: list[i]['name'],
-                                  cantidad: list[i]['cantidad'],
-                                  unidadesCantidad: list[i]['unidadesCantidad'],
-                                  calorias: list[i]['calorias'],
-                                  grasas: list[i]['grasas'],
-                                  proteinas: list[i]['proteinas'],
-                                  carbohidratos: list[i]['carbohidratos'],
-                                  sodio: list[i]['sodio'] ?? 0.0,
-                                  azucar: list[i]['azucar'] ?? 0.0,
-                                  fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['image']),
+                                id: list[i]['id'] ?? 0.0,
+                                codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
+                                nombreUsuario: nombreUsuario,
+                                name: list[i]['name'],
+                                cantidad: list[i]['cantidad'],
+                                unidadesCantidad: list[i]['unidadesCantidad'],
+                                calorias: list[i]['calorias'],
+                                grasas: list[i]['grasas'],
+                                proteinas: list[i]['proteinas'],
+                                carbohidratos: list[i]['carbohidratos'],
+                                sodio: list[i]['sodio'] ?? 0.0,
+                                azucar: list[i]['azucar'] ?? 0.0,
+                                fibra: list[i]['fibra'] ?? 0.0,
+                                image: list[i]['image'],
+                              ),
                             ),
                           );
                         },
@@ -589,21 +591,21 @@ class ItemList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MostrarFood(
-                                  id: list[i]['id'] ?? 0.0,
-                                  codigoDeBarras:
-                                      list[i]['codigoDeBarras'] ?? "",
-                                  nombreUsuario: nombreUsuario,
-                                  name: list[i]['name'],
-                                  cantidad: list[i]['cantidad'],
-                                  unidadesCantidad: list[i]['unidadesCantidad'],
-                                  calorias: list[i]['calorias'],
-                                  grasas: list[i]['grasas'],
-                                  proteinas: list[i]['proteinas'],
-                                  carbohidratos: list[i]['carbohidratos'],
-                                  sodio: list[i]['sodio'] ?? 0.0,
-                                  azucar: list[i]['azucar'] ?? 0.0,
-                                  fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['image']),
+                                id: list[i]['id'] ?? 0.0,
+                                codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
+                                nombreUsuario: nombreUsuario,
+                                name: list[i]['name'],
+                                cantidad: list[i]['cantidad'],
+                                unidadesCantidad: list[i]['unidadesCantidad'],
+                                calorias: list[i]['calorias'],
+                                grasas: list[i]['grasas'],
+                                proteinas: list[i]['proteinas'],
+                                carbohidratos: list[i]['carbohidratos'],
+                                sodio: list[i]['sodio'] ?? 0.0,
+                                azucar: list[i]['azucar'] ?? 0.0,
+                                fibra: list[i]['fibra'] ?? 0.0,
+                                image: list[i]['image'],
+                              ),
                             ),
                           );
                         },

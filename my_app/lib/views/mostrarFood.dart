@@ -8,9 +8,11 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
+import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'mostrarFood.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
 class MostrarFood extends StatefulWidget {
@@ -89,6 +91,7 @@ class _MostrarFoodState extends State<MostrarFood> {
   @override
   Widget build(BuildContext context) {
     var nueva_cantidad = cantidad != 0.0 ? cantidad : widget.cantidad;
+    print('${nueva_cantidad}');
     calorias = _recalucularInformacion(widget.calorias, nueva_cantidad, 100);
     proteinas = _recalucularInformacion(widget.proteinas, nueva_cantidad, 100);
     carbohidratos =
@@ -97,14 +100,13 @@ class _MostrarFoodState extends State<MostrarFood> {
     azucar = _recalucularInformacion(widget.azucar, nueva_cantidad, 100);
     sodio = _recalucularInformacion(widget.sodio, nueva_cantidad, 100);
     fibra = _recalucularInformacion(widget.fibra, nueva_cantidad, 100);
-    double calculoCalorias = cantidad != 0.0 ? calorias : widget.calorias;
-    double calculoProteinas = cantidad != 0.0 ? proteinas : widget.proteinas;
-    double calculoCarbohidratos =
-        cantidad != 0.0 ? carbohidratos : widget.carbohidratos;
-    double calculoGrasas = cantidad != 0.0 ? grasas : widget.grasas;
-    double calculoSodio = cantidad != 0.0 ? sodio : widget.sodio;
-    double calculoFibra = cantidad != 0.0 ? fibra : widget.fibra;
-    double calculoAzucar = cantidad != 0.0 ? azucar : widget.azucar;
+    double calculoCalorias = calorias;
+    double calculoProteinas = proteinas;
+    double calculoCarbohidratos = carbohidratos;
+    double calculoGrasas = grasas;
+    double calculoSodio = sodio;
+    double calculoFibra = fibra;
+    double calculoAzucar = azucar;
     Map<String, double> dataMap = {
       "Proteínas": calculoProteinas,
       "Hidratos": calculoCarbohidratos,
@@ -159,30 +161,38 @@ class _MostrarFoodState extends State<MostrarFood> {
                               child: Padding(
                                   padding: EdgeInsets.fromLTRB(0, 30, 10, 0),
                                   child: Column(children: [
-                                    FutureBuilder<http.Response>(
-                                      future: http.get(Uri.parse(widget.image)),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                                ConnectionState.done &&
-                                            snapshot.hasData &&
-                                            snapshot.data!.statusCode == 200 &&
-                                            ['http', 'https'].contains(
-                                                Uri.parse(widget.image)
-                                                    .scheme)) {
-                                          return FadeInImage.assetNetwork(
-                                            placeholder:
-                                                'assets/placeholder_image.png',
-                                            image: widget.image,
-                                            fit: BoxFit.cover,
-                                          );
-                                        } else {
-                                          return Image.asset(
+                                    widget.image != null && widget.image != ""
+                                        ? FutureBuilder<http.Response>(
+                                            future: http
+                                                .get(Uri.parse(widget.image)),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                      ConnectionState.done &&
+                                                  snapshot.hasData &&
+                                                  snapshot.data!.statusCode ==
+                                                      200 &&
+                                                  ['http', 'https'].contains(
+                                                      Uri.parse(widget.image)
+                                                          .scheme)) {
+                                                return FadeInImage.assetNetwork(
+                                                  placeholder:
+                                                      'assets/placeholder_image.png',
+                                                  image: widget.image,
+                                                  fit: BoxFit.cover,
+                                                );
+                                              } else {
+                                                return Image.asset(
+                                                  'assets/placeholder_image.png',
+                                                  fit: BoxFit.cover,
+                                                );
+                                              }
+                                            },
+                                          )
+                                        : Container(
+                                            child: Image.asset(
                                             'assets/placeholder_image.png',
                                             fit: BoxFit.cover,
-                                          );
-                                        }
-                                      },
-                                    ),
+                                          )),
                                   ])),
                             )),
                         Expanded(
@@ -210,6 +220,14 @@ class _MostrarFoodState extends State<MostrarFood> {
                                     color: Colors.black,
                                   ),
                                 ),
+                                SizedBox(height: 8),
+                                Text(
+                                  '$nueva_cantidad ${widget.unidadesCantidad}',
+                                  style: TextStyle(
+                                    fontSize: 15.0,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
                                 Row(
                                   children: [
                                     Expanded(
@@ -272,12 +290,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                     ),
                                     SizedBox(width: 10.0),
                                   ],
-                                ),
-                                Text(
-                                  '$nueva_cantidad ${widget.unidadesCantidad}',
-                                  style: TextStyle(
-                                    fontSize: 15.0,
-                                  ),
+
                                   // DropdownButton<String>(
                                   //   value: unidadesCantidad,
                                   //   onChanged: (String? newValue) {
@@ -426,7 +439,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                               width: 80,
                                               child: Center(
                                                   child: Text(
-                                                '${widget.cantidad} ${widget.unidadesCantidad}',
+                                                '100 ${widget.unidadesCantidad}',
                                                 style: TextStyle(
                                                     fontSize: 13.0,
                                                     fontWeight: FontWeight.w500,
@@ -1083,7 +1096,6 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             height: 2,
                                             width: double.maxFinite,
                                           )),
-                                      SizedBox(height: 10.0),
                                     ],
                                   ),
                                 ),
@@ -1322,7 +1334,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                       child: TextButton(
                         onPressed: () {
                           // Lógica para actualizar alimento
-                          dataBaseHelper.updateAlimento(
+                          updateAlimento(
                               widget.id,
                               widget.name,
                               nueva_cantidad,
@@ -1337,7 +1349,9 @@ class _MostrarFoodState extends State<MostrarFood> {
                               widget.azucar,
                               widget.fibra,
                               widget.codigoDeBarras);
-                          Navigator.pop(context);
+
+                          cantidad == 0;
+
                           //print(nueva_cantidad);
                         },
                         child: Text('Guardar cambios'),
@@ -1345,9 +1359,54 @@ class _MostrarFoodState extends State<MostrarFood> {
                     ),
                     SizedBox(height: 20)
                   ],
-                ))
+                )),
           ],
         ));
+  }
+
+  Future<http.Response> updateAlimento(
+      int idController,
+      String nameController,
+      double cantidadController,
+      String unidadesCantidadController,
+      double caloriasController,
+      double grasasController,
+      double proteinasController,
+      double carbohidratosController,
+      String imageController,
+      String nombreUsuarioController,
+      double sodioController,
+      double azucarController,
+      double fibraController,
+      String codigoDeBarrasController) async {
+    var url = "${urlConexion}/foods/$idController";
+    Map data = {
+      'name': nameController,
+      'cantidad': cantidadController,
+      'unidadesCantidad': unidadesCantidadController,
+      'calorias': caloriasController,
+      'grasas': grasasController,
+      'proteinas': proteinasController,
+      'carbohidratos': carbohidratosController,
+      'image': imageController,
+      'nombreUsuario': nombreUsuarioController,
+      'sodio': sodioController,
+      'azucar': azucarController,
+      'fibra': fibraController,
+      'codigoDeBarras': codigoDeBarrasController,
+    };
+    var body = json.encode(data);
+    var response = await http.put(Uri.parse(url),
+        headers: {"Content-Type": "application/json"}, body: body);
+    print("${response.body}");
+    //Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+    return response;
   }
 
   Future<http.Response> insertarAlimento(
@@ -1365,7 +1424,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       String image,
       String codigoDeBarras) async {
     final response = await http.post(
-      Uri.parse('${urlConection}/foods/add'),
+      Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

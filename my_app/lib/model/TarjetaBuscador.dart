@@ -193,9 +193,14 @@ child: Column(
     ),
     Positioned(
       bottom: 0,
-      right: 10.0,
-      child: FloatingActionButton(
-        onPressed: () {
+      right: 0,
+      child: IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: Colors.orange,
+                            ),
+                            onPressed: () {
+
           if(widget.anadirRegistro){
             registrohelper.addRegistro(
               widget.codigoDeBarras.trim().toLowerCase(),
@@ -228,8 +233,6 @@ child: Column(
             );
           }      
         },
-        child: Icon(Icons.add),
-        mini: true,
       ),
     ),  
   ],

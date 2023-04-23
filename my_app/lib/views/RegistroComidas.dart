@@ -28,14 +28,15 @@ class _RegistroComidasPageState extends State<RegistroComidasPage> {
             child: NutriAppBar(nombreUsuario: widget.nombreUsuario),
           ),
         ),
-        body: Column(children: [
+        body: SingleChildScrollView (
+          child: Column(children: [
           TipoComidaCard( nombreUsuario: widget.nombreUsuario, tipoDeComida:"Desayuno"),
           TipoComidaCard( nombreUsuario: widget.nombreUsuario, tipoDeComida:"Almuerzo"),
           TipoComidaCard( nombreUsuario: widget.nombreUsuario, tipoDeComida:"Comida"),
           TipoComidaCard( nombreUsuario: widget.nombreUsuario, tipoDeComida:"Merienda"),
           TipoComidaCard( nombreUsuario: widget.nombreUsuario, tipoDeComida:"Cena"),
           
-        ],) 
+        ],) ) 
       );
     
      }

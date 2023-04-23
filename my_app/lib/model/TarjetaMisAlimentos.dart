@@ -109,8 +109,9 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
             children: [
               Align(
                 alignment: Alignment.topRight,
-                heightFactor: 0.5,
+                heightFactor: 0.3,
                 child: IconButton(
+                  iconSize: 20,
                   icon: Icon(Icons.delete_outline),
                   color: Colors.black,
                   onPressed: () {
@@ -118,7 +119,7 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                   },
                 ),
               ),
-              SizedBox(height: 11),
+              SizedBox(height: 5),
               widget.imageUrl != null && widget.imageUrl != ""
                   ? Expanded(child: FutureBuilder(
                       future: http.head(Uri.parse(widget.imageUrl)),
@@ -127,9 +128,9 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                         if (snapshot.hasData &&
                             snapshot.data!.statusCode == 200) {
                           return Padding(
-                              padding: EdgeInsets.fromLTRB(20, 0, 28, 0),
+                              padding: EdgeInsets.fromLTRB(15, 0, 30, 0),
                               child: SizedBox(
-                                height: 140,
+                                height: 130,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
                                   child: FadeInImage.assetNetwork(
@@ -165,14 +166,15 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                           : widget.nombreAlimento,
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
-                        fontSize: 17.0,
+                        fontSize: 14.0,
                       ),
                     ),
-                    SizedBox(height: 4.0),
                     Text(
                       " ${widget.codigoDeBarras}",
+                      
                       style: TextStyle(
                         color: Colors.grey,
+                        fontSize: 10.0,
                       ),
                     ),
                   ],

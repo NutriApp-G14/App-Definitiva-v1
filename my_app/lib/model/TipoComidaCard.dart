@@ -130,10 +130,10 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                     children: [
                                 if (registroComidas!=null && !registroComidas.isEmpty)
                                     for (int i = 0; i < alimentos.length; i++)
-                                     if(tamanos[i]< 90)
+                                     if(tamanos[i] < 40)
                                     
                                     Text(
-                                       '${tamanos[i] > 70 ?  '${alimentos[i].substring(0,2)} ...' : alimentos[i]}, ',
+                                       '${tamanos[i] > 37 ?  '${alimentos[i].substring(0,2)} ...' : alimentos[i]}, ',
                                       style: TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w400,

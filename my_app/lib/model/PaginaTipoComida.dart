@@ -140,30 +140,28 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                       crossAxisSpacing: 10.0,
                                       mainAxisSpacing: 10.0,
                                     ),
-                                    itemBuilder: (context, i) {
-                                      return TarjetaAlimento(
-                                        id: widget.registros[i]['id'],
-                                        nombreUsuario: widget.nombreUsuario,
-                                        codigoDeBarras: widget.registros[i]
-                                            ['codigoDeBarras'],
-                                        cantidad: 100.0,
-                                        nombreAlimento: widget.registros[i]
-                                            ['codigoDeBarras'],
-                                        imageUrl:
-                                            'https://images.openfoodfacts.org/images/products/848/000/015/0936/front_es.42.200.jpg',
-                                        scoreImages: [
-                                          'https://static.openfoodfacts.org/images/attributes/nutriscore-b.svg',
-                                          'https://static.openfoodfacts.org/images/attributes/nova-group-4.svg',
-                                          'https://static.openfoodfacts.org/images/attributes/ecoscore-b.svg'
-                                        ],
-                                        scoreTitles: [
-                                          'Nutri-Score B - Good nutritional quality',
-                                          'NOVA 4 - Ultra processed foods',
-                                          'Eco-Score B - Low environmental impact'
-                                        ],
-                                      );
+                             itemBuilder: (context, i) {
+
+                          var nombreUsuario = widget.nombreUsuario;
+                          var codigoDeBarras = alimentos[i][0]['_id'];
+                          var cantidad = 100.0;
+                          var nombreAlimento = alimentos[i][0]['product_name'] ?? "";
+                          var imageUrl =  alimentos[i][0]['image_url'] ??"";
+                          var nutriscore = alimentos[i][0]['nutriscore_grade'] ?? "";
+                          var novaGroup = alimentos[i][0]['nova_group'] ?? "";
+                          var ecoscore = alimentos[i][0]['ecoscore_grade'] ?? "";
+
+                          return TarjetaAlimento(
+                              id: widget.registros[i]['id'],
+                              nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras,
+                              cantidad: cantidad,
+                              nombreAlimento: nombreAlimento , imageUrl: imageUrl,
+                              scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'],
+                              scoreTitles: ['Nutri-Score ${nutriscore}' , 'NOVA Group ${novaGroup}', 'Eco-Score ${ecoscore}'],
+                              );
+                                     
                                     }));
-                          } else if (constraints.maxWidth < 1100) {
+                          }else if (constraints.maxWidth < 1100) {
                             return SizedBox(
                                 height: 250,
                                 child: GridView.builder(
@@ -212,29 +210,26 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                       crossAxisSpacing: 10.0,
                                       mainAxisSpacing: 10.0,
                                     ),
-                                    itemBuilder: (context, i) {
-                                      return TarjetaAlimento(
-                                        id: widget.registros[i]
-                                            ['id'],
-                                        nombreUsuario: widget.nombreUsuario,
-                                        codigoDeBarras: widget.registros[i]
-                                            ['codigoDeBarras'],
-                                        cantidad: 100.0,
-                                        nombreAlimento:
-                                            'Confitura de fresa 0% azúcares añadidos - Hacendado - 380 g',
-                                        imageUrl:
-                                            'https://images.openfoodfacts.org/images/products/848/000/015/0936/front_es.42.200.jpg',
-                                        scoreImages: [
-                                          'https://static.openfoodfacts.org/images/attributes/nutriscore-b.svg',
-                                          'https://static.openfoodfacts.org/images/attributes/nova-group-4.svg',
-                                          'https://static.openfoodfacts.org/images/attributes/ecoscore-b.svg'
-                                        ],
-                                        scoreTitles: [
-                                          'Nutri-Score B - Good nutritional quality',
-                                          'NOVA 4 - Ultra processed foods',
-                                          'Eco-Score B - Low environmental impact'
-                                        ],
-                                      );
+                            itemBuilder: (context, i) {
+
+                          var nombreUsuario = widget.nombreUsuario;
+                          var codigoDeBarras = alimentos[i][0]['_id'];
+                          var cantidad = 100.0;
+                          var nombreAlimento = alimentos[i][0]['product_name'] ?? "";
+                          var imageUrl =  alimentos[i][0]['image_url'] ??"";
+                          var nutriscore = alimentos[i][0]['nutriscore_grade'] ?? "";
+                          var novaGroup = alimentos[i][0]['nova_group'] ?? "";
+                          var ecoscore = alimentos[i][0]['ecoscore_grade'] ?? "";
+
+                          return TarjetaAlimento(
+                              id: widget.registros[i]['id'],
+                              nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras,
+                              cantidad: cantidad,
+                              nombreAlimento: nombreAlimento , imageUrl: imageUrl,
+                              scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'],
+                              scoreTitles: ['Nutri-Score ${nutriscore}' , 'NOVA Group ${novaGroup}', 'Eco-Score ${ecoscore}'],
+                              );
+                                     
                                     }));
                           }
                         })),

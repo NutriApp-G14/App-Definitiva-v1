@@ -81,7 +81,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         padding: const EdgeInsets.all(10.0),
                         itemCount: _listaDeAlimentos == null ? 0 : _listaDeAlimentos.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
+                          crossAxisCount: 2,
                           crossAxisSpacing: 10.0,
                           mainAxisSpacing: 10.0,
                         ),

@@ -205,7 +205,8 @@ class _ListAlimentosState extends State<ListAlimentos> {
                         return snapshot.hasData
                             ? ItemListReceta(
                                 list: snapshot.data!,
-                                deleteItem: deleteDataReceta
+                                deleteItem: deleteDataReceta,
+                                nombreUsuario: widget.nombreUsuario,
                               )
                             : const Center(
                                 child: CircularProgressIndicator(),
@@ -761,8 +762,12 @@ class ItemList extends StatelessWidget {
 class ItemListReceta extends StatelessWidget {
   final List list;
   final Function(int) deleteItem;
+  final String nombreUsuario;
 
-  const ItemListReceta({required this.list, required this.deleteItem});
+  const ItemListReceta(
+      {required this.list,
+      required this.deleteItem,
+      required this.nombreUsuario});
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -860,6 +865,7 @@ class ItemListReceta extends StatelessWidget {
                                   ingredientes: list[i]['ingredientes'],
                                   descripcion: list[i]['descripcion'],
                                   pasos: list[i]['pasos'],
+                                  nombreUsuario: nombreUsuario,
                                   // calorias: list[i]['calorias'],
                                   // grasas: list[i]['grasas'],
                                   // proteinas: list[i]['proteinas'],
@@ -972,6 +978,7 @@ class ItemListReceta extends StatelessWidget {
                                   ingredientes: list[i]['ingredientes'],
                                   descripcion: list[i]['descripcion'],
                                   pasos: list[i]['pasos'],
+                                  nombreUsuario: nombreUsuario,
                                   // calorias: list[i]['calorias'],
                                   // grasas: list[i]['grasas'],
                                   // proteinas: list[i]['proteinas'],
@@ -1083,6 +1090,7 @@ class ItemListReceta extends StatelessWidget {
                                   ingredientes: list[i]['ingredientes'],
                                   descripcion: list[i]['descripcion'],
                                   pasos: list[i]['pasos'],
+                                  nombreUsuario: nombreUsuario,
                                   // calorias: list[i]['calorias'],
                                   // grasas: list[i]['grasas'],
                                   // proteinas: list[i]['proteinas'],

@@ -15,7 +15,12 @@ import 'mostrarFood.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
+//final urlConexion1 = 'http://localhost:8080';
 final urlConexion1 = 'http://localhost:8080';
+//final urlConexion1 = 'http://35.241.179.64:8080';
+//final urlConexion1 = 'http://35.189.241.218:8080';
+
+
 
 class MostrarFood extends StatefulWidget {
   final int id;
@@ -96,7 +101,6 @@ class _MostrarFoodState extends State<MostrarFood> {
   @override
   Widget build(BuildContext context) {
     var nueva_cantidad = cantidad != 0.0 ? cantidad : widget.cantidad;
-
     calorias = _recalucularInformacion(widget.calorias, nueva_cantidad, 100);
     proteinas = _recalucularInformacion(widget.proteinas, nueva_cantidad, 100);
     carbohidratos =
@@ -166,30 +170,38 @@ class _MostrarFoodState extends State<MostrarFood> {
                               child: Padding(
                                   padding: EdgeInsets.fromLTRB(0, 30, 10, 0),
                                   child: Column(children: [
-                                    FutureBuilder<http.Response>(
-                                      future: http.get(Uri.parse(widget.image)),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                                ConnectionState.done &&
-                                            snapshot.hasData &&
-                                            snapshot.data!.statusCode == 200 &&
-                                            ['http', 'https'].contains(
-                                                Uri.parse(widget.image)
-                                                    .scheme)) {
-                                          return FadeInImage.assetNetwork(
-                                            placeholder:
-                                                'assets/placeholder_image.png',
-                                            image: widget.image,
-                                            fit: BoxFit.cover,
-                                          );
-                                        } else {
-                                          return Image.asset(
+                                    widget.image != null && widget.image != ""
+                                        ? FutureBuilder<http.Response>(
+                                            future: http
+                                                .get(Uri.parse(widget.image)),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                      ConnectionState.done &&
+                                                  snapshot.hasData &&
+                                                  snapshot.data!.statusCode ==
+                                                      200 &&
+                                                  ['http', 'https'].contains(
+                                                      Uri.parse(widget.image)
+                                                          .scheme)) {
+                                                return FadeInImage.assetNetwork(
+                                                  placeholder:
+                                                      'assets/placeholder_image.png',
+                                                  image: widget.image,
+                                                  fit: BoxFit.cover,
+                                                );
+                                              } else {
+                                                return Image.asset(
+                                                  'assets/placeholder_image.png',
+                                                  fit: BoxFit.cover,
+                                                );
+                                              }
+                                            },
+                                          )
+                                        : Container(
+                                            child: Image.asset(
                                             'assets/placeholder_image.png',
                                             fit: BoxFit.cover,
-                                          );
-                                        }
-                                      },
-                                    ),
+                                          )),
                                   ])),
                             )),
                         Expanded(
@@ -217,6 +229,14 @@ class _MostrarFoodState extends State<MostrarFood> {
                                     color: Colors.black,
                                   ),
                                 ),
+                                SizedBox(height: 8),
+                                Text(
+                                  '$nueva_cantidad ${widget.unidadesCantidad}',
+                                  style: TextStyle(
+                                    fontSize: 15.0,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
                                 Row(
                                   children: [
                                     Expanded(
@@ -279,12 +299,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                     ),
                                     SizedBox(width: 10.0),
                                   ],
-                                ),
-                                Text(
-                                  '$nueva_cantidad ${widget.unidadesCantidad}',
-                                  style: TextStyle(
-                                    fontSize: 15.0,
-                                  ),
+
                                   // DropdownButton<String>(
                                   //   value: unidadesCantidad,
                                   //   onChanged: (String? newValue) {

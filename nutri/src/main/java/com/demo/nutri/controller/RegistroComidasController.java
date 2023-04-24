@@ -46,19 +46,25 @@ public class RegistroComidasController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RegistroComidas> getRegistroComida(@PathVariable String id) {
+    public ResponseEntity<RegistroComidas> getRegistroComida(@PathVariable Integer id) {
         return registroComidasRepository.findById(id).map(
                 registroComidas -> ResponseEntity.ok().body(registroComidas)).orElse(new ResponseEntity<RegistroComidas>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/reg/{id}")
-    public ResponseEntity<RegistroComidas> deleteRegistroComidas(@PathVariable String id) {
+    public ResponseEntity<RegistroComidas> deleteRegistroComidas(@PathVariable Integer id) {
         registroComidasRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<Alimento>  deleteAlimento(@PathVariable Integer id) {
+    //     repository.deleteById(id);
+    //     return ResponseEntity.ok().build();
+    // }
+
     @PutMapping("/{id}")
-    public ResponseEntity<RegistroComidas> updateRegistroComidas(@PathVariable String id,
+    public ResponseEntity<RegistroComidas> updateRegistroComidas(@PathVariable Integer id,
             @RequestBody RegistroComidas RegistroComidas) {
         return registroComidasRepository.findById(id).map(registroComidas -> {
             registroComidas.setNombreUsuario(RegistroComidas.getNombreUsuario());

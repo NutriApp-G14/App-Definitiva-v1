@@ -6,12 +6,19 @@ import 'dart:convert';
 
 
 //final urlConexion = 'http://34.77.36.66:8080';
-//final urlConexion = 'http://35.241.179.64:8080';
+//final urlConection = 'http://35.241.179.64:8080';
+final urlConection = 'http://localhost:8080';
 final urlConexion = 'http://localhost:8080';
 
-class RegistroHelper {
+//final urlConexion = 'http://35.189.241.218:8080';
+//final urlConection = 'http://35.189.241.218:8080';
+//final urlConexion = 'http://35.241.179.64:8080';
 
-    // Add Registro
+//finalfinal urlConexion = 'http://35.189.241.218:8080';
+
+
+class RegistroHelper {
+  // Add Registro
   Future<http.Response> addRegistro(
     String codigoDeBarrasController,
     double cantidadController,
@@ -21,10 +28,10 @@ class RegistroHelper {
     String nombreAlimento
   ) async {
     print("Funcion ejecutada");
-    var url = "${urlConexion}/registro/add";
+    var url = "${urlConection}/registro/add";
     Map data = {
-      'codigoDeBarras' : codigoDeBarrasController,
-      'cantidad' : cantidadController,
+      'codigoDeBarras': codigoDeBarrasController,
+      'cantidad': cantidadController,
       'nombreUsuario': nombreUsuarioController,
       'fecha' : fechaController,
       'tipoDeComida' : tipoDeComidaController,
@@ -39,14 +46,17 @@ class RegistroHelper {
     return response;
   }
 
-  // Borrar Registro
+
+// Borrar Registro
   Future<http.Response> deleteRegistro(int id) async {
-    var url = "${urlConexion}/registro/{id}";
+    var url = "${urlConexion}/registro/reg/{id}";
     var response = await http
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     print("${response.statusCode}");
     return response;
   }
+
+
 
   // Obtiene los registros a partir de su nombre de usuario,fecha y tipodeComida
   Future<List> getRegistroComidas(String nombreUsuario, String tipoDeComida, String fecha) async {

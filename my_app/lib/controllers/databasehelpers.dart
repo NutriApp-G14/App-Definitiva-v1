@@ -11,7 +11,7 @@ import 'dart:convert';
 import 'package:my_app/model/Usuario.dart';
 
 //final urlConexion = 'http://34.77.36.66:8080';
-//final urlConexion = 'http://35.241.179.64:8080';
+//final urlConexion = 'http://35.189.241.218:8080';
 final urlConexion = 'http://localhost:8080';
 //final urlConexion = 'http://localhost:8080';
 
@@ -30,7 +30,7 @@ class DataBaseHelper {
       double sodioController,
       double azucarController,
       double fibraController,
-      String codigoDeBarrasController)async {
+      String codigoDeBarrasController) async {
     var url = "${urlConexion}/foods/add";
     Map data = {
       'name': nameController,
@@ -396,9 +396,8 @@ class DataBaseHelper {
 // Funciones Para Alimentos
 
 // Obtener un Alimento al añadirlo
-  Future<bool> getAlimento(int id )async {
-    final response =
-        await http.get(Uri.parse('${urlConexion}/foods/$id'));
+  Future<bool> getAlimento(int id) async {
+    final response = await http.get(Uri.parse('${urlConexion}/foods/$id'));
     if (response.statusCode == 200) {
       return true;
     }

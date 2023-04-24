@@ -158,6 +158,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                               nombreAlimento: nombreAlimento , imageUrl: imageUrl,
                               scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'],
                               scoreTitles: ['Nutri-Score ${nutriscore}' , 'NOVA Group ${novaGroup}', 'Eco-Score ${ecoscore}'],
+                              fecha: widget.fecha, registros: widget.registros, tipodeComida: widget.tipoDeComida
                               );
                                      
                                     }));
@@ -193,7 +194,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                               nombreAlimento: nombreAlimento , imageUrl: imageUrl,
                               scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'],
                               scoreTitles: ['Nutri-Score ${nutriscore}' , 'NOVA Group ${novaGroup}', 'Eco-Score ${ecoscore}'],
-                              );
+                              fecha: widget.fecha, registros: widget.registros, tipodeComida: widget.tipoDeComida);
                                      
                                     }));
                           } else {
@@ -228,7 +229,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                               nombreAlimento: nombreAlimento , imageUrl: imageUrl,
                               scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'],
                               scoreTitles: ['Nutri-Score ${nutriscore}' , 'NOVA Group ${novaGroup}', 'Eco-Score ${ecoscore}'],
-                              );
+                              fecha: widget.fecha, registros: widget.registros, tipodeComida: widget.tipoDeComida,);
                                      
                                     }));
                           }

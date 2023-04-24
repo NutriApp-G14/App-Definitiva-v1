@@ -138,8 +138,8 @@ child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.nombreAlimento.length > 20
-                ? '${widget.nombreAlimento.substring(0, 20)}...'
+            widget.nombreAlimento.length > 13
+                ? '${widget.nombreAlimento.substring(0, 11)}...'
                 : widget.nombreAlimento,
             style: TextStyle(
               fontWeight: FontWeight.w400,
@@ -209,6 +209,7 @@ child: Column(
               formattedDate.trim().toLowerCase(),
               widget.tipoDeComida.trim().toLowerCase(),
               widget.nombreAlimento.trim());
+
           } else {
             insertarAlimento(
               widget.codigoDeBarras, 

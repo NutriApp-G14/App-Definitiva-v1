@@ -9,6 +9,8 @@ import 'package:my_app/views/mostrarFood.dart';
 
 //final urlConexion1 = 'http://35.241.179.64:8080';
 final urlConexion1 = 'http://localhost:8080';
+//final urlConexion1 = 'http://35.189.241.218:8080';
+
 
 class TarjetaMisAlimento extends StatefulWidget {
   final int id;
@@ -48,12 +50,24 @@ class TarjetaMisAlimento extends StatefulWidget {
 }
 
 class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
-  Future<void> deleteData(int id) async {
-    final response = await http.delete(
-      Uri.parse("$urlConexion1/foods/$id"),
-    );
-    _navigateAlimentos(context);
-  }
+
+Future<void> deleteData(int id) async {
+  
+  final response = await http.delete(
+    Uri.parse("$urlConexion1/foods/$id"),
+  );
+  _refreshListAlimentos();
+}
+
+_refreshListAlimentos() {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ListAlimentos(nombreUsuario: widget.nombreUsuario),
+      ),
+  );
+}
+
 
   _navigateAlimentos(BuildContext context) async {
     Navigator.of(context).push(
@@ -107,18 +121,20 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                heightFactor: 0.3,
-                child: IconButton(
-                  iconSize: 20,
-                  icon: Icon(Icons.delete_outline),
-                  color: Colors.black,
-                  onPressed: () {
-                    deleteData(widget.id);
-                  },
-                ),
-              ),
+           Align(
+            alignment: Alignment.topRight,
+              heightFactor: 0.4,
+               child: IconButton(
+              iconSize: 20,
+              icon: Icon(Icons.delete_outline),
+              color: Colors.black,
+              onPressed: () {
+                deleteData(widget.id);
+                print("presionado");
+              },
+            ),
+           ),
+
               SizedBox(height: 5),
               widget.imageUrl != null && widget.imageUrl != ""
                   ? Expanded(child: FutureBuilder(
@@ -128,9 +144,9 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                         if (snapshot.hasData &&
                             snapshot.data!.statusCode == 200) {
                           return Padding(
-                              padding: EdgeInsets.fromLTRB(15, 0, 30, 0),
+                              padding: EdgeInsets.fromLTRB(12, 0, 32, 0),
                               child: SizedBox(
-                                height: 130,
+                                height: 90,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
                                   child: FadeInImage.assetNetwork(
@@ -171,7 +187,6 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                     ),
                     Text(
                       " ${widget.codigoDeBarras}",
-                      
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 10.0,

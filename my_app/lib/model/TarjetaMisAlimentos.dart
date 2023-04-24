@@ -8,8 +8,8 @@ import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
 //final urlConexion1 = 'http://35.241.179.64:8080';
-//final urlConexion1 = 'http://localhost:8080';
-final urlConexion1 = 'http://35.189.241.218:8080';
+final urlConexion1 = 'http://localhost:8080';
+//final urlConexion1 = 'http://35.189.241.218:8080';
 
 
 class TarjetaMisAlimento extends StatefulWidget {

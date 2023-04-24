@@ -11,8 +11,8 @@ import 'dart:convert';
 import 'package:my_app/model/Usuario.dart';
 
 //final urlConexion = 'http://34.77.36.66:8080';
-final urlConexion = 'http://35.189.241.218:8080';
-//final urlConexion = 'http://localhost:8080';
+//final urlConexion = 'http://35.189.241.218:8080';
+final urlConexion = 'http://localhost:8080';
 //final urlConexion = 'http://localhost:8080';
 
 class DataBaseHelper {

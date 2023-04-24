@@ -1,10 +1,9 @@
 package com.demo.nutri.model;
 
+
 import java.net.URI;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Alimento {
@@ -18,28 +17,22 @@ public class Alimento {
     private Double grasas;
     private Double proteinas;
     private Double carbohidratos;
+    private Double azucar;
+    private Double fibra;
+    private Double sodio;
     private String image; 
     private String nombreUsuario; 
+    private String codigoDeBarras;
+    @ManyToOne
+    private Receta receta;
 
-
-    public String getUnidadesCantidad() {
-        return unidadesCantidad;
+    public String getCodigoDeBarras() {
+        return codigoDeBarras;
     }
-    public void setUnidadesCantidad(String unidadesCantidad) {
-        this.unidadesCantidad = unidadesCantidad;
+    public void setCodigoDeBarras(String codigoDeBarras) {
+        this.codigoDeBarras = codigoDeBarras;
     }
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-    public String getImage() {
-        return image;
-    }
-    public void setImage(String image) {
-        this.image = image;
-    }
+    
     public Integer getId() {
         return id;
     }
@@ -57,6 +50,12 @@ public class Alimento {
     }
     public void setCantidad(Double cantidad) {
         this.cantidad = cantidad;
+    }
+    public String getUnidadesCantidad() {
+        return unidadesCantidad;
+    }
+    public void setUnidadesCantidad(String unidadesCantidad) {
+        this.unidadesCantidad = unidadesCantidad;
     }
     public Double getCalorias() {
         return calorias;
@@ -82,6 +81,45 @@ public class Alimento {
     public void setCarbohidratos(Double carbohidratos) {
         this.carbohidratos = carbohidratos;
     }
+    public Double getAzucar() {
+        return azucar;
+    }
+    public void setAzucar(Double azucar) {
+        this.azucar = azucar;
+    }
+    public Double getFibra() {
+        return fibra;
+    }
+    public void setFibra(Double fibra) {
+        this.fibra = fibra;
+    }
+    public Double getSodio() {
+        return sodio;
+    }
+    public void setSodio(Double sodio) {
+        this.sodio = sodio;
+    }
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+    public Receta getReceta() {
+        return receta;
+    }
+    public void setReceta(Receta receta) {
+        this.receta = receta;
+    }
+
+
+
 
 }
 

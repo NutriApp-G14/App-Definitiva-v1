@@ -25,7 +25,7 @@ public class Alimento {
     private String codigoDeBarras;
     @ManyToOne
     private Receta receta;
-    @OneToOne
+    @ManyToOne
     private RegistroComidas registroComidas;
 
     public String getCodigoDeBarras() {

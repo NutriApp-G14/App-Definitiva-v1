@@ -14,8 +14,8 @@ public class RegistroComidas {
     private String fecha;
     private String tipoDeComida;
     private String nombreAlimento;
-    @OneToOne
-    private Alimento alimentos;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Alimento> alimentos;
     
     public String getNombreAlimento() {
         return nombreAlimento;
@@ -59,11 +59,12 @@ public class RegistroComidas {
     public void setTipoDeComida(String tipoDeComida) {
         this.tipoDeComida = tipoDeComida;
     }
-    public Alimento getAlimentos() {
+    public List<Alimento> getAlimentos() {
         return alimentos;
     }
-    public void setAlimentos(Alimento alimentos) {
+    public void setAlimentos(List<Alimento> alimentos) {
         this.alimentos = alimentos;
     }
+
 
 }

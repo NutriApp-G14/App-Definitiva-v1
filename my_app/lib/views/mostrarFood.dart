@@ -85,7 +85,7 @@ class _MostrarFoodState extends State<MostrarFood> {
   final bool isPremium = false;
   List<Alimento> alimentosRegistro = [];
   double cantidad = 0.0;
-  var unidadesCantidad = 0.0;
+  var unidadesCantidad = "";
   double calorias = 0.0;
   double proteinas = 0.0;
   double carbohidratos = 0.0;
@@ -1150,8 +1150,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                     name: widget.name,
                                                     cantidad: nueva_cantidad,
                                                     unidadesCantidad:
-                                                        unidadesCantidad
-                                                            .toString(),
+                                                        widget.unidadesCantidad,
                                                     calorias: widget.calorias,
                                                     grasas: widget.grasas,
                                                     proteinas: widget.proteinas,
@@ -1165,7 +1164,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                   widget.codigoDeBarras
                                                       .trim()
                                                       .toLowerCase(),
-                                                  widget.cantidad,
+                                                  nueva_cantidad,
                                                   widget.nombreUsuario
                                                       .trim()
                                                       .toLowerCase(),
@@ -1202,8 +1201,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                     name: widget.name,
                                                     cantidad: nueva_cantidad,
                                                     unidadesCantidad:
-                                                        unidadesCantidad
-                                                            .toString(),
+                                                        widget.unidadesCantidad,
                                                     calorias: widget.calorias,
                                                     grasas: widget.grasas,
                                                     proteinas: widget.proteinas,
@@ -1217,7 +1215,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                   widget.codigoDeBarras
                                                       .trim()
                                                       .toLowerCase(),
-                                                  widget.cantidad,
+                                                  nueva_cantidad,
                                                   widget.nombreUsuario
                                                       .trim()
                                                       .toLowerCase(),
@@ -1254,8 +1252,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                     name: widget.name,
                                                     cantidad: nueva_cantidad,
                                                     unidadesCantidad:
-                                                        unidadesCantidad
-                                                            .toString(),
+                                                        widget.unidadesCantidad,
                                                     calorias: widget.calorias,
                                                     grasas: widget.grasas,
                                                     proteinas: widget.proteinas,
@@ -1269,7 +1266,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                   widget.codigoDeBarras
                                                       .trim()
                                                       .toLowerCase(),
-                                                  widget.cantidad,
+                                                  nueva_cantidad,
                                                   widget.nombreUsuario
                                                       .trim()
                                                       .toLowerCase(),
@@ -1304,8 +1301,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                     name: widget.name,
                                                     cantidad: nueva_cantidad,
                                                     unidadesCantidad:
-                                                        unidadesCantidad
-                                                            .toString(),
+                                                        widget.unidadesCantidad,
                                                     calorias: widget.calorias,
                                                     grasas: widget.grasas,
                                                     proteinas: widget.proteinas,
@@ -1319,7 +1315,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                   widget.codigoDeBarras
                                                       .trim()
                                                       .toLowerCase(),
-                                                  widget.cantidad,
+                                                  nueva_cantidad,
                                                   widget.nombreUsuario
                                                       .trim()
                                                       .toLowerCase(),
@@ -1356,8 +1352,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                     name: widget.name,
                                                     cantidad: nueva_cantidad,
                                                     unidadesCantidad:
-                                                        unidadesCantidad
-                                                            .toString(),
+                                                        widget.unidadesCantidad,
                                                     calorias: widget.calorias,
                                                     grasas: widget.grasas,
                                                     proteinas: widget.proteinas,
@@ -1371,7 +1366,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                   widget.codigoDeBarras
                                                       .trim()
                                                       .toLowerCase(),
-                                                  widget.cantidad,
+                                                  nueva_cantidad,
                                                   widget.nombreUsuario
                                                       .trim()
                                                       .toLowerCase(),

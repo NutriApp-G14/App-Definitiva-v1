@@ -4,6 +4,8 @@ import 'dart:ffi';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:my_app/model/Alimento.dart';
+
 //final urlConexion = 'http://34.77.36.66:8080';
 //final urlConection = 'http://35.241.179.64:8080';
 final urlConection = 'http://34.77.252.254:8080';
@@ -23,7 +25,8 @@ class RegistroHelper {
       String nombreUsuarioController,
       String fechaController,
       String tipoDeComidaController,
-      String nombreAlimento) async {
+      String nombreAlimento,
+      List<Alimento> alimento) async {
     print("Funcion ejecutada");
     var url = "${urlConection}/registro/add";
     Map data = {
@@ -32,7 +35,8 @@ class RegistroHelper {
       'nombreUsuario': nombreUsuarioController,
       'fecha': fechaController,
       'tipoDeComida': tipoDeComidaController,
-      'nombreAlimento': nombreAlimento
+      'nombreAlimento': nombreAlimento,
+      'alimentos': alimento,
     };
     var body = json.encode(data);
 

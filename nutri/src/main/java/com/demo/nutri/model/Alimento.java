@@ -25,6 +25,8 @@ public class Alimento {
     private String codigoDeBarras;
     @ManyToOne
     private Receta receta;
+    @OneToOne
+    private RegistroComidas registroComidas;
 
     public String getCodigoDeBarras() {
         return codigoDeBarras;
@@ -116,6 +118,12 @@ public class Alimento {
     }
     public void setReceta(Receta receta) {
         this.receta = receta;
+    }
+    public RegistroComidas getRegistroComidas() {
+        return registroComidas;
+    }
+    public void setRegistroComidas(RegistroComidas registroComidas) {
+        this.registroComidas = registroComidas;
     }
 
 

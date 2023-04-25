@@ -14,6 +14,7 @@ public class RegistroComidas {
     private String fecha;
     private String tipoDeComida;
     private String nombreAlimento;
+    @OneToOne
     private Alimento alimentos;
     
     public String getNombreAlimento() {

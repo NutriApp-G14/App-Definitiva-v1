@@ -16,6 +16,7 @@ class MostrarReceta extends StatelessWidget {
   final List ingredientes;
   final String descripcion;
   final List pasos;
+  final String nombreUsuario;
 
   const MostrarReceta({
     required this.name,
@@ -25,6 +26,7 @@ class MostrarReceta extends StatelessWidget {
     required this.ingredientes,
     required this.descripcion,
     required this.pasos,
+    required this.nombreUsuario,
   });
   final bool isPremium = true;
 
@@ -239,24 +241,103 @@ class MostrarReceta extends StatelessWidget {
                     SizedBox(height: 50.0),
                     Card(
                         child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Descripción:",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.orange,
-                                fontWeight: FontWeight.bold),
+                            padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
+                            child: Row(children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    "Descripción:",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.orange,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(26, 10, 0, 0),
+                                      child: Text(
+                                        ' $descripcion',
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                ],
+                              ),
+                            ]))),
+                    Card(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          SizedBox(height: 10),
+                          Padding(
+                            padding: EdgeInsets.all(16),
+                            child: Text(
+                              "Ingredientes:",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          Text(
-                            ' $descripcion',
-                            style: TextStyle(fontSize: 12),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: ingredientes.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MostrarFood(
+                                                id: ingredientes[index]['id'] ??
+                                                    0.0,
+                                                codigoDeBarras: ingredientes[
+                                                            index]
+                                                        ['codigoDeBarras'] ??
+                                                    "",
+                                                nombreUsuario: nombreUsuario,
+                                                name: ingredientes[index]
+                                                    ['name'],
+                                                cantidad: ingredientes[index]
+                                                    ['cantidad'],
+                                                unidadesCantidad:
+                                                    ingredientes[index]
+                                                        ['unidadesCantidad'],
+                                                calorias: ingredientes[index]
+                                                    ['calorias'],
+                                                grasas: ingredientes[index]
+                                                    ['grasas'],
+                                                proteinas: ingredientes[index]
+                                                    ['proteinas'],
+                                                carbohidratos:
+                                                    ingredientes[index]
+                                                        ['carbohidratos'],
+                                                sodio: ingredientes[index]
+                                                        ['sodio'] ??
+                                                    0.0,
+                                                azucar: ingredientes[index]
+                                                        ['azucar'] ??
+                                                    0.0,
+                                                fibra: ingredientes[index]
+                                                        ['fibra'] ??
+                                                    0.0,
+                                                image: ingredientes[index]
+                                                    ['image'],
+                                              )));
+                                },
+                                child: Card(
+                                  color: Color.fromARGB(255, 253, 238, 215),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: Text(
+                                      ingredientes[index]['name'],
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        ],
-                      ),
-                    )),
+                        ])),
                     Card(
                         child: Padding(
                       padding: EdgeInsets.all(16),
@@ -274,13 +355,18 @@ class MostrarReceta extends StatelessWidget {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Column(
-                                  children: pasos.map((paso) {
-                                    return Text(
-                                      paso.toString(),
-                                      style: TextStyle(fontSize: 12),
+                                  children: pasos.asMap().entries.map((entry) {
+                                    int indice = entry.key + 1;
+                                    String paso = entry.value;
+                                    return Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Text(
+                                        '$indice. $paso',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
                                     );
                                   }).toList(),
-                                ),
+                                )
                               ]),
                         ],
                       ),

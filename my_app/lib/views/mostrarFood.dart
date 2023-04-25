@@ -15,6 +15,11 @@ import 'mostrarFood.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
+//final urlConexion1 = 'http://localhost:8080';
+final urlConexion1 = 'http://34.77.252.254:8080';
+//final urlConexion1 = 'http://35.241.179.64:8080';
+//final urlConexion1 = 'http://35.189.241.218:8080';
+
 class MostrarFood extends StatefulWidget {
   final int id;
   final String codigoDeBarras;
@@ -55,6 +60,7 @@ class _MostrarFoodState extends State<MostrarFood> {
   RegistroHelper registrohelper = RegistroHelper();
   DateTime now = DateTime.now();
   late String formattedDate;
+
   DataBaseHelper dataBaseHelper = DataBaseHelper();
   @override
   void initState() {
@@ -91,7 +97,6 @@ class _MostrarFoodState extends State<MostrarFood> {
   @override
   Widget build(BuildContext context) {
     var nueva_cantidad = cantidad != 0.0 ? cantidad : widget.cantidad;
-    print('${nueva_cantidad}');
     calorias = _recalucularInformacion(widget.calorias, nueva_cantidad, 100);
     proteinas = _recalucularInformacion(widget.proteinas, nueva_cantidad, 100);
     carbohidratos =
@@ -161,30 +166,38 @@ class _MostrarFoodState extends State<MostrarFood> {
                               child: Padding(
                                   padding: EdgeInsets.fromLTRB(0, 30, 10, 0),
                                   child: Column(children: [
-                                    FutureBuilder<http.Response>(
-                                      future: http.get(Uri.parse(widget.image)),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                                ConnectionState.done &&
-                                            snapshot.hasData &&
-                                            snapshot.data!.statusCode == 200 &&
-                                            ['http', 'https'].contains(
-                                                Uri.parse(widget.image)
-                                                    .scheme)) {
-                                          return FadeInImage.assetNetwork(
-                                            placeholder:
-                                                'assets/placeholder_image.png',
-                                            image: widget.image,
-                                            fit: BoxFit.cover,
-                                          );
-                                        } else {
-                                          return Image.asset(
+                                    widget.image != null && widget.image != ""
+                                        ? FutureBuilder<http.Response>(
+                                            future: http
+                                                .get(Uri.parse(widget.image)),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                      ConnectionState.done &&
+                                                  snapshot.hasData &&
+                                                  snapshot.data!.statusCode ==
+                                                      200 &&
+                                                  ['http', 'https'].contains(
+                                                      Uri.parse(widget.image)
+                                                          .scheme)) {
+                                                return FadeInImage.assetNetwork(
+                                                  placeholder:
+                                                      'assets/placeholder_image.png',
+                                                  image: widget.image,
+                                                  fit: BoxFit.cover,
+                                                );
+                                              } else {
+                                                return Image.asset(
+                                                  'assets/placeholder_image.png',
+                                                  fit: BoxFit.cover,
+                                                );
+                                              }
+                                            },
+                                          )
+                                        : Container(
+                                            child: Image.asset(
                                             'assets/placeholder_image.png',
                                             fit: BoxFit.cover,
-                                          );
-                                        }
-                                      },
-                                    ),
+                                          )),
                                   ])),
                             )),
                         Expanded(
@@ -212,6 +225,14 @@ class _MostrarFoodState extends State<MostrarFood> {
                                     color: Colors.black,
                                   ),
                                 ),
+                                SizedBox(height: 8),
+                                Text(
+                                  '$nueva_cantidad ${widget.unidadesCantidad}',
+                                  style: TextStyle(
+                                    fontSize: 15.0,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
                                 Row(
                                   children: [
                                     Expanded(
@@ -274,12 +295,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                     ),
                                     SizedBox(width: 10.0),
                                   ],
-                                ),
-                                Text(
-                                  '$nueva_cantidad ${widget.unidadesCantidad}',
-                                  style: TextStyle(
-                                    fontSize: 15.0,
-                                  ),
+
                                   // DropdownButton<String>(
                                   //   value: unidadesCantidad,
                                   //   onChanged: (String? newValue) {
@@ -1159,7 +1175,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                         .toLowerCase(),
                                                     'Desayuno'
                                                         .trim()
-                                                        .toLowerCase());
+                                                        .toLowerCase(),
+                                                    widget.name.trim());
                                               },
                                               child: Text('Desayuno'),
                                               style: ElevatedButton.styleFrom(
@@ -1192,7 +1209,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                         .toLowerCase(),
                                                     'Almuerzo'
                                                         .trim()
-                                                        .toLowerCase());
+                                                        .toLowerCase(),
+                                                    widget.name.trim());
                                               },
                                               child: Text('Almuerzo'),
                                               style: ElevatedButton.styleFrom(
@@ -1225,7 +1243,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                         .toLowerCase(),
                                                     'Comida'
                                                         .trim()
-                                                        .toLowerCase());
+                                                        .toLowerCase(),
+                                                    widget.name.trim());
                                               },
                                               child: Text('Comida'),
                                               style: ElevatedButton.styleFrom(
@@ -1258,7 +1277,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                         .toLowerCase(),
                                                     'Merienda'
                                                         .trim()
-                                                        .toLowerCase());
+                                                        .toLowerCase(),
+                                                    widget.name.trim());
                                               },
                                               child: Text('Merienda'),
                                               style: ElevatedButton.styleFrom(
@@ -1289,9 +1309,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                     formattedDate
                                                         .trim()
                                                         .toLowerCase(),
-                                                    'Cena'
-                                                        .trim()
-                                                        .toLowerCase());
+                                                    'Cena'.trim().toLowerCase(),
+                                                    widget.name.trim());
                                               },
                                               child: Text('Cena'),
                                               style: ElevatedButton.styleFrom(
@@ -1340,8 +1359,6 @@ class _MostrarFoodState extends State<MostrarFood> {
                               widget.codigoDeBarras);
 
                           cantidad == 0;
-
-                          //print(nueva_cantidad);
                         },
                         child: Text('Guardar cambios'),
                       ),
@@ -1368,7 +1385,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       double azucarController,
       double fibraController,
       String codigoDeBarrasController) async {
-    var url = "${urlConexion}/foods/$idController";
+    var url = "${urlConexion1}/foods/$idController";
     Map data = {
       'name': nameController,
       'cantidad': cantidadController,
@@ -1387,7 +1404,6 @@ class _MostrarFoodState extends State<MostrarFood> {
     var body = json.encode(data);
     var response = await http.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
-    print("${response.body}");
     //Navigator.pop(context);
     Navigator.pop(context);
     Navigator.push(
@@ -1413,7 +1429,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       String image,
       String codigoDeBarras) async {
     final response = await http.post(
-      Uri.parse('${urlConection}/foods/add'),
+      Uri.parse('${urlConexion1}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

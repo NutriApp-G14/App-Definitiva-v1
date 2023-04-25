@@ -3,12 +3,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_app/model/TarjetaMisAlimentos.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/AddRecetasPage.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/EditarUsuario.dart';
+import 'package:my_app/views/PintarCards.dart';
 import 'package:my_app/views/UsuarioPage.dart';
-import 'package:my_app/views/buscador.dart';
 import 'package:my_app/model/NavBar.dart';
 
 import 'package:my_app/controllers/databasehelpers.dart';
@@ -33,7 +34,6 @@ class _ListAlimentosState extends State<ListAlimentos> {
 
   void _toggleShowFoods() {
     setState(() {
-      print('cambio');
       _showFoods = !_showFoods;
     });
   }
@@ -202,11 +202,11 @@ class _ListAlimentosState extends State<ListAlimentos> {
                         if (snapshot.hasError) {
                           // print(snapshot.error);
                         }
-                        print(snapshot.data);
                         return snapshot.hasData
                             ? ItemListReceta(
                                 list: snapshot.data!,
                                 deleteItem: deleteDataReceta,
+                                nombreUsuario: widget.nombreUsuario,
                               )
                             : const Center(
                                 child: CircularProgressIndicator(),
@@ -280,6 +280,7 @@ class ItemList extends StatelessWidget {
       {required this.list,
       required this.deleteItem,
       required this.nombreUsuario});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -294,105 +295,32 @@ class ItemList extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
-            print("media");
+          var nombreAlimento = list[i]['name'].toString() ?? "";
+          var codigoDeBarras= list[i]['codigoDeBarras'] ??"";
+          var imageUrl = ""; 
+          var id =  list[i]['id']; 
+          if (list[i]['image'] != null && list[i]['image'] != ""){
+            imageUrl = list[i]['image'];
+          }
+
+          var cantidad= list[i]['cantidad']?? 100.0;
+          var calorias= list[i]['calorias']?? 0.0;
+          var grasas= list[i]['grasas']?? 0.0;
+          var proteinas= list[i]['proteinas']?? 0.0;
+          var carbohidratos= list[i]['carbohidratos']?? 0.0;
+          var sodio=  list[i]['sodio'] ?? 0.0;
+          var azucar=  list[i]['azucar'] ?? 0.0;
+          var fibra=  list[i]['fibra'] ?? 0.0;
+          var unidadesCantidad =  list[i]['unidadesCantidad'] ?? "";
+
             return SizedBox(
               height: 100.3,
-              child: Card(
-                color: Colors.orange[200],
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: list[i]['image'] != null && list[i]['image'] != ""
-                          ? FutureBuilder(
-                              future: http.head(Uri.parse(list[i]['image'])),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<http.Response> snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data!.statusCode == 200) {
-                                  return FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: list[i]['image'],
-                                    fit: BoxFit.cover,
-                                  );
-                                } else {
-                                  return Icon(
-                                    Icons.fastfood,
-                                    color: Colors.white,
-                                    size: 50,
-                                  );
-                                }
-                              },
-                            )
-                          : Icon(
-                              Icons.fastfood,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
-                        onPressed: () {
-                          deleteItem(list[i]['id']);
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          list[i]['name'].toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal,
-                            fontFamily: "Open Sans",
-                            fontSize: 18.0,
-                            // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.remove_red_eye),
-                        //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
-                        onPressed: () {
-                          print("codigo");
-                          print(list[i]['codigoDeBarras']);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MostrarFood(
-                                id: list[i]['id'] ?? 0,
-                                codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
-                                nombreUsuario: nombreUsuario,
-                                name: list[i]['name'],
-                                cantidad: list[i]['cantidad'],
-                                unidadesCantidad: list[i]['unidadesCantidad'],
-                                calorias: list[i]['calorias'],
-                                grasas: list[i]['grasas'],
-                                proteinas: list[i]['proteinas'],
-                                carbohidratos: list[i]['carbohidratos'],
-                                sodio: list[i]['sodio'] ?? 0.0,
-                                azucar: list[i]['azucar'] ?? 0.0,
-                                fibra: list[i]['fibra'] ?? 0.0,
-                                image: list[i]['image'],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child:  TarjetaMisAlimento(nombreAlimento: nombreAlimento 
+              ,codigoDeBarras: codigoDeBarras, imageUrl: imageUrl, id:id,
+               nombreUsuario: nombreUsuario, cantidad:cantidad, calorias: calorias, grasas: grasas,
+               proteinas: proteinas, carbohidratos:carbohidratos, sodio: sodio , azucar: azucar, fibra:fibra,
+               unidadesCantidad: unidadesCantidad,
+            )
             );
           },
         );
@@ -406,104 +334,32 @@ class ItemList extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
+          var nombreAlimento = list[i]['name'].toString() ?? "";
+          var codigoDeBarras= list[i]['codigoDeBarras'] ??"";
+          var imageUrl = ""; 
+          var id =  list[i]['id']; 
+          if (list[i]['image'] != null && list[i]['image'] != ""){
+            imageUrl = list[i]['image'];
+          }
+
+          var cantidad= list[i]['cantidad']?? 100.0;
+          var calorias= list[i]['calorias']?? 0.0;
+          var grasas= list[i]['grasas']?? 0.0;
+          var proteinas= list[i]['proteinas']?? 0.0;
+          var carbohidratos= list[i]['carbohidratos']?? 0.0;
+          var sodio=  list[i]['sodio'] ?? 0.0;
+          var azucar=  list[i]['azucar'] ?? 0.0;
+          var fibra=  list[i]['fibra'] ?? 0.0;
+          var unidadesCantidad =  list[i]['unidadesCantidad'] ?? "";
+
             return SizedBox(
               height: 100.3,
-              child: Card(
-                color: Colors.orange[200],
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: list[i]['image'] != null && list[i]['image'] != ""
-                          ? FutureBuilder(
-                              future: http.head(Uri.parse(list[i]['image'])),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<http.Response> snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data!.statusCode == 200) {
-                                  return FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: list[i]['image'],
-                                    fit: BoxFit.cover,
-                                  );
-                                } else {
-                                  return Icon(
-                                    Icons.fastfood,
-                                    color: Colors.white,
-                                    size: 50,
-                                  );
-                                }
-                              },
-                            )
-                          : Icon(
-                              Icons.fastfood,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
-                        onPressed: () {
-                          deleteItem(list[i]['id']);
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          list[i]['name'].toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal,
-                            fontFamily: "Open Sans",
-                            fontSize: 18.0,
-                            // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.remove_red_eye),
-                        //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
-                        onPressed: () {
-                          print("codigo");
-                          print(list[i]['codigoDeBarras']);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MostrarFood(
-                                id: list[i]['id'] ?? 0.0,
-                                codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
-                                nombreUsuario: nombreUsuario,
-                                name: list[i]['name'],
-                                cantidad: list[i]['cantidad'],
-                                unidadesCantidad: list[i]['unidadesCantidad'],
-                                calorias: list[i]['calorias'],
-                                grasas: list[i]['grasas'],
-                                proteinas: list[i]['proteinas'],
-                                carbohidratos: list[i]['carbohidratos'],
-                                sodio: list[i]['sodio'] ?? 0.0,
-                                azucar: list[i]['azucar'] ?? 0.0,
-                                fibra: list[i]['fibra'] ?? 0.0,
-                                image: list[i]['image'],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child:  TarjetaMisAlimento(nombreAlimento: nombreAlimento 
+              ,codigoDeBarras: codigoDeBarras, imageUrl: imageUrl, id:id,
+               nombreUsuario: nombreUsuario, cantidad:cantidad, calorias: calorias, grasas: grasas,
+               proteinas: proteinas, carbohidratos:carbohidratos, sodio: sodio , azucar: azucar, fibra:fibra,
+               unidadesCantidad:unidadesCantidad ,
+            )
             );
           },
         );
@@ -517,103 +373,31 @@ class ItemList extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
+          var nombreAlimento = list[i]['name'].toString() ?? "";
+          var codigoDeBarras= list[i]['codigoDeBarras'] ??"";
+          var imageUrl = ""; 
+          var id =  list[i]['id']; 
+          if (list[i]['image'] != null && list[i]['image'] != ""){
+            imageUrl = list[i]['image'];
+          }
+          var cantidad= list[i]['cantidad']?? 100.0;
+          var calorias= list[i]['calorias']?? 0.0;
+          var grasas= list[i]['grasas']?? 0.0;
+          var proteinas= list[i]['proteinas']?? 0.0;
+          var carbohidratos= list[i]['carbohidratos']?? 0.0;
+          var sodio=  list[i]['sodio'] ?? 0.0;
+          var azucar=  list[i]['azucar'] ?? 0.0;
+          var fibra=  list[i]['fibra'] ?? 0.0;
+          var unidadesCantidad =  list[i]['unidadesCantidad'] ?? "";
+
             return SizedBox(
               height: 100.3,
-              child: Card(
-                color: Colors.orange[200],
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: list[i]['image'] != null && list[i]['image'] != ""
-                          ? FutureBuilder(
-                              future: http.head(Uri.parse(list[i]['image'])),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<http.Response> snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data!.statusCode == 200) {
-                                  return FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: list[i]['image'],
-                                    fit: BoxFit.cover,
-                                  );
-                                } else {
-                                  return Icon(
-                                    Icons.fastfood,
-                                    color: Colors.white,
-                                    size: 50,
-                                  );
-                                }
-                              },
-                            )
-                          : Icon(
-                              Icons.fastfood,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
-                        onPressed: () {
-                          deleteItem(list[i]['id']);
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          list[i]['name'].toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal,
-                            fontFamily: "Open Sans",
-                            fontSize: 18.0,
-                            // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.remove_red_eye),
-                        //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MostrarFood(
-                                id: list[i]['id'] ?? 0.0,
-                                codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
-                                nombreUsuario: nombreUsuario,
-                                name: list[i]['name'],
-                                cantidad: list[i]['cantidad'],
-                                unidadesCantidad: list[i]['unidadesCantidad'],
-                                calorias: list[i]['calorias'],
-                                grasas: list[i]['grasas'],
-                                proteinas: list[i]['proteinas'],
-                                carbohidratos: list[i]['carbohidratos'],
-                                sodio: list[i]['sodio'] ?? 0.0,
-                                azucar: list[i]['azucar'] ?? 0.0,
-                                fibra: list[i]['fibra'] ?? 0.0,
-                                image: list[i]['image'],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+              child: TarjetaMisAlimento(nombreAlimento: nombreAlimento 
+              ,codigoDeBarras: codigoDeBarras, imageUrl: imageUrl, id:id,
+               nombreUsuario: nombreUsuario, cantidad:cantidad, calorias: calorias, grasas: grasas,
+               proteinas: proteinas, carbohidratos:carbohidratos, sodio: sodio , azucar: azucar, fibra:fibra,
+               unidadesCantidad: unidadesCantidad,
+            ));
           },
         );
       }
@@ -623,11 +407,367 @@ class ItemList extends StatelessWidget {
 
 //Pintar las Recetas
 
+// class ItemListReceta extends StatelessWidget {
+//   final String nombreUsuario;
+//   final List list;
+//   final Function(int) deleteItem;
+
+//   const ItemListReceta({required this.list, required this.deleteItem, required this.nombreUsuario});
+//   @override
+//   Widget build(BuildContext context) {
+//     return LayoutBuilder(
+//         builder: (BuildContext context, BoxConstraints constraints) {
+//       if (constraints.maxWidth < 600) {
+//         return GridView.builder(
+//           padding: const EdgeInsets.all(10.0),
+//           itemCount: list == null ? 0 : list.length,
+//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//             crossAxisCount: 2,
+//             crossAxisSpacing: 10.0,
+//             mainAxisSpacing: 10.0,
+//           ),
+//           itemBuilder: (context, i) {
+//             print("media");
+//             return SizedBox(
+//               height: 100.3,
+//               child: Card(
+//                 color: Colors.orange[200],
+//                 child: Stack(
+//                   children: [
+//                     Align(
+//                       alignment: Alignment.center,
+//                       child: list[i]['imagen'] != null &&
+//                               list[i]['imagen'] != ""
+//                           ? FutureBuilder(
+//                               future: http.head(Uri.parse(list[i]['imagen'])),
+//                               builder: (BuildContext context,
+//                                   AsyncSnapshot<http.Response> snapshot) {
+//                                 if (snapshot.hasData &&
+//                                     snapshot.data!.statusCode == 200) {
+//                                   return FadeInImage.assetNetwork(
+//                                     placeholder: 'assets/placeholder_image.png',
+//                                     image: list[i]['imagen'],
+//                                     fit: BoxFit.cover,
+//                                   );
+//                                 } else {
+//                                   return Icon(
+//                                     Icons.fastfood,
+//                                     color: Colors.white,
+//                                     size: 50,
+//                                   );
+//                                 }
+//                               },
+//                             )
+//                           : Icon(
+//                               Icons.fastfood,
+//                               color: Colors.white,
+//                               size: 50,
+//                             ),
+//                     ),
+//                     Align(
+//                       alignment: Alignment.topRight,
+//                       child: IconButton(
+//                         icon: Icon(Icons.delete_outline),
+//                         color: Colors.orange,
+//                         onPressed: () {
+//                           deleteItem(list[i]['id']);
+//                         },
+//                       ),
+//                     ),
+//                     Align(
+//                       alignment: Alignment.bottomLeft,
+//                       child: Padding(
+//                         padding: const EdgeInsets.all(8.0),
+//                         child: Text(
+//                           list[i]['nombre'].toString(),
+//                           style: const TextStyle(
+//                             fontWeight: FontWeight.bold,
+//                             fontStyle: FontStyle.normal,
+//                             fontFamily: "Open Sans",
+//                             fontSize: 18.0,
+//                             // color: Color.fromARGB(255, 255, 255, 255),
+//                             color: Colors.orange,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     Align(
+//                       alignment: Alignment.bottomRight,
+//                       child: IconButton(
+//                         icon: Icon(Icons.remove_red_eye),
+//                         //color: Color.fromARGB(255, 255, 255, 255),
+//                         color: Colors.orange,
+//                         onPressed: () {
+//                           print("codigo");
+//                           print(list[i]['codigoDeBarras']);
+//                           Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                               builder: (context) => MostrarFood(
+//                                 id: list[i]['id'] ?? 0,
+//                                 codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
+//                                 nombreUsuario: nombreUsuario,
+//                                 name: list[i]['name'],
+//                                 cantidad: list[i]['cantidad'],
+//                                 unidadesCantidad: list[i]['unidadesCantidad'],
+//                                 calorias: list[i]['calorias'],
+//                                 grasas: list[i]['grasas'],
+//                                 proteinas: list[i]['proteinas'],
+//                                 carbohidratos: list[i]['carbohidratos'],
+//                                 sodio: list[i]['sodio'] ?? 0.0,
+//                                 azucar: list[i]['azucar'] ?? 0.0,
+//                                 fibra: list[i]['fibra'] ?? 0.0,
+//                                 image: list[i]['image'],
+//                               ),
+//                             ),
+//                           );
+//                         },
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             );
+//           },
+//         );
+//       } else if (constraints.maxWidth < 1100) {
+//         return GridView.builder(
+//           padding: const EdgeInsets.all(10.0),
+//           itemCount: list == null ? 0 : list.length,
+//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//             crossAxisCount: 3,
+//             crossAxisSpacing: 10.0,
+//             mainAxisSpacing: 10.0,
+//           ),
+//           itemBuilder: (context, i) {
+//             return SizedBox(
+//               height: 100.3,
+//               child: Card(
+//                 color: Colors.orange[200],
+//                 child: Stack(
+//                   children: [
+//                     Align(
+//                       alignment: Alignment.center,
+//                       child: list[i]['imagen'] != null &&
+//                               list[i]['imagen'] != ""
+//                           ? FutureBuilder(
+//                               future: http.head(Uri.parse(list[i]['imagen'])),
+//                               builder: (BuildContext context,
+//                                   AsyncSnapshot<http.Response> snapshot) {
+//                                 if (snapshot.hasData &&
+//                                     snapshot.data!.statusCode == 200) {
+//                                   return FadeInImage.assetNetwork(
+//                                     placeholder: 'assets/placeholder_image.png',
+//                                     image: list[i]['imagen'],
+//                                     fit: BoxFit.cover,
+//                                   );
+//                                 } else {
+//                                   return Icon(
+//                                     Icons.fastfood,
+//                                     color: Colors.white,
+//                                     size: 50,
+//                                   );
+//                                 }
+//                               },
+//                             )
+//                           : Icon(
+//                               Icons.fastfood,
+//                               color: Colors.white,
+//                               size: 50,
+//                             ),
+//                     ),
+//                     Align(
+//                       alignment: Alignment.topRight,
+//                       child: IconButton(
+//                         icon: Icon(Icons.delete_outline),
+//                         color: Colors.orange,
+//                         onPressed: () {
+//                           deleteItem(list[i]['id']);
+//                         },
+//                       ),
+//                     ),
+//                     Align(
+//                       alignment: Alignment.bottomLeft,
+//                       child: Padding(
+//                         padding: const EdgeInsets.all(8.0),
+//                         child: Text(
+//                           list[i]['nombre'].toString(),
+//                           style: const TextStyle(
+//                             fontWeight: FontWeight.bold,
+//                             fontStyle: FontStyle.normal,
+//                             fontFamily: "Open Sans",
+//                             fontSize: 18.0,
+//                             // color: Color.fromARGB(255, 255, 255, 255),
+//                             color: Colors.orange,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     Align(
+//                       alignment: Alignment.bottomRight,
+//                       child: IconButton(
+//                         icon: Icon(Icons.remove_red_eye),
+//                         //color: Color.fromARGB(255, 255, 255, 255),
+//                         color: Colors.orange,
+//                         onPressed: () {
+//                           print("codigo");
+//                           print(list[i]['codigoDeBarras']);
+//                           Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                               builder: (context) => MostrarFood(
+//                                 id: list[i]['id'] ?? 0.0,
+//                                 codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
+//                                 nombreUsuario: nombreUsuario,
+//                                 name: list[i]['name'],
+//                                 cantidad: list[i]['cantidad'],
+//                                 unidadesCantidad: list[i]['unidadesCantidad'],
+//                                 calorias: list[i]['calorias'],
+//                                 grasas: list[i]['grasas'],
+//                                 proteinas: list[i]['proteinas'],
+//                                 carbohidratos: list[i]['carbohidratos'],
+//                                 sodio: list[i]['sodio'] ?? 0.0,
+//                                 azucar: list[i]['azucar'] ?? 0.0,
+//                                 fibra: list[i]['fibra'] ?? 0.0,
+//                                 image: list[i]['image'],
+//                               ),
+//                             ),
+//                           );
+//                         },
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             );
+//           },
+//         );
+//       } else {
+//         return GridView.builder(
+//           padding: const EdgeInsets.all(10.0),
+//           itemCount: list == null ? 0 : list.length,
+//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//             crossAxisCount: 6,
+//             crossAxisSpacing: 10.0,
+//             mainAxisSpacing: 10.0,
+//           ),
+//           itemBuilder: (context, i) {
+//             return SizedBox(
+//               height: 100.3,
+//               child: Card(
+//                 color: Colors.orange[200],
+//                 child: Stack(
+//                   children: [
+//                     Align(
+//                       alignment: Alignment.center,
+//                       child: list[i]['imagen'] != null &&
+//                               list[i]['imagen'] != ""
+//                           ? FutureBuilder(
+//                               future: http.head(Uri.parse(list[i]['imagen'])),
+//                               builder: (BuildContext context,
+//                                   AsyncSnapshot<http.Response> snapshot) {
+//                                 if (snapshot.hasData &&
+//                                     snapshot.data!.statusCode == 200) {
+//                                   return FadeInImage.assetNetwork(
+//                                     placeholder: 'assets/placeholder_image.png',
+//                                     image: list[i]['imagen'],
+//                                     fit: BoxFit.cover,
+//                                   );
+//                                 } else {
+//                                   return Icon(
+//                                     Icons.fastfood,
+//                                     color: Colors.white,
+//                                     size: 50,
+//                                   );
+//                                 }
+//                               },
+//                             )
+//                           : Icon(
+//                               Icons.fastfood,
+//                               color: Colors.white,
+//                               size: 50,
+//                             ),
+//                     ),
+//                     Align(
+//                       alignment: Alignment.topRight,
+//                       child: IconButton(
+//                         icon: Icon(Icons.delete_outline),
+//                         color: Colors.orange,
+//                         onPressed: () {
+//                           deleteItem(list[i]['id']);
+//                         },
+//                       ),
+//                     ),
+//                     Align(
+//                       alignment: Alignment.bottomLeft,
+//                       child: Padding(
+//                         padding: const EdgeInsets.all(8.0),
+//                         child: Text(
+//                           list[i]['nombre'].toString(),
+//                           style: const TextStyle(
+//                             fontWeight: FontWeight.bold,
+//                             fontStyle: FontStyle.normal,
+//                             fontFamily: "Open Sans",
+//                             fontSize: 18.0,
+//                             // color: Color.fromARGB(255, 255, 255, 255),
+//                             color: Colors.orange,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     Align(
+//                       alignment: Alignment.bottomRight,
+//                       child: IconButton(
+//                         icon: Icon(Icons.remove_red_eye),
+//                         //color: Color.fromARGB(255, 255, 255, 255),
+//                         color: Colors.orange,
+//                         onPressed: () {
+//                           Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                               builder: (context) => MostrarFood(
+//                                 id: list[i]['id'] ?? 0.0,
+//                                 codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
+//                                 nombreUsuario: nombreUsuario,
+//                                 name: list[i]['name'],
+//                                 cantidad: list[i]['cantidad'],
+//                                 unidadesCantidad: list[i]['unidadesCantidad'],
+//                                 calorias: list[i]['calorias'],
+//                                 grasas: list[i]['grasas'],
+//                                 proteinas: list[i]['proteinas'],
+//                                 carbohidratos: list[i]['carbohidratos'],
+//                                 sodio: list[i]['sodio'] ?? 0.0,
+//                                 azucar: list[i]['azucar'] ?? 0.0,
+//                                 fibra: list[i]['fibra'] ?? 0.0,
+//                                 image: list[i]['image'],
+//                               ),
+//                             ),
+//                           );
+//                         },
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             );
+//           },
+//         );
+//       }
+//     });
+//   }
+// }
+
+//Pintar las Recetas
+
 class ItemListReceta extends StatelessWidget {
   final List list;
   final Function(int) deleteItem;
+  final String nombreUsuario;
 
-  const ItemListReceta({required this.list, required this.deleteItem});
+  const ItemListReceta(
+      {required this.list,
+      required this.deleteItem,
+      required this.nombreUsuario});
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -645,7 +785,7 @@ class ItemListReceta extends StatelessWidget {
             return SizedBox(
               height: 100.3,
               child: Card(
-                color: Colors.orange[200],
+                color: Colors.white,
                 child: Stack(
                   children: [
                     Align(
@@ -666,7 +806,7 @@ class ItemListReceta extends StatelessWidget {
                                 } else {
                                   return Icon(
                                     Icons.fastfood,
-                                    color: Colors.white,
+                                    color: Colors.orange[200],
                                     size: 50,
                                   );
                                 }
@@ -674,7 +814,7 @@ class ItemListReceta extends StatelessWidget {
                             )
                           : Icon(
                               Icons.fastfood,
-                              color: Colors.white,
+                              color: Colors.orange[200],
                               size: 50,
                             ),
                     ),
@@ -682,7 +822,7 @@ class ItemListReceta extends StatelessWidget {
                       alignment: Alignment.topRight,
                       child: IconButton(
                         icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
+                        color: Colors.black,
                         onPressed: () {
                           deleteItem(list[i]['id']);
                         },
@@ -693,14 +833,17 @@ class ItemListReceta extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          list[i]['nombre'].toString(),
+
+                          list[i]['nombre'].toString().length > 16
+                  ? '${list[i]['nombre'].toString().substring(0,15)}...'
+                  : list[i]['nombre'].toString(),
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.normal,
                             fontFamily: "Open Sans",
-                            fontSize: 18.0,
+                            fontSize: 15.0,
                             // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -710,7 +853,7 @@ class ItemListReceta extends StatelessWidget {
                       child: IconButton(
                         icon: Icon(Icons.remove_red_eye),
                         //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
+                        color: Colors.black,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -722,6 +865,7 @@ class ItemListReceta extends StatelessWidget {
                                   ingredientes: list[i]['ingredientes'],
                                   descripcion: list[i]['descripcion'],
                                   pasos: list[i]['pasos'],
+                                  nombreUsuario: nombreUsuario,
                                   // calorias: list[i]['calorias'],
                                   // grasas: list[i]['grasas'],
                                   // proteinas: list[i]['proteinas'],
@@ -754,7 +898,7 @@ class ItemListReceta extends StatelessWidget {
             return SizedBox(
               height: 100.3,
               child: Card(
-                color: Colors.orange[200],
+                color: Colors.white,
                 child: Stack(
                   children: [
                     Align(
@@ -770,7 +914,9 @@ class ItemListReceta extends StatelessWidget {
                                   return FadeInImage.assetNetwork(
                                     placeholder: 'assets/placeholder_image.png',
                                     image: list[i]['imagen'],
+                                    height: 90,
                                     fit: BoxFit.cover,
+                                    
                                   );
                                 } else {
                                   return Icon(
@@ -791,7 +937,7 @@ class ItemListReceta extends StatelessWidget {
                       alignment: Alignment.topRight,
                       child: IconButton(
                         icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
+                        color: Colors.black,
                         onPressed: () {
                           deleteItem(list[i]['id']);
                         },
@@ -810,6 +956,7 @@ class ItemListReceta extends StatelessWidget {
                             fontSize: 18.0,
                             // color: Color.fromARGB(255, 255, 255, 255),
                             color: Colors.orange,
+                            backgroundColor: Colors.white,
                           ),
                         ),
                       ),
@@ -831,6 +978,7 @@ class ItemListReceta extends StatelessWidget {
                                   ingredientes: list[i]['ingredientes'],
                                   descripcion: list[i]['descripcion'],
                                   pasos: list[i]['pasos'],
+                                  nombreUsuario: nombreUsuario,
                                   // calorias: list[i]['calorias'],
                                   // grasas: list[i]['grasas'],
                                   // proteinas: list[i]['proteinas'],
@@ -918,7 +1066,7 @@ class ItemListReceta extends StatelessWidget {
                             fontFamily: "Open Sans",
                             fontSize: 18.0,
                             // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -928,7 +1076,9 @@ class ItemListReceta extends StatelessWidget {
                       child: IconButton(
                         icon: Icon(Icons.remove_red_eye),
                         //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
+                        //color: Colors.orange,
+                        focusColor:Colors.black,
+                        
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -940,6 +1090,7 @@ class ItemListReceta extends StatelessWidget {
                                   ingredientes: list[i]['ingredientes'],
                                   descripcion: list[i]['descripcion'],
                                   pasos: list[i]['pasos'],
+                                  nombreUsuario: nombreUsuario,
                                   // calorias: list[i]['calorias'],
                                   // grasas: list[i]['grasas'],
                                   // proteinas: list[i]['proteinas'],

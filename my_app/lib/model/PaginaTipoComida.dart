@@ -46,8 +46,10 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                BuscadorAlimentos(nombreUsuario: widget.nombreUsuario, fecha: widget.fecha, tipoDeComida: widget.tipoDeComida)));
+            builder: (context) => BuscadorAlimentos(
+                nombreUsuario: widget.nombreUsuario,
+                fecha: widget.fecha,
+                tipoDeComida: widget.tipoDeComida)));
   }
 
   Future<List<dynamic>> searchAndDisplayFoodNuevaAPI(
@@ -94,7 +96,6 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                   snapshot.hasData) {
                 var alimentos = snapshot.data!;
 
-
                 return Column(
                   children: [
                     Expanded(
@@ -103,7 +104,8 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                           height: 56,
                           child: Center(
                             child: ElevatedButton(
-                              onPressed: () => _navigateBuscadorAlimentos(context),
+                              onPressed: () =>
+                                  _navigateBuscadorAlimentos(context),
                               child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 8.0),
@@ -140,29 +142,47 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                       crossAxisSpacing: 10.0,
                                       mainAxisSpacing: 10.0,
                                     ),
-                             itemBuilder: (context, i) {
+                                    itemBuilder: (context, i) {
+                                      var nombreUsuario = widget.nombreUsuario;
+                                      var codigoDeBarras =
+                                          alimentos[i][0]['_id'];
+                                      var cantidad =
+                                          widget.registros[i]['cantidad'];
+                                      var nombreAlimento =
+                                          alimentos[i][0]['product_name'] ?? "";
+                                      var imageUrl =
+                                          alimentos[i][0]['image_url'] ?? "";
+                                      var nutriscore = alimentos[i][0]
+                                              ['nutriscore_grade'] ??
+                                          "";
+                                      var novaGroup =
+                                          alimentos[i][0]['nova_group'] ?? "";
+                                      var ecoscore = alimentos[i][0]
+                                              ['ecoscore_grade'] ??
+                                          "";
 
-                          var nombreUsuario = widget.nombreUsuario;
-                          var codigoDeBarras = alimentos[i][0]['_id'];
-                          var cantidad = 100.0;
-                          var nombreAlimento = alimentos[i][0]['product_name'] ?? "";
-                          var imageUrl =  alimentos[i][0]['image_url'] ??"";
-                          var nutriscore = alimentos[i][0]['nutriscore_grade'] ?? "";
-                          var novaGroup = alimentos[i][0]['nova_group'] ?? "";
-                          var ecoscore = alimentos[i][0]['ecoscore_grade'] ?? "";
-
-                          return TarjetaAlimento(
-                              id: widget.registros[i]['id'],
-                              nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras,
-                              cantidad: cantidad,
-                              nombreAlimento: nombreAlimento , imageUrl: imageUrl,
-                              scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'],
-                              scoreTitles: ['Nutri-Score ${nutriscore}' , 'NOVA Group ${novaGroup}', 'Eco-Score ${ecoscore}'],
-                              fecha: widget.fecha, registros: widget.registros, tipodeComida: widget.tipoDeComida
-                              );
-                                     
+                                      return TarjetaAlimento(
+                                          id: widget.registros[i]['id'],
+                                          nombreUsuario: nombreUsuario,
+                                          codigoDeBarras: codigoDeBarras,
+                                          cantidad: cantidad,
+                                          nombreAlimento: nombreAlimento,
+                                          imageUrl: imageUrl,
+                                          scoreImages: [
+                                            'https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg',
+                                            'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg',
+                                            'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'
+                                          ],
+                                          scoreTitles: [
+                                            'Nutri-Score ${nutriscore}',
+                                            'NOVA Group ${novaGroup}',
+                                            'Eco-Score ${ecoscore}'
+                                          ],
+                                          fecha: widget.fecha,
+                                          registros: widget.registros,
+                                          tipodeComida: widget.tipoDeComida);
                                     }));
-                          }else if (constraints.maxWidth < 1100) {
+                          } else if (constraints.maxWidth < 1100) {
                             return SizedBox(
                                 height: 250,
                                 child: GridView.builder(
@@ -177,25 +197,43 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                       mainAxisSpacing: 10.0,
                                     ),
                                     itemBuilder: (context, i) {
+                                      var nombreUsuario = widget.nombreUsuario;
+                                      var codigoDeBarras =
+                                          alimentos[i][0]['_id'];
+                                      var cantidad = 100.0;
+                                      var nombreAlimento =
+                                          alimentos[i][0]['product_name'] ?? "";
+                                      var imageUrl =
+                                          alimentos[i][0]['image_url'] ?? "";
+                                      var nutriscore = alimentos[i][0]
+                                              ['nutriscore_grade'] ??
+                                          "";
+                                      var novaGroup =
+                                          alimentos[i][0]['nova_group'] ?? "";
+                                      var ecoscore = alimentos[i][0]
+                                              ['ecoscore_grade'] ??
+                                          "";
 
-                          var nombreUsuario = widget.nombreUsuario;
-                          var codigoDeBarras = alimentos[i][0]['_id'];
-                          var cantidad = 100.0;
-                          var nombreAlimento = alimentos[i][0]['product_name'] ?? "";
-                          var imageUrl =  alimentos[i][0]['image_url'] ??"";
-                          var nutriscore = alimentos[i][0]['nutriscore_grade'] ?? "";
-                          var novaGroup = alimentos[i][0]['nova_group'] ?? "";
-                          var ecoscore = alimentos[i][0]['ecoscore_grade'] ?? "";
-
-                          return TarjetaAlimento(
-                              id: widget.registros[i]['id'],
-                              nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras,
-                              cantidad: cantidad,
-                              nombreAlimento: nombreAlimento , imageUrl: imageUrl,
-                              scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'],
-                              scoreTitles: ['Nutri-Score ${nutriscore}' , 'NOVA Group ${novaGroup}', 'Eco-Score ${ecoscore}'],
-                              fecha: widget.fecha, registros: widget.registros, tipodeComida: widget.tipoDeComida);
-                                     
+                                      return TarjetaAlimento(
+                                          id: widget.registros[i]['id'],
+                                          nombreUsuario: nombreUsuario,
+                                          codigoDeBarras: codigoDeBarras,
+                                          cantidad: cantidad,
+                                          nombreAlimento: nombreAlimento,
+                                          imageUrl: imageUrl,
+                                          scoreImages: [
+                                            'https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg',
+                                            'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg',
+                                            'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'
+                                          ],
+                                          scoreTitles: [
+                                            'Nutri-Score ${nutriscore}',
+                                            'NOVA Group ${novaGroup}',
+                                            'Eco-Score ${ecoscore}'
+                                          ],
+                                          fecha: widget.fecha,
+                                          registros: widget.registros,
+                                          tipodeComida: widget.tipoDeComida);
                                     }));
                           } else {
                             return SizedBox(
@@ -211,26 +249,45 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                       crossAxisSpacing: 10.0,
                                       mainAxisSpacing: 10.0,
                                     ),
-                            itemBuilder: (context, i) {
+                                    itemBuilder: (context, i) {
+                                      var nombreUsuario = widget.nombreUsuario;
+                                      var codigoDeBarras =
+                                          alimentos[i][0]['_id'];
+                                      var cantidad = 100.0;
+                                      var nombreAlimento =
+                                          alimentos[i][0]['product_name'] ?? "";
+                                      var imageUrl =
+                                          alimentos[i][0]['image_url'] ?? "";
+                                      var nutriscore = alimentos[i][0]
+                                              ['nutriscore_grade'] ??
+                                          "";
+                                      var novaGroup =
+                                          alimentos[i][0]['nova_group'] ?? "";
+                                      var ecoscore = alimentos[i][0]
+                                              ['ecoscore_grade'] ??
+                                          "";
 
-                          var nombreUsuario = widget.nombreUsuario;
-                          var codigoDeBarras = alimentos[i][0]['_id'];
-                          var cantidad = 100.0;
-                          var nombreAlimento = alimentos[i][0]['product_name'] ?? "";
-                          var imageUrl =  alimentos[i][0]['image_url'] ??"";
-                          var nutriscore = alimentos[i][0]['nutriscore_grade'] ?? "";
-                          var novaGroup = alimentos[i][0]['nova_group'] ?? "";
-                          var ecoscore = alimentos[i][0]['ecoscore_grade'] ?? "";
-
-                          return TarjetaAlimento(
-                              id: widget.registros[i]['id'],
-                              nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras,
-                              cantidad: cantidad,
-                              nombreAlimento: nombreAlimento , imageUrl: imageUrl,
-                              scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'],
-                              scoreTitles: ['Nutri-Score ${nutriscore}' , 'NOVA Group ${novaGroup}', 'Eco-Score ${ecoscore}'],
-                              fecha: widget.fecha, registros: widget.registros, tipodeComida: widget.tipoDeComida,);
-                                     
+                                      return TarjetaAlimento(
+                                        id: widget.registros[i]['id'],
+                                        nombreUsuario: nombreUsuario,
+                                        codigoDeBarras: codigoDeBarras,
+                                        cantidad: cantidad,
+                                        nombreAlimento: nombreAlimento,
+                                        imageUrl: imageUrl,
+                                        scoreImages: [
+                                          'https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg',
+                                          'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg',
+                                          'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'
+                                        ],
+                                        scoreTitles: [
+                                          'Nutri-Score ${nutriscore}',
+                                          'NOVA Group ${novaGroup}',
+                                          'Eco-Score ${ecoscore}'
+                                        ],
+                                        fecha: widget.fecha,
+                                        registros: widget.registros,
+                                        tipodeComida: widget.tipoDeComida,
+                                      );
                                     }));
                           }
                         })),

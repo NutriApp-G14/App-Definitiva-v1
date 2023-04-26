@@ -73,6 +73,7 @@ public class RegistroComidasController {
             registroComidas.setFecha(RegistroComidas.getFecha());
             registroComidas.setTipoDeComida(RegistroComidas.getTipoDeComida());
             registroComidas.setNombreAlimento(RegistroComidas.getNombreAlimento());
+            registroComidas.setAlimentos(RegistroComidas.getAlimentos());
             registroComidasRepository.save(registroComidas);
             return ResponseEntity.ok().body(registroComidas);
         }).orElse(new ResponseEntity<RegistroComidas>(HttpStatus.NOT_FOUND));

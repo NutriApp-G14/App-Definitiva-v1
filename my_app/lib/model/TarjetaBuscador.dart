@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
+import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
@@ -37,7 +39,18 @@ class TarjetaBuscador extends StatefulWidget {
       required this.imageUrl,
       required this.nombreAlimento,
       required this.scoreImages,
-      required this.scoreTitles, required this.id, required this.calorias, required this.grasas, required this.proteinas, required this.carbohidratos, required this.sodio, required this.azucar, required this.fibra, required this.unidadesCantidad, required this.anadirRegistro, required this.tipoDeComida});
+      required this.scoreTitles,
+      required this.id,
+      required this.calorias,
+      required this.grasas,
+      required this.proteinas,
+      required this.carbohidratos,
+      required this.sodio,
+      required this.azucar,
+      required this.fibra,
+      required this.unidadesCantidad,
+      required this.anadirRegistro,
+      required this.tipoDeComida});
 
   @override
   _TarjetaBuscadorState createState() => _TarjetaBuscadorState();
@@ -55,8 +68,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
     formattedDate = DateFormat('dd-MM-yyyy').format(now);
   }
 
-
-
+  List<Alimento> alimentoRegistro = [];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -76,7 +88,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
         child: InkWell(
           borderRadius: BorderRadius.circular(8.0),
           onTap: () {
-  Navigator.push(
+            Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => MostrarFood(
@@ -94,159 +106,180 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                           codigoDeBarras: widget.codigoDeBarras,
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
-                        )));          },
-child: Column(
-  crossAxisAlignment: CrossAxisAlignment.stretch,
-  children: [
-    widget.imageUrl != null && widget.imageUrl != ""
-        ? Flexible(
-            child: FutureBuilder(
-              future: http.head(Uri.parse(widget.imageUrl)),
-              builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
-                if (snapshot.hasData && snapshot.data!.statusCode == 200) {
-                  return Padding(
-                    padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: SizedBox(
-                        child: FadeInImage.assetNetwork(
-                          placeholder: 'assets/placeholder_image.png',
-                          image: widget.imageUrl,
-                          fit: BoxFit.cover, // Ajustar la imagen para cubrir todo el espacio disponible
-                        ),
+                        )));
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              widget.imageUrl != null && widget.imageUrl != ""
+                  ? Flexible(
+                      child: FutureBuilder(
+                        future: http.head(Uri.parse(widget.imageUrl)),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<http.Response> snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.data!.statusCode == 200) {
+                            return Padding(
+                              padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: SizedBox(
+                                  child: FadeInImage.assetNetwork(
+                                    placeholder: 'assets/placeholder_image.png',
+                                    image: widget.imageUrl,
+                                    fit: BoxFit
+                                        .cover, // Ajustar la imagen para cubrir todo el espacio disponible
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Icon(
+                              Icons.fastfood,
+                              color: Color.fromARGB(221, 255, 181, 71),
+                              size: 100,
+                            );
+                          }
+                        },
+                      ),
+                    )
+                  : Icon(
+                      Icons.fastfood,
+                      color: Color.fromARGB(221, 255, 181, 71),
+                      size: 100,
+                    ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.nombreAlimento.length > 13
+                          ? '${widget.nombreAlimento.substring(0, 11)}...'
+                          : widget.nombreAlimento,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16.0,
                       ),
                     ),
-                  );
-                } else {
-                  return Icon(
-                    Icons.fastfood,
-                    color: Color.fromARGB(221, 255, 181, 71),
-                    size: 100,
-                  );
-                }
-              },
-            ),
-          )
-        : Icon(
-            Icons.fastfood,
-            color: Color.fromARGB(221, 255, 181, 71),
-            size: 100,
-          ),
-    Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.nombreAlimento.length > 13
-                ? '${widget.nombreAlimento.substring(0, 11)}...'
-                : widget.nombreAlimento,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 16.0,
-            ),
-          ),
- Stack(
-  children: [
-    Column(
-      children: [
-        SizedBox(height: 4.0),
-        Row(
-          children: [
-            for (int i = 0; i < widget.scoreTitles.length; i++) 
-              // Verifica si el enlace de la imagen es válido
-              if (Uri.tryParse(widget.scoreImages[i]) != null) 
-                // El enlace es válido, muestra la imagen
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Tooltip(
-                    message: widget.scoreTitles[i],
-                    child: Hero(
-                      tag: 'score_image_${Random().nextInt(5000) + 1}',
-                      child: SvgPicture.network(
-                        widget.scoreImages[i],
-                        placeholderBuilder: (BuildContext context) => SizedBox(
-                          height: 20.0,
+                    Stack(
+                      children: [
+                        Column(
+                          children: [
+                            SizedBox(height: 4.0),
+                            Row(
+                              children: [
+                                for (int i = 0;
+                                    i < widget.scoreTitles.length;
+                                    i++)
+                                  // Verifica si el enlace de la imagen es válido
+                                  widget.scoreImages[i] != null &&
+                                          widget.scoreImages[i] != ""
+                                      ?
+                                      //if (Uri.tryParse(widget.scoreImages[i]) !=
+                                      //null)
+                                      // El enlace es válido, muestra la imagen
+                                      Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 8.0),
+                                          child: Tooltip(
+                                            message: widget.scoreTitles[i],
+                                            child: Hero(
+                                              tag:
+                                                  'score_image_${Random().nextInt(5000) + 1}',
+                                              child: SvgPicture.network(
+                                                widget.scoreImages[i],
+                                                placeholderBuilder:
+                                                    (BuildContext context) =>
+                                                        SizedBox(
+                                                  height: 20.0,
+                                                ),
+                                                height: 20.0,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Container()
+                              ],
+                            ),
+                            SizedBox(height: 4.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    " ${widget.codigoDeBarras}",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        height: 20.0,
-                      ),
-                    ),
-                  ),
-                )
-          ],
-        ),
-        SizedBox(height: 4.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              child: Text(
-                " ${widget.codigoDeBarras}",
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-    Positioned(
-      bottom: 0,
-      right: 0,
-      child: IconButton(
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: IconButton(
                             icon: Icon(
                               Icons.add,
                               color: Colors.orange,
                             ),
                             onPressed: () {
-
-          if(widget.anadirRegistro){
-            registrohelper.addRegistro(
-              widget.codigoDeBarras.trim().toLowerCase(),
-              widget.cantidad,
-              widget.nombreUsuario.trim().toLowerCase(),
-              formattedDate.trim().toLowerCase(),
-              widget.tipoDeComida.trim().toLowerCase(),
-              widget.nombreAlimento.trim());
-
-          } else {
-            insertarAlimento(
-              widget.codigoDeBarras, 
-              widget.nombreAlimento, 
-              widget.calorias, 
-              widget.cantidad, 
-              widget.unidadesCantidad,
-              widget.carbohidratos, 
-              widget.grasas, 
-              widget.proteinas, 
-              widget.sodio, 
-              widget.azucar, 
-              widget.fibra, 
-              widget.imageUrl
-            );
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                  ListAlimentos(nombreUsuario: widget.nombreUsuario)
-              )
-            );
-          }      
-        },
-      ),
-    ),  
-  ],
- )
-
-
-        ],
-      ),
-    ),
-  ],
-),
-
-
+                              alimentoRegistro = [];
+                              alimentoRegistro.add(Alimento(
+                                  name: widget.nombreAlimento,
+                                  cantidad: widget.cantidad,
+                                  unidadesCantidad: widget.unidadesCantidad,
+                                  calorias: widget.calorias,
+                                  grasas: widget.grasas,
+                                  proteinas: widget.proteinas,
+                                  carbohidratos: widget.carbohidratos,
+                                  azucar: widget.azucar,
+                                  fibra: widget.fibra,
+                                  sodio: widget.sodio,
+                                  image: widget.imageUrl));
+                              if (widget.anadirRegistro) {
+                                registrohelper.addRegistro(
+                                    widget.codigoDeBarras.trim().toLowerCase(),
+                                    widget.cantidad,
+                                    widget.nombreUsuario.trim().toLowerCase(),
+                                    formattedDate.trim().toLowerCase(),
+                                    widget.tipoDeComida.trim().toLowerCase(),
+                                    widget.nombreAlimento.trim(),
+                                    alimentoRegistro);
+                              } else {
+                                insertarAlimento(
+                                    widget.codigoDeBarras,
+                                    widget.nombreAlimento,
+                                    widget.calorias,
+                                    widget.cantidad,
+                                    widget.unidadesCantidad,
+                                    widget.carbohidratos,
+                                    widget.grasas,
+                                    widget.proteinas,
+                                    widget.sodio,
+                                    widget.azucar,
+                                    widget.fibra,
+                                    widget.imageUrl);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ListAlimentos(
+                                            nombreUsuario:
+                                                widget.nombreUsuario)));
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -286,11 +319,11 @@ child: Column(
         'codigoDeBarras': codigoDeBarras
       }),
     );
-    
+
     return response;
   }
 
-   _navigateListAlimento(BuildContext context) async {
+  _navigateListAlimento(BuildContext context) async {
     Navigator.push(
         context,
         MaterialPageRoute(

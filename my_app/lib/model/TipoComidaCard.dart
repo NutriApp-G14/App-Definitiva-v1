@@ -102,7 +102,11 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                   foods[i][0]['cantidad'] * foods[i][0]['grasas'] / 100;
             }
 
-            print(proteinasFoods);
+            print('Protes: ' );print(proteinasFoods);
+            print('Carb: ' );print(carbohidratosFoods);
+            print('Grasas: ' );print(grasasFoods);
+            print('Calorias: ' );print(caloriasFoods);
+
             return Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -192,7 +196,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: 320,
+                                                  flex: caloriasFoods.ceil(),
                                                   child: Container(
                                                       height: 10,
                                                       color: Color.fromARGB(
@@ -202,9 +206,9 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: 125,
+                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
                                                     child: Text(
-                                                      '320 kcal',
+                                                      '${caloriasFoods.toStringAsFixed(2)} kcal',
                                                       style: TextStyle(
                                                           fontSize: 10),
                                                     )),
@@ -213,7 +217,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: 60,
+                                                  flex: proteinasFoods.ceil(),
                                                   child: Container(
                                                     height: 10,
                                                     color: Color.fromARGB(
@@ -224,9 +228,9 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: 125,
+                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
                                                     child: Text(
-                                                      '60 g',
+                                                      '${proteinasFoods.toStringAsFixed(2)} g',
                                                       style: TextStyle(
                                                           fontSize: 10),
                                                     )),
@@ -235,7 +239,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: 90,
+                                                  flex: carbohidratosFoods.ceil(),
                                                   child: Container(
                                                     height: 10,
                                                     color: Color.fromARGB(
@@ -246,9 +250,9 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: 125,
+                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
                                                     child: Text(
-                                                      '90 g',
+                                                      '${carbohidratosFoods.toStringAsFixed(2)} g',
                                                       style: TextStyle(
                                                           fontSize: 10),
                                                     )),
@@ -257,7 +261,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: 30,
+                                                  flex: grasasFoods.ceil(),
                                                   child: Container(
                                                     height: 10,
                                                     color: Color.fromARGB(
@@ -268,9 +272,9 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: 125,
+                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
                                                     child: Text(
-                                                      '30 g',
+                                                      '${grasasFoods.toStringAsFixed(2)} g',
                                                       style: TextStyle(
                                                           fontSize: 10),
                                                     )),

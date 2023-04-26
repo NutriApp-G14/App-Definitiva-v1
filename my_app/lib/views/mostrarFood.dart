@@ -15,10 +15,8 @@ import 'mostrarFood.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
-//final urlConexion1 = 'http://localhost:8080';
-final urlConexion1 = 'http://34.77.171.152:8080';
-//final urlConexion1 = 'http://35.241.179.64:8080';
-//final urlConexion1 = 'http://35.189.241.218:8080';
+final urlConexion1 = 'http://localhost:8080';
+//final urlConexion1 = 'http://34.77.171.152:8080';
 
 class MostrarFood extends StatefulWidget {
   final int id;

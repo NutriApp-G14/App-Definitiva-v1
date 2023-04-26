@@ -25,7 +25,7 @@ class _AddRecetasPageState extends State<AddRecetasPage> {
   final TextEditingController imageController = TextEditingController();
   final TextEditingController nombreUsuarioController = TextEditingController();
   List<String> _steps = [];
-  List<Alimento> _ingredientes = [];
+  //List<Alimento> _ingredientes = [];
   var _unidadSeleccionadas;
   List<Alimento> ingredientes = [];
   _navigateListAlimento(BuildContext context) async {
@@ -60,7 +60,6 @@ class _AddRecetasPageState extends State<AddRecetasPage> {
     var response = await http.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
     Navigator.pop(context);
     _navigateListAlimento(context);
     return response;

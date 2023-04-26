@@ -10,9 +10,7 @@ import 'dart:convert';
 
 import 'package:my_app/model/Usuario.dart';
 
-//final urlConexion = 'http://34.77.36.66:8080';
-final urlConexion = 'http://35.189.241.218:8080';
-
+final urlConexion = 'http://34.77.171.152:8080';
 //final urlConexion = 'http://localhost:8080';
 
 class DataBaseHelper {
@@ -159,7 +157,6 @@ class DataBaseHelper {
     var response = await http.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 
@@ -311,7 +308,6 @@ class DataBaseHelper {
     var body = json.encode(data);
     var response = await http.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
-    print("${response.body}");
     //Navigator.pop(context);
     return response;
   }
@@ -354,7 +350,6 @@ class DataBaseHelper {
     var response = await http
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 
@@ -393,7 +388,6 @@ class DataBaseHelper {
     var response = await http.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
     return response;
   }
 

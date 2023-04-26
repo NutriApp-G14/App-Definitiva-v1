@@ -15,6 +15,11 @@ import 'mostrarFood.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
+//final urlConexion1 = 'http://localhost:8080';
+final urlConexion1 = 'http://34.77.171.152:8080';
+//final urlConexion1 = 'http://35.241.179.64:8080';
+//final urlConexion1 = 'http://35.189.241.218:8080';
+
 class MostrarFood extends StatefulWidget {
   final int id;
   final String codigoDeBarras;
@@ -55,6 +60,7 @@ class _MostrarFoodState extends State<MostrarFood> {
   RegistroHelper registrohelper = RegistroHelper();
   DateTime now = DateTime.now();
   late String formattedDate;
+
   DataBaseHelper dataBaseHelper = DataBaseHelper();
   @override
   void initState() {
@@ -77,9 +83,9 @@ class _MostrarFoodState extends State<MostrarFood> {
   }
 
   final bool isPremium = false;
-
+  List<Alimento> alimentosRegistro = [];
   double cantidad = 0.0;
-  var unidadesCantidad = 0.0;
+  var unidadesCantidad = "";
   double calorias = 0.0;
   double proteinas = 0.0;
   double carbohidratos = 0.0;
@@ -91,7 +97,6 @@ class _MostrarFoodState extends State<MostrarFood> {
   @override
   Widget build(BuildContext context) {
     var nueva_cantidad = cantidad != 0.0 ? cantidad : widget.cantidad;
-    print('${nueva_cantidad}');
     calorias = _recalucularInformacion(widget.calorias, nueva_cantidad, 100);
     proteinas = _recalucularInformacion(widget.proteinas, nueva_cantidad, 100);
     carbohidratos =
@@ -290,23 +295,6 @@ class _MostrarFoodState extends State<MostrarFood> {
                                     ),
                                     SizedBox(width: 10.0),
                                   ],
-
-                                  // DropdownButton<String>(
-                                  //   value: unidadesCantidad,
-                                  //   onChanged: (String? newValue) {
-                                  //     setState(() {
-                                  //       unidadesCantidad = newValue ?? '';
-                                  //     });
-                                  //   },
-                                  //   items: ['kg', 'g', 'oz', 'lb']
-                                  //       .map<DropdownMenuItem<String>>(
-                                  //           (String value) {
-                                  //     return DropdownMenuItem<String>(
-                                  //       value: value,
-                                  //       child: Text(value),
-                                  //     );
-                                  //   }).toList(),
-                                  // ),
                                 ),
                                 SizedBox(height: 8),
                                 Text(
@@ -1157,20 +1145,38 @@ class _MostrarFoodState extends State<MostrarFood> {
                                           children: [
                                             ElevatedButton(
                                               onPressed: () {
+                                                alimentosRegistro = [];
+                                                alimentosRegistro.add(Alimento(
+                                                    name: widget.name,
+                                                    cantidad: nueva_cantidad,
+                                                    unidadesCantidad:
+                                                        widget.unidadesCantidad,
+                                                    calorias: widget.calorias,
+                                                    grasas: widget.grasas,
+                                                    proteinas: widget.proteinas,
+                                                    carbohidratos:
+                                                        widget.carbohidratos,
+                                                    azucar: widget.azucar,
+                                                    fibra: widget.fibra,
+                                                    sodio: widget.sodio,
+                                                    image: widget.image));
                                                 registrohelper.addRegistro(
-                                                    widget.codigoDeBarras
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    widget.cantidad,
-                                                    widget.nombreUsuario
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    formattedDate
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    'Desayuno'
-                                                        .trim()
-                                                        .toLowerCase());
+                                                  widget.codigoDeBarras
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  nueva_cantidad,
+                                                  widget.nombreUsuario
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  formattedDate
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  'Desayuno'
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  widget.name.trim(),
+                                                  alimentosRegistro,
+                                                );
                                               },
                                               child: Text('Desayuno'),
                                               style: ElevatedButton.styleFrom(
@@ -1190,20 +1196,38 @@ class _MostrarFoodState extends State<MostrarFood> {
                                           children: [
                                             ElevatedButton(
                                               onPressed: () {
+                                                alimentosRegistro = [];
+                                                alimentosRegistro.add(Alimento(
+                                                    name: widget.name,
+                                                    cantidad: nueva_cantidad,
+                                                    unidadesCantidad:
+                                                        widget.unidadesCantidad,
+                                                    calorias: widget.calorias,
+                                                    grasas: widget.grasas,
+                                                    proteinas: widget.proteinas,
+                                                    carbohidratos:
+                                                        widget.carbohidratos,
+                                                    azucar: widget.azucar,
+                                                    fibra: widget.fibra,
+                                                    sodio: widget.sodio,
+                                                    image: widget.image));
                                                 registrohelper.addRegistro(
-                                                    widget.codigoDeBarras
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    widget.cantidad,
-                                                    widget.nombreUsuario
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    formattedDate
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    'Almuerzo'
-                                                        .trim()
-                                                        .toLowerCase());
+                                                  widget.codigoDeBarras
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  nueva_cantidad,
+                                                  widget.nombreUsuario
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  formattedDate
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  'Almuerzo'
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  widget.name.trim(),
+                                                  alimentosRegistro,
+                                                );
                                               },
                                               child: Text('Almuerzo'),
                                               style: ElevatedButton.styleFrom(
@@ -1223,20 +1247,36 @@ class _MostrarFoodState extends State<MostrarFood> {
                                           children: [
                                             ElevatedButton(
                                               onPressed: () {
+                                                alimentosRegistro = [];
+                                                alimentosRegistro.add(Alimento(
+                                                    name: widget.name,
+                                                    cantidad: nueva_cantidad,
+                                                    unidadesCantidad:
+                                                        widget.unidadesCantidad,
+                                                    calorias: widget.calorias,
+                                                    grasas: widget.grasas,
+                                                    proteinas: widget.proteinas,
+                                                    carbohidratos:
+                                                        widget.carbohidratos,
+                                                    azucar: widget.azucar,
+                                                    fibra: widget.fibra,
+                                                    sodio: widget.sodio,
+                                                    image: widget.image));
                                                 registrohelper.addRegistro(
-                                                    widget.codigoDeBarras
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    widget.cantidad,
-                                                    widget.nombreUsuario
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    formattedDate
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    'Comida'
-                                                        .trim()
-                                                        .toLowerCase());
+                                                  widget.codigoDeBarras
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  nueva_cantidad,
+                                                  widget.nombreUsuario
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  formattedDate
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  'Comida'.trim().toLowerCase(),
+                                                  widget.name.trim(),
+                                                  alimentosRegistro,
+                                                );
                                               },
                                               child: Text('Comida'),
                                               style: ElevatedButton.styleFrom(
@@ -1256,20 +1296,38 @@ class _MostrarFoodState extends State<MostrarFood> {
                                           children: [
                                             ElevatedButton(
                                               onPressed: () {
+                                                alimentosRegistro = [];
+                                                alimentosRegistro.add(Alimento(
+                                                    name: widget.name,
+                                                    cantidad: nueva_cantidad,
+                                                    unidadesCantidad:
+                                                        widget.unidadesCantidad,
+                                                    calorias: widget.calorias,
+                                                    grasas: widget.grasas,
+                                                    proteinas: widget.proteinas,
+                                                    carbohidratos:
+                                                        widget.carbohidratos,
+                                                    azucar: widget.azucar,
+                                                    fibra: widget.fibra,
+                                                    sodio: widget.sodio,
+                                                    image: widget.image));
                                                 registrohelper.addRegistro(
-                                                    widget.codigoDeBarras
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    widget.cantidad,
-                                                    widget.nombreUsuario
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    formattedDate
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    'Merienda'
-                                                        .trim()
-                                                        .toLowerCase());
+                                                  widget.codigoDeBarras
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  nueva_cantidad,
+                                                  widget.nombreUsuario
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  formattedDate
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  'Merienda'
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  widget.name.trim(),
+                                                  alimentosRegistro,
+                                                );
                                               },
                                               child: Text('Merienda'),
                                               style: ElevatedButton.styleFrom(
@@ -1289,20 +1347,36 @@ class _MostrarFoodState extends State<MostrarFood> {
                                           children: [
                                             ElevatedButton(
                                               onPressed: () {
+                                                alimentosRegistro = [];
+                                                alimentosRegistro.add(Alimento(
+                                                    name: widget.name,
+                                                    cantidad: nueva_cantidad,
+                                                    unidadesCantidad:
+                                                        widget.unidadesCantidad,
+                                                    calorias: widget.calorias,
+                                                    grasas: widget.grasas,
+                                                    proteinas: widget.proteinas,
+                                                    carbohidratos:
+                                                        widget.carbohidratos,
+                                                    azucar: widget.azucar,
+                                                    fibra: widget.fibra,
+                                                    sodio: widget.sodio,
+                                                    image: widget.image));
                                                 registrohelper.addRegistro(
-                                                    widget.codigoDeBarras
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    widget.cantidad,
-                                                    widget.nombreUsuario
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    formattedDate
-                                                        .trim()
-                                                        .toLowerCase(),
-                                                    'Cena'
-                                                        .trim()
-                                                        .toLowerCase());
+                                                  widget.codigoDeBarras
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  nueva_cantidad,
+                                                  widget.nombreUsuario
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  formattedDate
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  'Cena'.trim().toLowerCase(),
+                                                  widget.name.trim(),
+                                                  alimentosRegistro,
+                                                );
                                               },
                                               child: Text('Cena'),
                                               style: ElevatedButton.styleFrom(
@@ -1351,8 +1425,6 @@ class _MostrarFoodState extends State<MostrarFood> {
                               widget.codigoDeBarras);
 
                           cantidad == 0;
-
-                          //print(nueva_cantidad);
                         },
                         child: Text('Guardar cambios'),
                       ),
@@ -1379,7 +1451,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       double azucarController,
       double fibraController,
       String codigoDeBarrasController) async {
-    var url = "${urlConexion}/foods/$idController";
+    var url = "${urlConexion1}/foods/$idController";
     Map data = {
       'name': nameController,
       'cantidad': cantidadController,
@@ -1398,7 +1470,6 @@ class _MostrarFoodState extends State<MostrarFood> {
     var body = json.encode(data);
     var response = await http.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
-    print("${response.body}");
     //Navigator.pop(context);
     Navigator.pop(context);
     Navigator.push(
@@ -1424,7 +1495,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       String image,
       String codigoDeBarras) async {
     final response = await http.post(
-      Uri.parse('${urlConexion}/foods/add'),
+      Uri.parse('${urlConexion1}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

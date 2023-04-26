@@ -54,7 +54,6 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
     var response = await http.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
 
     Navigator.pop(context);
     _navigateListAlimento(context);

@@ -7,7 +7,6 @@ import 'package:my_app/model/NavBar.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/EditarUsuario.dart';
-import 'package:my_app/views/buscador.dart';
 import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/model/Alergias.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -330,7 +329,6 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                       width: 115,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          print(valorInicial);
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -664,7 +662,6 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                         _tmb,
                                         _objectiveSeleccionado,
                                         _peso);
-                                    print(requerimientoCalorico);
                                   },
                                   items: [
                                     DropdownMenuItem(

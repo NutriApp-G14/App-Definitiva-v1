@@ -202,7 +202,6 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
       var body = json.decode(response.body);
       var listaDeAlimentos =
           body['products'].toList(); //.cast<Map<String, dynamic>>();
-      print(listaDeAlimentos);
       setState(() {
         _listaDeAlimentos = listaDeAlimentos;
       });

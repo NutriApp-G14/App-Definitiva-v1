@@ -137,7 +137,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                             return Icon(
                               Icons.fastfood,
                               color: Color.fromARGB(221, 255, 181, 71),
-                              size: 100,
+                              size: 90,
                             );
                           }
                         },
@@ -146,7 +146,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                   : Icon(
                       Icons.fastfood,
                       color: Color.fromARGB(221, 255, 181, 71),
-                      size: 100,
+                      size: 90,
                     ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -299,7 +299,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
       double fibra,
       String image) async {
     final response = await http.post(
-      Uri.parse('${urlConexion}/foods/add'),
+      Uri.parse('${urlConection}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

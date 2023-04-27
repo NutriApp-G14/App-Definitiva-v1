@@ -15,10 +15,10 @@ import 'mostrarFood.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
-//final urlConexion1 = 'http://localhost:8080';
-final urlConexion1 = 'http://34.77.252.254:8080';
-//final urlConexion1 = 'http://35.241.179.64:8080';
-//final urlConexion1 = 'http://35.189.241.218:8080';
+//final urlConection = 'http://localhost:8080';
+//final urlConection = 'http://34.77.252.254:8080';
+//final urlConection = 'http://35.241.179.64:8080';
+//final urlConection = 'http://35.189.241.218:8080';
 
 class MostrarFood extends StatefulWidget {
   final int id;
@@ -1451,7 +1451,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       double azucarController,
       double fibraController,
       String codigoDeBarrasController) async {
-    var url = "${urlConexion1}/foods/$idController";
+    var url = "${urlConexion}/foods/$idController";
     Map data = {
       'name': nameController,
       'cantidad': cantidadController,
@@ -1495,7 +1495,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       String image,
       String codigoDeBarras) async {
     final response = await http.post(
-      Uri.parse('${urlConexion1}/foods/add'),
+      Uri.parse('${urlConection}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

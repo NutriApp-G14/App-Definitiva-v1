@@ -6,16 +6,17 @@ import 'dart:convert';
 
 import 'package:my_app/model/Alimento.dart';
 
-//final urlConexion = 'http://34.77.36.66:8080';
+//final urlConection = 'http://34.77.36.66:8080';
 //final urlConection = 'http://35.241.179.64:8080';
-final urlConection = 'http://34.77.252.254:8080';
-final urlConexion = 'http://34.77.252.254:8080';
+//final urlConection = 'http://34.77.252.254:8080';
+//final urlConection = 'http://34.77.252.254:8080';
 
-//final urlConexion = 'http://35.189.241.218:8080';
 //final urlConection = 'http://35.189.241.218:8080';
-//final urlConexion = 'http://35.241.179.64:8080';
+//final urlConection = 'http://35.189.241.218:8080';
+//final urlConection = 'http://35.241.179.64:8080';
 
-//finalfinal urlConexion = 'http://35.189.241.218:8080';
+final urlConection = 'http://localhost:8080';
+
 
 class RegistroHelper {
   // Add Registro
@@ -48,7 +49,7 @@ class RegistroHelper {
 
 // Borrar Registro
   Future<http.Response> deleteRegistro(int id) async {
-    var url = "${urlConexion}/registro/reg/{id}";
+    var url = "${urlConection}/registro/reg/{id}";
     var response = await http
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     print("${response.statusCode}");
@@ -59,7 +60,7 @@ class RegistroHelper {
   Future<List> getRegistroComidas(
       String nombreUsuario, String tipoDeComida, String fecha) async {
     final response = await http.get(Uri.parse(
-        "${urlConexion}/registro/registros/$fecha/$tipoDeComida/$nombreUsuario"));
+        "${urlConection}/registro/registros/$fecha/$tipoDeComida/$nombreUsuario"));
 
     return json.decode(response.body);
   }

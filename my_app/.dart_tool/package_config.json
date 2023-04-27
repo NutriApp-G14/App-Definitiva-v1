@@ -32,6 +32,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "cross_file",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/cross_file-0.3.3+4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "cupertino_icons",
       "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.5",
       "packageUri": "lib/",
@@ -50,6 +56,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "flutter_barcode_scanner",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_barcode_scanner-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_form_builder",
       "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_form_builder-7.0.0-alpha.3",
       "packageUri": "lib/",
@@ -62,8 +74,20 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "flutter_plugin_android_lifecycle",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.12",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///C:/Users/lucia/flutter/packages/flutter_test",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///C:/Users/lucia/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -76,6 +100,36 @@
     {
       "name": "http_parser",
       "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "image_picker",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker-0.8.7+4",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "image_picker_android",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_android-0.8.6+8",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "image_picker_for_web",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_for_web-2.1.12",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "image_picker_ios",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_ios-0.8.7+3",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "image_picker_platform_interface",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_platform_interface-2.6.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -128,10 +182,46 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "permission_handler",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/permission_handler-10.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_android",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/permission_handler_android-10.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_apple",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/permission_handler_apple-9.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_platform_interface",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/permission_handler_platform_interface-3.9.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "permission_handler_windows",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/permission_handler_windows-0.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "pie_chart",
       "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/pie_chart-5.3.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "sky_engine",
@@ -194,7 +284,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-04-27T08:46:29.197742Z",
+  "generated": "2023-04-27T09:34:46.776940Z",
   "generator": "pub",
   "generatorVersion": "3.0.0-398.0.dev"
 }

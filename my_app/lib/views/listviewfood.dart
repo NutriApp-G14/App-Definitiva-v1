@@ -27,6 +27,17 @@ class ListAlimentos extends StatefulWidget {
 class _ListAlimentosState extends State<ListAlimentos> {
   DataBaseHelper dataBaseHelper = DataBaseHelper();
 
+  String _query = '';
+  List<String> _foodList = [];
+  List<Map<String, dynamic>> _foods = [];
+  List<Map<String, dynamic>> _listaDeAlimentos = [];
+
+  void _onSubmitSearch() async {
+    if (_query.isNotEmpty) {
+      await searchAndDisplayFood(_query);
+    }
+  }
+
   late List data;
   bool _showFoods = true;
 
@@ -70,6 +81,35 @@ class _ListAlimentosState extends State<ListAlimentos> {
       Uri.parse("${urlConexion}/foods/$id"),
     );
     setState(() {});
+  }
+
+  Future<http.Response> searchFood(String searchTerm) async {
+    var url =
+        'https://api.edamam.com/api/food-database/v2/parser?app_id=2c2e2462&app_key=7b3486401bec7d7ccd46c6bc6e85b3cc&ingr=$searchTerm';
+    return await http.get(Uri.parse(url));
+  }
+
+  Future<void> searchAndDisplayFood(String searchTerm) async {
+    var response = await searchFood(searchTerm);
+
+    if (response.statusCode == 200) {
+      var body = json.decode(response.body);
+      var foodList =
+          body['hints'].map((food) => food['food']['label']).toList();
+      var foods = body['hints']
+          .map((food) => food['food'])
+          .toList()
+          .cast<Map<String, dynamic>>();
+
+      setState(() {
+        _foodList = foodList.cast<String>(); // Convert foodList to List<String>
+        _foods = foods;
+      });
+      // Show food list in UI
+      // ...
+    } else {
+      print('Error al realizar la búsqueda');
+    }
   }
 
   @override
@@ -151,6 +191,32 @@ class _ListAlimentosState extends State<ListAlimentos> {
                 ),
               ],
             ),
+            SizedBox(height: 10.0),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: TextField(
+                style: TextStyle(fontSize: 14.0, color: Colors.black),
+                decoration: InputDecoration(
+                  hintText: 'Busca un alimento...',
+                  filled: true,
+                  fillColor: Colors.orange[200],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14.0),
+                    borderSide: BorderSide(
+                      color: Colors.orange[200]!,
+                      width: 1.0,
+                    ),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.search, color: Colors.black),
+                    onPressed: () {
+                      _onSubmitSearch; // Aquí va el código que se ejecutará al presionar el botón de búsqueda
+                    },
+                  ),
+                ),
+              ),
+            ),
+
             SizedBox(height: 16.0),
             Expanded(
               child: _showFoods

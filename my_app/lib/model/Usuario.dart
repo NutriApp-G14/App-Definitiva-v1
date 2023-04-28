@@ -8,11 +8,21 @@ class Usuario {
   final String gender;
   final String activity;
   final String objective;
+  //final String imageString;
   //final List<String> allergies;
 
-
-  Usuario( this.nombre, this.nombreUsuario, this.password,  this.age,
-             this.height, this.weight, this.gender, this.activity, this.objective);
+  Usuario(
+    this.nombre,
+    this.nombreUsuario,
+    this.password,
+    this.age,
+    this.height,
+    this.weight,
+    this.gender,
+    this.activity,
+    this.objective,
+    //this.imageString
+  );
 
   factory Usuario.fromJson(Map<String, dynamic> json) {
     return Usuario(
@@ -24,9 +34,8 @@ class Usuario {
       json['weight'],
       json['gender'],
       json['activity'],
-      json['objective']
-
-
+      json['objective'],
+      //json['imageString'],
     );
   }
 }

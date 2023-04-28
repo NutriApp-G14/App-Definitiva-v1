@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/views/IniciarSesion.dart';
-import 'package:my_app/views/listviewfood.dart';
+import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/model/Alergias.dart';
 import 'package:intl/intl.dart';
 
@@ -46,12 +47,16 @@ class CrearUsuarioPage extends StatefulWidget {
 }
 
 class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
+  var aceptarTerminos = false;
   DataBaseHelper dataBaseHelper = DataBaseHelper();
 
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController nombreUsuarioController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
+
   var _generoSeleccionado;
   var _nivelActividadSeleccionado;
   List<int> pesos = List<int>.generate(300, (index) => index + 35);
@@ -151,44 +156,34 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                   ),
                 ),
                 SizedBox(height: 10.0),
-                DropdownButtonFormField(
+                TextField(
+                  controller: heightController,
                   decoration: InputDecoration(
                     labelText: 'Altura',
                     hintText: 'Altura en cm',
                     icon: Icon(Icons.height),
                   ),
-                  value: alturaSeleccionada,
-                  items: alturas.map((int altura) {
-                    return DropdownMenuItem<int>(
-                      value: altura,
-                      child: Text(altura.toString() + "cm"),
-                    );
-                  }).toList(),
-                  onChanged: (nuevaAltura) {
-                    setState(() {
-                      alturaSeleccionada = nuevaAltura!;
-                    });
-                  },
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  // Validamos que solo se ingresen números
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
                 ),
                 SizedBox(height: 10.0),
-                DropdownButtonFormField(
+                TextField(
+                  controller: weightController,
                   decoration: InputDecoration(
                     labelText: 'Peso',
                     hintText: 'Peso en kg',
-                    icon: Icon(Icons.fitness_center),
+                    icon: Icon(Icons.height),
                   ),
-                  value: pesoSeleccionado,
-                  items: pesos.map((int peso) {
-                    return DropdownMenuItem<int>(
-                      value: peso,
-                      child: Text(peso.toString() + " kg"),
-                    );
-                  }).toList(),
-                  onChanged: (nuevoPeso) {
-                    setState(() {
-                      pesoSeleccionado = nuevoPeso!;
-                    });
-                  },
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  // Validamos que solo se ingresen números
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
                 ),
                 SizedBox(height: 10.0),
                 DropdownButtonFormField(
@@ -271,8 +266,8 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                               .toString()
                               .trim()
                               .isEmpty ||
-                          pesoSeleccionado.toString().trim().isEmpty ||
-                          alturaSeleccionada.toString().trim().isEmpty) {
+                          weightController.text.trim().isEmpty ||
+                          heightController.text.trim().isEmpty) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -311,53 +306,10 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                         );
                         return;
                       } else {
-                        dataBaseHelper.addUsuario(
-                          nombreController.text.trim(),
-                          nombreUsuarioController.text.trim(),
-                          passwordController.text.trim(),
-                          ageController.text.trim(),
-                          alturaSeleccionada.toString(),
-                          pesoSeleccionado.toString(),
-                          _generoSeleccionado,
-                          _nivelActividadSeleccionado,
-                          "ninguno"
-                        );
-                        Map<String, bool> alergiasSeleccionadas =
-                            seleccionarAlergias(alergias, seleccionadas);
-                        bool cacahuetesController =
-                            alergiasSeleccionadas['Cacahuetes'] ?? false;
-                        bool lecheController =
-                            alergiasSeleccionadas['Leche'] ?? false;
-                        bool huevoController =
-                            alergiasSeleccionadas['Huevo'] ?? false;
-                        bool trigoController =
-                            alergiasSeleccionadas['Trigo'] ?? false;
-                        bool sojaController =
-                            alergiasSeleccionadas['Soja'] ?? false;
-                        bool mariscosController =
-                            alergiasSeleccionadas['Mariscos'] ?? false;
-                        bool frutosSecosController =
-                            alergiasSeleccionadas['Frutos secos'] ?? false;
-                        bool pescadoController =
-                            alergiasSeleccionadas['Pescado'] ?? false;
-
-                        dataBaseHelper.addAlergias(
-                            nombreUsuarioController.text.trim(),
-                            cacahuetesController,
-                            lecheController,
-                            huevoController,
-                            trigoController,
-                            sojaController,
-                            mariscosController,
-                            frutosSecosController,
-                            pescadoController);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ListAlimentos(
-                                  nombreUsuario:
-                                      nombreUsuarioController.text.trim())),
-                        );
+                        _mostrarDialogoTerminos();
+                        if (aceptarTerminos) {
+                          print("hola");
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -367,6 +319,9 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                     ),
                     child: Text('Crear cuenta',
                         style: TextStyle(fontWeight: FontWeight.bold)))),
+            SizedBox(
+              height: 5,
+            ),
             TextButton(
               onPressed: () {
                 // Lógica para ir a la página de inicio de sesión
@@ -377,8 +332,100 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
               },
               child: Text('¿Ya tienes cuenta? Inicia sesión'),
             ),
+            SizedBox(
+              height: 15,
+            ),
           ])
         ],
+      ),
+    );
+  }
+
+  void _mostrarDialogoTerminos() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Términos de uso'),
+          content: Text('Aquí va la información de los términos de uso.'),
+          actions: [
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                setState(() {
+                  aceptarTerminos = false;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                setState(() {
+                  aceptarTerminos = true;
+                });
+                dataBaseHelper.addUsuario(
+                    nombreController.text.trim(),
+                    nombreUsuarioController.text.trim(),
+                    passwordController.text.trim(),
+                    ageController.text.trim(),
+                    heightController.text.trim(),
+                    weightController.text.trim(),
+                    _generoSeleccionado,
+                    _nivelActividadSeleccionado,
+                    "ninguno",
+                    "");
+                Map<String, bool> alergiasSeleccionadas =
+                    seleccionarAlergias(alergias, seleccionadas);
+                bool cacahuetesController =
+                    alergiasSeleccionadas['Cacahuetes'] ?? false;
+                bool lecheController = alergiasSeleccionadas['Leche'] ?? false;
+                bool huevoController = alergiasSeleccionadas['Huevo'] ?? false;
+                bool trigoController = alergiasSeleccionadas['Trigo'] ?? false;
+                bool sojaController = alergiasSeleccionadas['Soja'] ?? false;
+                bool mariscosController =
+                    alergiasSeleccionadas['Mariscos'] ?? false;
+                bool frutosSecosController =
+                    alergiasSeleccionadas['Frutos secos'] ?? false;
+                bool pescadoController =
+                    alergiasSeleccionadas['Pescado'] ?? false;
+
+                dataBaseHelper.addAlergias(
+                    nombreUsuarioController.text.trim(),
+                    cacahuetesController,
+                    lecheController,
+                    huevoController,
+                    trigoController,
+                    sojaController,
+                    mariscosController,
+                    frutosSecosController,
+                    pescadoController);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ListAlimentos(
+                          nombreUsuario: nombreUsuarioController.text.trim())),
+                );
+                // Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class TerminosDeUsoPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Términos de uso'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text('Aquí va la información de los términos de uso.'),
       ),
     );
   }

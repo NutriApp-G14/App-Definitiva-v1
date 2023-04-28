@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:http/http.dart' as http;
-import 'listviewfood.dart';
+import 'listviewFood.dart';
 
 class AddAlimentoPage extends StatefulWidget {
   final String nombreUsuario;
@@ -22,9 +22,8 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
   final TextEditingController proteinasController = TextEditingController();
   final TextEditingController carbohidratosController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
-  final TextEditingController alergenosController = TextEditingController();
-
-  List<String> _alergenosSeleccionados = [];
+  final TextEditingController codigoDeBarrasController= TextEditingController();
+  final TextEditingController alergenosController= TextEditingController();
 
   Future<http.Response> addAlimento(
       String nameController,
@@ -35,8 +34,9 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
       double proteinasController,
       double carbohidratosController,
       String imageController,
-      List<String> alergenosController,
-      String nombreUsuarioController) async {
+      String nombreUsuarioController,
+      String codigoDeBarras)
+       async {
     var url = "${urlConexion}/foods/add";
     Map data = {
       'name': nameController,
@@ -48,13 +48,12 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
       'carbohidratos': '$carbohidratosController',
       'image': imageController,
       'nombreUsuario': nombreUsuarioController,
-      'alergenos': jsonEncode(alergenosController)
+      'codigoDeBarras':codigoDeBarrasController
     };
     var body = json.encode(data);
     var response = await http.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    print("${response.body}");
 
     Navigator.pop(context);
     _navigateListAlimento(context);
@@ -69,72 +68,6 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
         MaterialPageRoute(
             builder: (context) =>
                 ListAlimentos(nombreUsuario: widget.nombreUsuario)));
-  }
-
-  Future<List<String>> _buildAlergenosDialog(BuildContext context) async {
-    List<String> alergenos = [];
-    List<String> selectedAlergenos = [];
-
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Selecciona tus alérgenos'),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    CheckboxListTile(
-                      title: Text('Leche'),
-                      value: selectedAlergenos.contains('Leche'),
-                      onChanged: (bool? value) {
-                        setState(() {
-                          if (value != null) {
-                            selectedAlergenos.add('Leche');
-                          } else {
-                            selectedAlergenos.remove('Leche');
-                          }
-                        });
-                      },
-                    ),
-                    CheckboxListTile(
-                      title: Text('Huevo'),
-                      value: selectedAlergenos.contains('Huevo'),
-                      onChanged: (bool? value) {
-                        setState(() {
-                          if (value != null) {
-                            selectedAlergenos.add('Huevo');
-                          } else {
-                            selectedAlergenos.remove('Huevo');
-                          }
-                        });
-                      },
-                    ),
-                    CheckboxListTile(
-                      title: Text('Frutos secos'),
-                      value: selectedAlergenos.contains('Frutos secos'),
-                      onChanged: (bool? value) {
-                        setState(() {
-                          if (value != null) {
-                            selectedAlergenos.add('Frutos secos');
-                          } else {
-                            selectedAlergenos.remove('Frutos secos');
-                          }
-                        });
-                      },
-                    ),
-                    // Agrega más CheckboxListTile según tus necesidades
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-
-    return alergenos;
   }
 
   @override
@@ -246,27 +179,6 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
                 ),
               ),
             ),
-            // Container(
-            //   child: TextFormField(
-            //     controller: alergenosController,
-            //     decoration: InputDecoration(
-            //       labelText: 'Alergenos',
-            //       hintText: 'Seleccione uno o varios alergenos',
-            //       icon: new Icon(Icons.warning),
-            //     ),
-            //     onTap: () async {
-            //       List<String> result = await showDialog(
-            //         context: context,
-            //        // builder: (context) => _buildAlergenosDialog(),
-            //       );
-            //       if (result != null) {
-            //         setState(() {
-            //           alergenosController.text = result.join(', ');
-            //         });
-            //       }
-            //     },
-            //   ),
-            // ),
             Container(
               child: TextField(
                 controller: imageController,
@@ -277,25 +189,57 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
                 ),
               ),
             ),
+           Container(
+              child: TextField(
+                controller: codigoDeBarrasController,
+                decoration: InputDecoration(
+                  labelText: 'Codigo de Barras',
+                  hintText: 'Codigo de barras del producto',
+                  icon: new Icon(Icons.scanner),
+                ),
+              ),
+            ),
             const SizedBox(height: 32.0),
             Column(children: [
               Center(
-                  child: SizedBox(
+                child: SizedBox(
                 height: 40,
                 width: 150,
                 child: ElevatedButton(
-                  onPressed: () {
-                    addAlimento(
-                        nameController.text.trim(),
-                        double.parse(cantidadController.text.trim()),
-                        _unidadSeleccionadas,
-                        double.parse(caloriasController.text.trim()),
-                        double.parse(grasasController.text.trim()),
-                        double.parse(proteinasController.text.trim()),
-                        double.parse(carbohidratosController.text.trim()),
-                        imageController.text.trim(),
-                        widget.nombreUsuario.trim() as List<String>,
-                        alergenosController.text.trim());
+                  onPressed: () async {
+                    bool exists = await dataBaseHelper.usuarioExists(codigoDeBarrasController.text.trim());
+                      if (exists) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Codigo de barras existente'),
+                            content: Text(
+                                'Ese alimento ya está añadido'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Cerrar'),
+                              ),
+                            ],
+                          ),
+                        );
+                        return;
+                      } else {
+                        addAlimento(
+                      nameController.text.trim(),
+                      double.parse(cantidadController.text.trim()),
+                      _unidadSeleccionadas,
+                      double.parse(caloriasController.text.trim()),
+                      double.parse(grasasController.text.trim()),
+                      double.parse(proteinasController.text.trim()),
+                      double.parse(carbohidratosController.text.trim()),
+                      imageController.text.trim(),
+                      widget.nombreUsuario.trim(),
+                      codigoDeBarrasController.text.trim() ?? "",
+                    );   
+                  }
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
@@ -304,7 +248,8 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
                   ),
                   child: const Text('Añadir'),
                 ),
-              ))
+              )
+              )
             ])
           ],
         )));

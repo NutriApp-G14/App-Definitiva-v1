@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
+import 'package:my_app/views/BuscadorNuevo.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/IniciarSesion.dart';
-import 'package:my_app/views/NuevoBuscador.dart';
+//import 'package:my_app/views/NuevoBuscador.dart';
+import 'package:my_app/views/RegistroComidas.dart';
 import 'package:my_app/views/UsuarioPage.dart';
-import 'package:my_app/views/buscador.dart';
-import 'package:my_app/views/listviewfood.dart';
+import 'package:my_app/views/listviewFood.dart';
 
 class NutriAppBar extends StatefulWidget {
   final String nombreUsuario;
@@ -21,6 +23,14 @@ class NutriAppBar extends StatefulWidget {
 
 class _NutriAppBarState extends State<NutriAppBar> {
   DataBaseHelper dataBaseHelper = DataBaseHelper();
+  DateTime now = DateTime.now();
+  late String formattedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    formattedDate = DateFormat('dd-MM-yyyy').format(now);
+  }
 
   _navigateAddAlimento(BuildContext context) async {
     Navigator.push(
@@ -28,6 +38,16 @@ class _NutriAppBarState extends State<NutriAppBar> {
         MaterialPageRoute(
             builder: (context) =>
                 AddAlimentoPage(nombreUsuario: widget.nombreUsuario)));
+  }
+
+  _navigateRegistroComidas(BuildContext context) async {
+    String usuarioNombreUsuario = widget.nombreUsuario;
+
+    Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          RegistroComidasPage(nombreUsuario: usuarioNombreUsuario),
+      transitionDuration: Duration(seconds: 0),
+    ));
   }
 
   _navigateUsuarioPage(BuildContext context) async {
@@ -131,9 +151,14 @@ class _NutriAppBarState extends State<NutriAppBar> {
                     //   builder: (context) => BuscadorComida(
                     //     nombreUsuario: widget.nombreUsuario,
                     //   ),
-                       MaterialPageRoute(
-                      builder: (context) => NuevoBuscador(
+                    //  MaterialPageRoute(
+                    // builder: (context) => NuevoBuscador(
+                    //   nombreUsuario: widget.nombreUsuario,
+                    // ),
+                    MaterialPageRoute(
+                      builder: (context) => BuscadorNuevo(
                         nombreUsuario: widget.nombreUsuario,
+                        fecha: formattedDate,
                       ),
                     ),
                   );
@@ -171,28 +196,7 @@ class _NutriAppBarState extends State<NutriAppBar> {
                     icon: Icon(Icons.menu_book),
                     color: Colors.black,
                     onPressed: () {
-                      if (widget.isPremium) {
-                        // Código para la acción de estadísticas
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('Sprint 3'),
-                              content: Text(
-                                  'Esta funcionalidad estará disponible en el Sprint 3'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('Aceptar'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
+                      _navigateRegistroComidas(context);
                     },
                     highlightColor: Colors
                         .transparent, // desactiva la sombra del botón cuando se presiona

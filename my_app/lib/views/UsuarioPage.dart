@@ -7,8 +7,7 @@ import 'package:my_app/model/NavBar.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/EditarUsuario.dart';
-import 'package:my_app/views/buscador.dart';
-import 'package:my_app/views/listviewfood.dart';
+import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/model/Alergias.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -330,7 +329,6 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                       width: 115,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          print(valorInicial);
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -648,22 +646,22 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                       _objectiveSeleccionado = value;
                                     });
                                     dataBaseHelper.updateUsuario(
-                                        usuario.nombre,
-                                        usuario.nombreUsuario,
-                                        usuario.password,
-                                        usuario.age,
-                                        usuario.height,
-                                        usuario.weight,
-                                        usuario.gender,
-                                        usuario.activity,
-                                        _objectiveSeleccionado);
+                                      usuario.nombre,
+                                      usuario.nombreUsuario,
+                                      usuario.password,
+                                      usuario.age,
+                                      usuario.height,
+                                      usuario.weight,
+                                      usuario.gender,
+                                      usuario.activity,
+                                      _objectiveSeleccionado,
+                                    );
 
                                     requerimientoCalorico = _factorActividad(
                                         usuario.activity,
                                         _tmb,
                                         _objectiveSeleccionado,
                                         _peso);
-                                    print(requerimientoCalorico);
                                   },
                                   items: [
                                     DropdownMenuItem(

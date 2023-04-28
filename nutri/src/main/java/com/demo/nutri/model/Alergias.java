@@ -10,6 +10,29 @@ import javax.persistence.Id;
 public class Alergias {
     @Id
     private String nombreUsuario;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((nombreUsuario == null) ? 0 : nombreUsuario.hashCode());
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Alergias other = (Alergias) obj;
+        if (nombreUsuario == null) {
+            if (other.nombreUsuario != null)
+                return false;
+        } else if (!nombreUsuario.equals(other.nombreUsuario))
+            return false;
+        return true;
+    }
     private Boolean cacahuetes;
     private Boolean leche;
     private Boolean huevo;

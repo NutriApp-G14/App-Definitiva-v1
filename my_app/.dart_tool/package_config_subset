@@ -144,8 +144,13 @@ file:///Users/cris/.pub-cache/hosted/pub.dev/permission_handler_windows-0.1.2/
 file:///Users/cris/.pub-cache/hosted/pub.dev/permission_handler_windows-0.1.2/lib/
 petitparser
 2.18
+<<<<<<< HEAD
 file:///Users/cris/.pub-cache/hosted/pub.dev/petitparser-5.1.0/
 file:///Users/cris/.pub-cache/hosted/pub.dev/petitparser-5.1.0/lib/
+=======
+file:///C:/Users/P.Lozano/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-5.1.0/
+file:///C:/Users/P.Lozano/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-5.1.0/lib/
+>>>>>>> pablo
 pie_chart
 2.12
 file:///Users/cris/.pub-cache/hosted/pub.dev/pie_chart-5.3.2/

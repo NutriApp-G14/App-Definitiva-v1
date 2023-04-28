@@ -8,7 +8,6 @@ import 'package:my_app/views/listviewfood.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
-
 class BuscadorNuevo extends StatefulWidget {
   final String nombreUsuario;
   final String fecha;
@@ -428,6 +427,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
           ],
         ));
   }
+
   String _barcode = '';
 
   Future<void> _scanBarcode() async {
@@ -466,6 +466,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
       print('Error al realizar la búsqueda');
     }
   }
+
   Future<http.Response> searchFoodNuevaAPIBarCode(String barcode) async {
     var url1 = 'https://world.openfoodfacts.org/api/v0/product/$barcode.json';
     return await http.get(Uri.parse(url1));
@@ -589,4 +590,3 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
     return response;
   }
 }
-                

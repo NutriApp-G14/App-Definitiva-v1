@@ -237,7 +237,11 @@
     },
     {
       "name": "petitparser",
+<<<<<<< HEAD
       "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/petitparser-5.1.0",
+=======
+      "rootUri": "file:///C:/Users/P.Lozano/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-5.1.0",
+>>>>>>> pablo
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -338,7 +342,11 @@
       "languageVersion": "2.17"
     }
   ],
+<<<<<<< HEAD
   "generated": "2023-04-28T12:16:15.902853Z",
+=======
+  "generated": "2023-04-26T19:34:15.686468Z",
+>>>>>>> pablo
   "generator": "pub",
   "generatorVersion": "2.19.5"
 }

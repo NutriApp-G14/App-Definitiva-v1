@@ -175,9 +175,9 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                               for (int i = 0;
                                                   i < alimentos.length;
                                                   i++)
-                                                if (tamanos[i] < 40)
+                                                 (tamanos[i] < 30) ?
                                                   Text(
-                                                    '${tamanos[i] > 37 ? '${alimentos[i].substring(0, 2)} ...' : alimentos[i]}, ',
+                                                    '${tamanos[i] > 27 ? '${alimentos[i].substring(0, 2)} ...' : alimentos[i]}, ',
                                                     style: TextStyle(
                                                       color: Colors.grey,
                                                       fontWeight:
@@ -185,7 +185,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                       fontSize: 14,
                                                       fontFamily: 'Montserrat',
                                                     ),
-                                                  ),
+                                                  ): Text(".."),
                                           ],
                                         ),
                                         SizedBox(

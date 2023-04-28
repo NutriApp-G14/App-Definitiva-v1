@@ -22,6 +22,9 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
   final TextEditingController proteinasController = TextEditingController();
   final TextEditingController carbohidratosController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
+  final TextEditingController alergenosController = TextEditingController();
+
+  List<String> _alergenosSeleccionados = [];
 
   Future<http.Response> addAlimento(
       String nameController,
@@ -32,6 +35,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
       double proteinasController,
       double carbohidratosController,
       String imageController,
+      List<String> alergenosController,
       String nombreUsuarioController) async {
     var url = "${urlConexion}/foods/add";
     Map data = {
@@ -43,7 +47,8 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
       'proteinas': '$proteinasController',
       'carbohidratos': '$carbohidratosController',
       'image': imageController,
-      'nombreUsuario': nombreUsuarioController
+      'nombreUsuario': nombreUsuarioController,
+      'alergenos': jsonEncode(alergenosController)
     };
     var body = json.encode(data);
     var response = await http.post(Uri.parse(url),
@@ -64,6 +69,72 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
         MaterialPageRoute(
             builder: (context) =>
                 ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+  }
+
+  Future<List<String>> _buildAlergenosDialog(BuildContext context) async {
+    List<String> alergenos = [];
+    List<String> selectedAlergenos = [];
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Selecciona tus alérgenos'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CheckboxListTile(
+                      title: Text('Leche'),
+                      value: selectedAlergenos.contains('Leche'),
+                      onChanged: (bool? value) {
+                        setState(() {
+                          if (value != null) {
+                            selectedAlergenos.add('Leche');
+                          } else {
+                            selectedAlergenos.remove('Leche');
+                          }
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: Text('Huevo'),
+                      value: selectedAlergenos.contains('Huevo'),
+                      onChanged: (bool? value) {
+                        setState(() {
+                          if (value != null) {
+                            selectedAlergenos.add('Huevo');
+                          } else {
+                            selectedAlergenos.remove('Huevo');
+                          }
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: Text('Frutos secos'),
+                      value: selectedAlergenos.contains('Frutos secos'),
+                      onChanged: (bool? value) {
+                        setState(() {
+                          if (value != null) {
+                            selectedAlergenos.add('Frutos secos');
+                          } else {
+                            selectedAlergenos.remove('Frutos secos');
+                          }
+                        });
+                      },
+                    ),
+                    // Agrega más CheckboxListTile según tus necesidades
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+
+    return alergenos;
   }
 
   @override
@@ -175,6 +246,27 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
                 ),
               ),
             ),
+            // Container(
+            //   child: TextFormField(
+            //     controller: alergenosController,
+            //     decoration: InputDecoration(
+            //       labelText: 'Alergenos',
+            //       hintText: 'Seleccione uno o varios alergenos',
+            //       icon: new Icon(Icons.warning),
+            //     ),
+            //     onTap: () async {
+            //       List<String> result = await showDialog(
+            //         context: context,
+            //        // builder: (context) => _buildAlergenosDialog(),
+            //       );
+            //       if (result != null) {
+            //         setState(() {
+            //           alergenosController.text = result.join(', ');
+            //         });
+            //       }
+            //     },
+            //   ),
+            // ),
             Container(
               child: TextField(
                 controller: imageController,
@@ -194,16 +286,16 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     addAlimento(
-                      nameController.text.trim(),
-                      double.parse(cantidadController.text.trim()),
-                      _unidadSeleccionadas,
-                      double.parse(caloriasController.text.trim()),
-                      double.parse(grasasController.text.trim()),
-                      double.parse(proteinasController.text.trim()),
-                      double.parse(carbohidratosController.text.trim()),
-                      imageController.text.trim(),
-                      widget.nombreUsuario.trim(),
-                    );
+                        nameController.text.trim(),
+                        double.parse(cantidadController.text.trim()),
+                        _unidadSeleccionadas,
+                        double.parse(caloriasController.text.trim()),
+                        double.parse(grasasController.text.trim()),
+                        double.parse(proteinasController.text.trim()),
+                        double.parse(carbohidratosController.text.trim()),
+                        imageController.text.trim(),
+                        widget.nombreUsuario.trim() as List<String>,
+                        alergenosController.text.trim());
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),

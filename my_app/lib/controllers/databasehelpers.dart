@@ -21,6 +21,7 @@ class DataBaseHelper {
       double proteinasController,
       double carbohidratosController,
       String imageController,
+      String alergenosController,
       String nombreUsuarioController,
       double sodioController,
       double azucarController,
@@ -38,7 +39,8 @@ class DataBaseHelper {
       'nombreUsuario': nombreUsuarioController,
       'sodio': sodioController,
       'azucar': azucarController,
-      'fibra': fibraController
+      'fibra': fibraController,
+      'alergenos': alergenosController
     };
     var body = json.encode(data);
     var response = await http.post(Uri.parse(url),

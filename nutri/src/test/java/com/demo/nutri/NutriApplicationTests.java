@@ -69,6 +69,7 @@ class NutriApplicationTests {
 
 	@Test
     final void testAlimento() {
+// Prueba de la creación de alimentos
         Alimento alimento = new Alimento();
         alimento.setName("Alimento");
         alimento.setCantidad(100.0);
@@ -81,10 +82,27 @@ class NutriApplicationTests {
 		alimento.setFibra(0.0);
 		alimento.setSodio(0.0);
 		alimento.setImage("");
-		alimento.setNombreUsuario("usuarioPrueba");
-		alimento.setCodigoDeBarras("");
+		alimento.setNombreUsuario("usuarioPrueba2");
+		alimento.setCodigoDeBarras("1");
         alimentoRepo.save(alimento);
-// Prueba de la creación de un alimento
+
+        Alimento alimento3 = new Alimento();
+        alimento3.setName("Alimento");
+        alimento3.setCantidad(100.0);
+		alimento3.setUnidadesCantidad("gramos");
+        alimento3.setCalorias(150.0);
+        alimento3.setGrasas(2.0);
+		alimento3.setProteinas(0.5);
+		alimento3.setCarbohidratos(3.0);
+		alimento3.setAzucar(0.0);
+		alimento3.setFibra(0.0);
+		alimento3.setSodio(0.0);
+		alimento3.setImage("");
+		alimento3.setNombreUsuario("usuarioPrueba2");
+		alimento3.setCodigoDeBarras("2");
+        alimentoRepo.save(alimento3);
+
+// Prueba de la obtención de un alimento
 		int id = alimento.getId();
         Optional<Alimento> alimento2 = alimentoRepo.findById(id);
         assertEquals(alimento2.get().getNombreUsuario(), alimento.getNombreUsuario());
@@ -92,14 +110,25 @@ class NutriApplicationTests {
 		assertEquals(alimento2.get().getCantidad(), 100.0);
 		assertEquals(alimento2.get().getUnidadesCantidad(), "gramos");
 		assertEquals(alimento2.get().getCalorias(), 150.0);
-     
+
+// Prueba de la obtención de los alimentos de un usuario
+		List<Alimento> alimentosUsuario= alimentoRepo.findByNombreUsuario("usuarioPrueba2");
+		assertNotEquals(alimentosUsuario.size(), 0);
+
+//Prueba de la obtención de los alimentos con un codigo de barras y un usuario
+		List<Alimento> alimentosCodigo= alimentoRepo.findByCodigoDeBarrasAndNombreUsuario("1", "usuarioPrueba");
+		assertNotEquals(alimentosUsuario.size(), 0);
+
+
 // Prueba de la actualización de un alimento
 alimento.setGrasas(4.0);
 		alimentoRepo.save(alimento);
         alimento2 = alimentoRepo.findById(id);
-        assertNotEquals(alimento2.get().getGrasas(), 2.0);           
+        assertNotEquals(alimento2.get().getGrasas(), 2.0);    
+
 // Prueba de la eliminación de un alimento
 	alimentoRepo.delete(alimento);
+	alimentoRepo.delete(alimento3);
 	alimento2 = alimentoRepo.findById(id);
 	assertFalse(alimento2.isPresent());
 }
@@ -199,6 +228,10 @@ receta.setNombre("Tarta de chocolate");
 	recetaRepo.save(receta);
 	receta2 = recetaRepo.findById(id);
 	assertNotEquals(receta2.get().getNombre(), "Tarta de queso");	   
+// Prueba de la eliminación de un alimento
+recetaRepo.delete(receta);
+receta2 = recetaRepo.findById(id);
+assertFalse(receta2.isPresent());
 // Prueba de la eliminación de un alimento
 recetaRepo.delete(receta);
 receta2 = recetaRepo.findById(id);

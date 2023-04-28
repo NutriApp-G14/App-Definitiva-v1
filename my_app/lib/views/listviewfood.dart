@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:my_app/model/TarjetaMisAlimentos.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/AddRecetasPage.dart';
@@ -80,14 +82,24 @@ class _ListAlimentosState extends State<ListAlimentos> {
   }
 
   Future<void> deleteData(int id) async {
-    final response = await http.delete(
+     HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient.delete(
       Uri.parse("$urlConexion/foods/$id"),
     );
     setState(() {});
   }
 
   Future<void> deleteDataReceta(int id) async {
-    final response = await http.delete(
+     HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+    
+    final response = await ioClient.delete(
       Uri.parse("${urlConexion}/recipes/$id"),
     );
     setState(() {});

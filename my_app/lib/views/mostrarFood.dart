@@ -1,18 +1,15 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'dart:math';
-import 'dart:ffi' as ffi;
-
-import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:core';
+import 'package:http/io_client.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:pie_chart/pie_chart.dart';
-import 'mostrarFood.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
 //final urlConection = 'http://localhost:8080';
@@ -1451,6 +1448,13 @@ class _MostrarFoodState extends State<MostrarFood> {
       double azucarController,
       double fibraController,
       String codigoDeBarrasController) async {
+
+   HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
+
+  
     var url = "${urlConection}/foods/$idController";
     Map data = {
       'name': nameController,
@@ -1468,7 +1472,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       'codigoDeBarras': codigoDeBarrasController,
     };
     var body = json.encode(data);
-    var response = await http.put(Uri.parse(url),
+    var response = await ioClient.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     //Navigator.pop(context);
     Navigator.pop(context);
@@ -1494,7 +1498,13 @@ class _MostrarFoodState extends State<MostrarFood> {
       double fibra,
       String image,
       String codigoDeBarras) async {
-    final response = await http.post(
+    HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
+
+    
+    final response = await ioClient.post(
       Uri.parse('${urlConection}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

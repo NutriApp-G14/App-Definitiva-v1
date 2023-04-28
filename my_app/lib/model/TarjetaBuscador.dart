@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/model/Alimento.dart';
@@ -298,7 +299,11 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
       double azucar,
       double fibra,
       String image) async {
-    final response = await http.post(
+  HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
+    final response = await ioClient.post(
       Uri.parse('${urlConection}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

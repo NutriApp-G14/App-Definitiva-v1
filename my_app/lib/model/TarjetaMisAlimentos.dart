@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/views/mostrarFood.dart';
@@ -51,7 +53,11 @@ class TarjetaMisAlimento extends StatefulWidget {
 
 class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
   Future<void> deleteData(int id) async {
-    final response = await http.delete(
+    HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
+    final response = await ioClient..delete(
       Uri.parse("$urlConection/foods/$id"),
     );
     _refreshListAlimentos();

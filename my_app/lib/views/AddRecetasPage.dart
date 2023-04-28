@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:http/io_client.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
@@ -45,6 +47,10 @@ class _AddRecetasPageState extends State<AddRecetasPage> {
       List<String> pasos,
       String imagen,
       String nombreUsuario) async {
+  HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
     var url = "${urlConexion}/recipes/add";
     Map data = {
       'nombre': nombre,
@@ -57,7 +63,7 @@ class _AddRecetasPageState extends State<AddRecetasPage> {
       'nombreUsuario': nombreUsuario,
     };
     var body = json.encode(data);
-    var response = await http.post(Uri.parse(url),
+    var response = await ioClient.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     Navigator.pop(context);

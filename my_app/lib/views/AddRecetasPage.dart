@@ -25,7 +25,7 @@ class _AddRecetasPageState extends State<AddRecetasPage> {
   final TextEditingController imageController = TextEditingController();
   final TextEditingController nombreUsuarioController = TextEditingController();
   List<String> _steps = [];
-  List<Alimento> _ingredientes = [];
+  //List<Alimento> _ingredientes = [];
   var _unidadSeleccionadas;
   List<Alimento> ingredientes = [];
   _navigateListAlimento(BuildContext context) async {

@@ -12,8 +12,7 @@ import 'package:my_app/views/mostrarFood.dart';
 class BuscadorNuevo extends StatefulWidget {
   final String nombreUsuario;
   final String fecha;
-  final String tipoDeComida ="";
-  
+  final String tipoDeComida = "";
 
   const BuscadorNuevo({required this.nombreUsuario, required this.fecha});
 
@@ -55,7 +54,6 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
             onPressed: () {
               _navigateListAlimento(context);
             },
-            
             color: Colors.black,
           ),
         ),
@@ -76,8 +74,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 suffixIcon: IconButton(
-                icon: Icon(Icons.barcode_reader),
-                onPressed: _scanBarcode,
+                  icon: Icon(Icons.barcode_reader),
+                  onPressed: _scanBarcode,
                 ),
               ),
             ),
@@ -86,54 +84,347 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
               onPressed: _onSubmitSearch,
               child: Text('Buscar'),
             ),
-                 Flexible (child: LayoutBuilder(
-                      builder: (BuildContext context, BoxConstraints constraints) {
-                      return 
-                        GridView.builder(
-                        padding: const EdgeInsets.all(10.0),
-                        itemCount: _listaDeAlimentos == null ? 0 : _listaDeAlimentos.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10.0,
-                          mainAxisSpacing: 10.0,
-                        ),
-                        itemBuilder: (context, i) {
-                          var nombreUsuario = widget.nombreUsuario;
-                          var codigoDeBarras = _listaDeAlimentos[i]['_id'];
-                          var cantidad = 100.0;
-                          var nombreAlimento = _listaDeAlimentos[i]['product_name'] ?? "";
-                          var imageUrl =  _listaDeAlimentos[i]['image_url'] ??"";
-                          var nutriscore = _listaDeAlimentos[i]['nutriscore_grade'] ?? "";
-                          var novaGroup = _listaDeAlimentos[i]['nova_group'] ?? "";
-                          var ecoscore = _listaDeAlimentos[i]['ecoscore_grade'] ?? "";
+            Flexible(child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+             if (constraints.maxWidth < 600) {
 
-                          var unidadesCantidad="gramos";
-                          var calorias= (_listaDeAlimentos[i]['nutriments']?['sugars_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['sugars_100g'])  : _listaDeAlimentos[i]['nutriments']['sugars_100g'] ?.toDouble() ?? 0.0;
-                          var grasas= (_listaDeAlimentos[i]['nutriments']?['fat_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['fat_100g'])  : _listaDeAlimentos[i]['nutriments']['fat_100g'] ?.toDouble() ?? 0.0;
-                          var proteinas= (_listaDeAlimentos[i]['nutriments']?['proteins_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['proteins_100g'])  : _listaDeAlimentos[i]['nutriments']['proteins_100g'] ?.toDouble() ?? 0.0;
-                          var carbohidratos= (_listaDeAlimentos[i]['nutriments']?['carbohydrates_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['carbohydrates_100g'])  : _listaDeAlimentos[i]['nutriments']['carbohydrates_100g'] ?.toDouble() ?? 0.0;
-                          var sodio= (_listaDeAlimentos[i]['nutriments']?['sodium_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['sodium_100g'])  : _listaDeAlimentos[i]['nutriments']['sodium_100g'] ?.toDouble() ?? 0.0;
-                          var azucar= (_listaDeAlimentos[i]['nutriments']?['sugars_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['sugars_100g'])  : _listaDeAlimentos[i]['nutriments']['sugars_100g'] ?.toDouble() ?? 0.0;
-                          var fibra= (_listaDeAlimentos[i]['nutriments']?['fiber_100g'] is String) ? double.parse(_listaDeAlimentos[i]['nutriments']['fiber_100g'])  : _listaDeAlimentos[i]['nutriments']['fiber_100g'] ?.toDouble() ?? 0.0;
+              return GridView.builder(
+                  padding: const EdgeInsets.all(10.0),
+                  itemCount:
+                      _listaDeAlimentos == null ? 0 : _listaDeAlimentos.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0,
+                  ),
+                  itemBuilder: (context, i) {
+                    var nombreUsuario = widget.nombreUsuario;
+                    var codigoDeBarras = _listaDeAlimentos[i]['_id'];
+                    var cantidad = 100.0;
+                    var nombreAlimento =
+                        _listaDeAlimentos[i]['product_name'] ?? "";
+                    var imageUrl = _listaDeAlimentos[i]['image_url'] ?? "";
+                    var nutriscore =
+                        _listaDeAlimentos[i]['nutriscore_grade'] ?? "";
+                    var novaGroup = _listaDeAlimentos[i]['nova_group'] ?? "";
+                    var ecoscore = _listaDeAlimentos[i]['ecoscore_grade'] ?? "";
+
+                    var unidadesCantidad = "gramos";
+                    var calorias = (_listaDeAlimentos[i]['nutriments']
+                            ?['sugars_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['sugars_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['sugars_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var grasas = (_listaDeAlimentos[i]['nutriments']
+                            ?['fat_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['fat_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['fat_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var proteinas = (_listaDeAlimentos[i]['nutriments']
+                            ?['proteins_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['proteins_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['proteins_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var carbohidratos = (_listaDeAlimentos[i]['nutriments']
+                            ?['carbohydrates_100g'] is String)
+                        ? double.parse(_listaDeAlimentos[i]['nutriments']
+                            ['carbohydrates_100g'])
+                        : _listaDeAlimentos[i]['nutriments']
+                                    ['carbohydrates_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var sodio = (_listaDeAlimentos[i]['nutriments']
+                            ?['sodium_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['sodium_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['sodium_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var azucar = (_listaDeAlimentos[i]['nutriments']
+                            ?['sugars_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['sugars_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['sugars_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var fibra = (_listaDeAlimentos[i]['nutriments']
+                            ?['fiber_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['fiber_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['fiber_100g']
+                                ?.toDouble() ??
+                            0.0;
+
+                    return TarjetaBuscador(
+                      tipoDeComida: widget.tipoDeComida,
+                      id: 0,
+                      nombreUsuario: nombreUsuario,
+                      codigoDeBarras: codigoDeBarras,
+                      cantidad: cantidad,
+                      nombreAlimento: nombreAlimento,
+                      imageUrl: imageUrl,
+                      scoreImages: [
+                        nutriscore == ""
+                            ? ""
+                            : 'https://static.openfoodfacts.org/images/attributes/nutriscore-$nutriscore.svg',
+                        novaGroup == ""
+                            ? ""
+                            : 'https://static.openfoodfacts.org/images/attributes/nova-group-$novaGroup.svg',
+                        ecoscore == ""
+                            ? ""
+                            : 'https://static.openfoodfacts.org/images/attributes/ecoscore-$ecoscore.svg'
+                      ],
+                      scoreTitles: [
+                        'Nutri-Score $nutriscore',
+                        'NOVA Group $novaGroup',
+                        'Eco-Score $ecoscore'
+                      ],
+                      calorias: calorias,
+                      grasas: grasas,
+                      proteinas: proteinas,
+                      unidadesCantidad: unidadesCantidad,
+                      carbohidratos: carbohidratos,
+                      sodio: sodio,
+                      azucar: azucar,
+                      fibra: fibra,
+                      anadirRegistro: false,
+                    );
+                  });
+      } else if (constraints.maxWidth < 1100) {
+            return GridView.builder(
+                  padding: const EdgeInsets.all(10.0),
+                  itemCount:
+                      _listaDeAlimentos == null ? 0 : _listaDeAlimentos.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0,
+                  ),
+                  itemBuilder: (context, i) {
+                    var nombreUsuario = widget.nombreUsuario;
+                    var codigoDeBarras = _listaDeAlimentos[i]['_id'];
+                    var cantidad = 100.0;
+                    var nombreAlimento =
+                        _listaDeAlimentos[i]['product_name'] ?? "";
+                    var imageUrl = _listaDeAlimentos[i]['image_url'] ?? "";
+                    var nutriscore =
+                        _listaDeAlimentos[i]['nutriscore_grade'] ?? "";
+                    var novaGroup = _listaDeAlimentos[i]['nova_group'] ?? "";
+                    var ecoscore = _listaDeAlimentos[i]['ecoscore_grade'] ?? "";
+
+                    var unidadesCantidad = "gramos";
+                    var calorias = (_listaDeAlimentos[i]['nutriments']
+                            ?['sugars_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['sugars_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['sugars_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var grasas = (_listaDeAlimentos[i]['nutriments']
+                            ?['fat_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['fat_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['fat_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var proteinas = (_listaDeAlimentos[i]['nutriments']
+                            ?['proteins_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['proteins_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['proteins_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var carbohidratos = (_listaDeAlimentos[i]['nutriments']
+                            ?['carbohydrates_100g'] is String)
+                        ? double.parse(_listaDeAlimentos[i]['nutriments']
+                            ['carbohydrates_100g'])
+                        : _listaDeAlimentos[i]['nutriments']
+                                    ['carbohydrates_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var sodio = (_listaDeAlimentos[i]['nutriments']
+                            ?['sodium_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['sodium_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['sodium_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var azucar = (_listaDeAlimentos[i]['nutriments']
+                            ?['sugars_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['sugars_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['sugars_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var fibra = (_listaDeAlimentos[i]['nutriments']
+                            ?['fiber_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['fiber_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['fiber_100g']
+                                ?.toDouble() ??
+                            0.0;
+
+                    return TarjetaBuscador(
+                      tipoDeComida: widget.tipoDeComida,
+                      id: 0,
+                      nombreUsuario: nombreUsuario,
+                      codigoDeBarras: codigoDeBarras,
+                      cantidad: cantidad,
+                      nombreAlimento: nombreAlimento,
+                      imageUrl: imageUrl,
+                      scoreImages: [
+                        nutriscore == ""
+                            ? ""
+                            : 'https://static.openfoodfacts.org/images/attributes/nutriscore-$nutriscore.svg',
+                        novaGroup == ""
+                            ? ""
+                            : 'https://static.openfoodfacts.org/images/attributes/nova-group-$novaGroup.svg',
+                        ecoscore == ""
+                            ? ""
+                            : 'https://static.openfoodfacts.org/images/attributes/ecoscore-$ecoscore.svg'
+                      ],
+                      scoreTitles: [
+                        'Nutri-Score $nutriscore',
+                        'NOVA Group $novaGroup',
+                        'Eco-Score $ecoscore'
+                      ],
+                      calorias: calorias,
+                      grasas: grasas,
+                      proteinas: proteinas,
+                      unidadesCantidad: unidadesCantidad,
+                      carbohidratos: carbohidratos,
+                      sodio: sodio,
+                      azucar: azucar,
+                      fibra: fibra,
+                      anadirRegistro: false,
+                    );
+                  });
 
 
-                          return TarjetaBuscador(
-                            tipoDeComida: widget.tipoDeComida,
-                            id:0,nombreUsuario: nombreUsuario ,codigoDeBarras: codigoDeBarras, cantidad: cantidad,
-                              nombreAlimento:nombreAlimento , imageUrl: imageUrl,
-                              scoreImages: ['https://static.openfoodfacts.org/images/attributes/nutriscore-$nutriscore.svg', 'https://static.openfoodfacts.org/images/attributes/nova-group-$novaGroup.svg', 'https://static.openfoodfacts.org/images/attributes/ecoscore-$ecoscore.svg'],
-                              scoreTitles: ['Nutri-Score $nutriscore' , 'NOVA Group $novaGroup', 'Eco-Score $ecoscore'],
-                              calorias: calorias, grasas: grasas, proteinas: proteinas, unidadesCantidad: unidadesCantidad, carbohidratos: carbohidratos,
-                              sodio: sodio, azucar: azucar, fibra: fibra, anadirRegistro: false,
-                              
-                              );
-                        }
-                        );
-                      
-                      }
-                 )
-                 )
+            }else{
 
+            return GridView.builder(
+                  padding: const EdgeInsets.all(10.0),
+                  itemCount:
+                      _listaDeAlimentos == null ? 0 : _listaDeAlimentos.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0,
+                  ),
+                  itemBuilder: (context, i) {
+                    var nombreUsuario = widget.nombreUsuario;
+                    var codigoDeBarras = _listaDeAlimentos[i]['_id'];
+                    var cantidad = 100.0;
+                    var nombreAlimento =
+                        _listaDeAlimentos[i]['product_name'] ?? "";
+                    var imageUrl = _listaDeAlimentos[i]['image_url'] ?? "";
+                    var nutriscore =
+                        _listaDeAlimentos[i]['nutriscore_grade'] ?? "";
+                    var novaGroup = _listaDeAlimentos[i]['nova_group'] ?? "";
+                    var ecoscore = _listaDeAlimentos[i]['ecoscore_grade'] ?? "";
+
+                    var unidadesCantidad = "gramos";
+                    var calorias = (_listaDeAlimentos[i]['nutriments']
+                            ?['sugars_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['sugars_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['sugars_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var grasas = (_listaDeAlimentos[i]['nutriments']
+                            ?['fat_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['fat_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['fat_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var proteinas = (_listaDeAlimentos[i]['nutriments']
+                            ?['proteins_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['proteins_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['proteins_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var carbohidratos = (_listaDeAlimentos[i]['nutriments']
+                            ?['carbohydrates_100g'] is String)
+                        ? double.parse(_listaDeAlimentos[i]['nutriments']
+                            ['carbohydrates_100g'])
+                        : _listaDeAlimentos[i]['nutriments']
+                                    ['carbohydrates_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var sodio = (_listaDeAlimentos[i]['nutriments']
+                            ?['sodium_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['sodium_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['sodium_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var azucar = (_listaDeAlimentos[i]['nutriments']
+                            ?['sugars_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['sugars_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['sugars_100g']
+                                ?.toDouble() ??
+                            0.0;
+                    var fibra = (_listaDeAlimentos[i]['nutriments']
+                            ?['fiber_100g'] is String)
+                        ? double.parse(
+                            _listaDeAlimentos[i]['nutriments']['fiber_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['fiber_100g']
+                                ?.toDouble() ??
+                            0.0;
+
+                    return TarjetaBuscador(
+                      tipoDeComida: widget.tipoDeComida,
+                      id: 0,
+                      nombreUsuario: nombreUsuario,
+                      codigoDeBarras: codigoDeBarras,
+                      cantidad: cantidad,
+                      nombreAlimento: nombreAlimento,
+                      imageUrl: imageUrl,
+                      scoreImages: [
+                        nutriscore == ""
+                            ? ""
+                            : 'https://static.openfoodfacts.org/images/attributes/nutriscore-$nutriscore.svg',
+                        novaGroup == ""
+                            ? ""
+                            : 'https://static.openfoodfacts.org/images/attributes/nova-group-$novaGroup.svg',
+                        ecoscore == ""
+                            ? ""
+                            : 'https://static.openfoodfacts.org/images/attributes/ecoscore-$ecoscore.svg'
+                      ],
+                      scoreTitles: [
+                        'Nutri-Score $nutriscore',
+                        'NOVA Group $novaGroup',
+                        'Eco-Score $ecoscore'
+                      ],
+                      calorias: calorias,
+                      grasas: grasas,
+                      proteinas: proteinas,
+                      unidadesCantidad: unidadesCantidad,
+                      carbohidratos: carbohidratos,
+                      sodio: sodio,
+                      azucar: azucar,
+                      fibra: fibra,
+                      anadirRegistro: false,
+                    );
+                  });
+
+
+
+            }
+            
+            
+            
+  }))
           ],
         ));
   }
@@ -155,7 +446,6 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
       print('Error al escanear el código de barras: $e');
     }
   }
-
 
   Future<http.Response> searchFoodNuevaAPI(String searchTerm) async {
     var url =
@@ -180,6 +470,12 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
     var url1 = 'https://world.openfoodfacts.org/api/v0/product/$barcode.json';
     return await http.get(Uri.parse(url1));
   }
+
+
+
+
+
+
 
   Future<void> _fetchFood(barcode) async {
     var response = await searchFoodNuevaAPIBarCode(barcode);
@@ -253,9 +549,6 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
       print('Error al realizar la búsqueda');
     }
   }
-
-
-
 
   Future<http.Response> insertarAlimento(
       String codigoDeBarras,

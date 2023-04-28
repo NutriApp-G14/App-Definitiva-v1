@@ -1,4 +1,6 @@
 package com.demo.nutri.model;
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,8 @@ public class RegistroComidas {
     private String fecha;
     private String tipoDeComida;
     private String nombreAlimento;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Alimento> alimentos;
     
     public String getNombreAlimento() {
         return nombreAlimento;
@@ -55,5 +59,12 @@ public class RegistroComidas {
     public void setTipoDeComida(String tipoDeComida) {
         this.tipoDeComida = tipoDeComida;
     }
+    public List<Alimento> getAlimentos() {
+        return alimentos;
+    }
+    public void setAlimentos(List<Alimento> alimentos) {
+        this.alimentos = alimentos;
+    }
+
 
 }

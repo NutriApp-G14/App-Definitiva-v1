@@ -4,13 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
-//final urlConexion1 = 'http://35.241.179.64:8080';
-final urlConexion1 = 'http://localhost:8080';
-//final urlConexion1 = 'http://35.189.241.218:8080';
-
+// //final urlConexion1 = 'http://35.241.179.64:8080';
+// final urlConexion1 = 'http://34.77.252.254:8080';
+// //final urlConexion1 = 'http://35.189.241.218:8080';
 
 class TarjetaMisAlimento extends StatefulWidget {
   final int id;
@@ -50,24 +50,22 @@ class TarjetaMisAlimento extends StatefulWidget {
 }
 
 class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
+  Future<void> deleteData(int id) async {
+    final response = await http.delete(
+      Uri.parse("$urlConection/foods/$id"),
+    );
+    _refreshListAlimentos();
+  }
 
-Future<void> deleteData(int id) async {
-  
-  final response = await http.delete(
-    Uri.parse("$urlConexion1/foods/$id"),
-  );
-  _refreshListAlimentos();
-}
-
-_refreshListAlimentos() {
-  Navigator.push(
+  _refreshListAlimentos() {
+    Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => ListAlimentos(nombreUsuario: widget.nombreUsuario),
+        builder: (context) =>
+            ListAlimentos(nombreUsuario: widget.nombreUsuario),
       ),
-  );
-}
-
+    );
+  }
 
   _navigateAlimentos(BuildContext context) async {
     Navigator.of(context).push(
@@ -121,23 +119,23 @@ _refreshListAlimentos() {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-           Align(
-            alignment: Alignment.topRight,
-              heightFactor: 0.4,
-               child: IconButton(
-              iconSize: 20,
-              icon: Icon(Icons.delete_outline),
-              color: Colors.black,
-              onPressed: () {
-                deleteData(widget.id);
-                print("presionado");
-              },
-            ),
-           ),
-
+              Align(
+                alignment: Alignment.topRight,
+                heightFactor: 0.4,
+                child: IconButton(
+                  iconSize: 20,
+                  icon: Icon(Icons.delete_outline),
+                  color: Colors.black,
+                  onPressed: () {
+                    deleteData(widget.id);
+                    print("presionado");
+                  },
+                ),
+              ),
               SizedBox(height: 5),
               widget.imageUrl != null && widget.imageUrl != ""
-                  ? Expanded(child: FutureBuilder(
+                  ? Expanded(
+                      child: FutureBuilder(
                       future: http.head(Uri.parse(widget.imageUrl)),
                       builder: (BuildContext context,
                           AsyncSnapshot<http.Response> snapshot) {
@@ -164,8 +162,7 @@ _refreshListAlimentos() {
                           );
                         }
                       },
-                    )
-                  )
+                    ))
                   : Icon(
                       Icons.fastfood,
                       color: Color.fromARGB(221, 255, 181, 71),

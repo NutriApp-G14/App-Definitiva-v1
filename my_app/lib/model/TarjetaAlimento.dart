@@ -111,7 +111,7 @@ void calcularDatos() async {
 
     print(widget.registros);
     final response = await http.delete(
-      Uri.parse("$urlConexion/registro/reg/$id"),
+      Uri.parse("$urlConection/registro/reg/$id"),
     );
     setState(() {});
     widget.registros.removeWhere((element) => element['id'] == id);

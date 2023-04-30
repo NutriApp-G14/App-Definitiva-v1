@@ -71,15 +71,15 @@ class _MostrarFoodState extends State<MostrarFood> {
   }
 
   final Map<String, String> allergenNames = {
-    "en:milk": "leche",
-    "en:eggs": "huevo",
-    "en:gluten": "trigo",
-    "en:nuts": "frutos secos",
-    "en:peanuts": "cacahuetes",
-    "en:soybeans": "soja",
-    "en:crustaceans": "marisco",
-    "en:molluscs": "marisco",
-    "en:fish": "pescado"
+    "en:milk": "Leche",
+    "en:eggs": "Huevo",
+    "en:gluten": "Trigo",
+    "en:nuts": "Frutos Secos",
+    "en:peanuts": "Cacahuetes",
+    "en:soybeans": "Soja",
+    "en:crustaceans": "Marisco",
+    "en:molluscs": "Marisco",
+    "en:fish": "Pescado"
 
     // Agrega más códigos de alérgenos y nombres de alimentos aquí
   };
@@ -1159,27 +1159,82 @@ class _MostrarFoodState extends State<MostrarFood> {
                         ElevatedButton(
                           onPressed: () {
                             // Verificar si hay alguna coincidencia con los alergenos del alimento
-                            bool hayCoincidencia = false;
-                            for (String alergenoAlimento in widget.alergenos) {
-                              if (alergias_.contains(alergenoAlimento)) {
-                                hayCoincidencia = true;
-                                break;
-                              }
+                            // bool hayCoincidencia = false;
+                            // for (String alergenoAlimento in widget.alergenos) {
+                            //   if (alergias_.contains(alergenoAlimento)) {
+                            //     hayCoincidencia = true;
+                            //     break;
+                            //   }
+                            // }
+                            bool verificarAlergenos(List<String> alergenos) {
+                              return alergenos != null;
                             }
 
+                            bool hayAlergenos =
+                                verificarAlergenos(widget.alergenos);
+
                             // Si hay una coincidencia, mostrar un dialogo emergente
-                            if (hayCoincidencia) {
+                            if (hayAlergenos) {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: Text('Advertencia'),
-                                    content: Text(
-                                        'Este alimento contiene alergenos que podrían afectar tu salud.'),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            'Este alimento contiene alergenos que podrían afectar tu salud.'),
+                                        SizedBox(height: 25.0),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            for (String item in nombreAlergenos)
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.warning,
+                                                      color: Colors.red),
+                                                  SizedBox(width: 10),
+                                                  Text(
+                                                    item,
+                                                    style:
+                                                        TextStyle(fontSize: 14),
+                                                  ),
+                                                ],
+                                              ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                     actions: [
                                       TextButton(
+                                        onPressed: () {
+                                          insertarAlimento(
+                                            widget.nombreUsuario,
+                                            widget.name,
+                                            widget.calorias,
+                                            widget.cantidad,
+                                            widget.unidadesCantidad,
+                                            widget.grasas,
+                                            widget.proteinas,
+                                            widget.carbohidratos,
+                                            widget.sodio,
+                                            widget.azucar,
+                                            widget.fibra,
+                                            widget.image,
+                                            widget.codigoDeBarras,
+                                            widget.alergenos,
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('Aceptar'),
+                                      ),
+                                      TextButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text('OK'),
+                                        child: Text('Cancelar'),
                                       ),
                                     ],
                                   );

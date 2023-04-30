@@ -19,33 +19,23 @@ import 'package:my_app/views/listviewfood.dart';
 class TipoComidaCard extends StatefulWidget {
   final String nombreUsuario;
   final String tipoDeComida;
-  final String day;
-  final proteinasFoods;
-  final caloriasFoods;
-  final carbohidratosFoods;
-  final grasasFoods;
 
   const TipoComidaCard(
-      {required this.nombreUsuario, required this.tipoDeComida,
-        required this.day,
-        required this.proteinasFoods,
-        required this.caloriasFoods,
-        required this.carbohidratosFoods,
-        required this.grasasFoods});
+      {required this.nombreUsuario, required this.tipoDeComida});
 
   @override
   _TipoComidaCardState createState() => _TipoComidaCardState();
 }
 
 class _TipoComidaCardState extends State<TipoComidaCard> {
-
+  DateTime now = DateTime.now();
+  late String formattedDate;
   RegistroHelper dataBaseHelper = RegistroHelper();
-
 
   @override
   void initState() {
     super.initState();
-    
+    formattedDate = DateFormat('dd-MM-yyyy').format(now);
   }
 
   _navigateMostrarTipoComida(BuildContext context, String fecha,
@@ -53,37 +43,34 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
     List registros = await dataBaseHelper.getRegistroComidas(
         nombreUsuario.trim().toLowerCase(),
         tipoDeComida.trim().toLowerCase(),
-        widget.day.trim().toLowerCase());
+        formattedDate.trim().toLowerCase());
 
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => PaginaTipoComida(
         nombreUsuario: nombreUsuario,
         tipoDeComida: tipoDeComida,
-        fecha: widget.day,
+        fecha: fecha,
         registros: registros,
       ),
       transitionDuration: Duration(seconds: 0),
     ));
   }
 
+  double proteinasFoods = 0;
+  double caloriasFoods = 0;
+  double carbohidratosFoods = 0;
+  double grasasFoods = 0;
 
   @override
   Widget build(BuildContext context) {
-
-    
-
     return FutureBuilder(
         future: dataBaseHelper.getRegistroComidas(
           widget.nombreUsuario.trim().toLowerCase(),
           widget.tipoDeComida.trim().toLowerCase(),
-          widget.day.trim().toLowerCase(),
+          formattedDate.trim().toLowerCase(),
         ),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            var proteinasFoods = widget.proteinasFoods;
-            var caloriasFoods = widget.proteinasFoods;
-            var carbohidratosFoods = widget.proteinasFoods;
-            var grasasFoods = widget.proteinasFoods;
             List registroComidas = snapshot.data;
             List<String> alimentos = [];
             List foods = [];
@@ -94,7 +81,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
               alimentos = registroComidas
                   .map((registro) => registro['nombreAlimento'].toString())
                   .toList();
-
+              //print(alimentos);
               foods = registroComidas
                   .map((registro) => registro['alimentos'])
                   .toList();
@@ -115,6 +102,14 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                   foods[i][0]['cantidad'] * foods[i][0]['grasas'] / 100;
             }
 
+            print('Protes: ');
+            print(proteinasFoods);
+            print('Carb: ');
+            print(carbohidratosFoods);
+            print('Grasas: ');
+            print(grasasFoods);
+            print('Calorias: ');
+            print(caloriasFoods);
 
             return Padding(
                 padding:
@@ -184,17 +179,19 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                               for (int i = 0;
                                                   i < alimentos.length;
                                                   i++)
-                                                 (tamanos[i] < 30) ?
-                                                  Text(
-                                                    '${tamanos[i] > 27 ? '${alimentos[i].substring(0, 2)} ...' : alimentos[i]}, ',
-                                                    style: TextStyle(
-                                                      color: Colors.grey,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 14,
-                                                      fontFamily: 'Montserrat',
-                                                    ),
-                                                  ): Text(".."),
+                                                (tamanos[i] < 30)
+                                                    ? Text(
+                                                        '${tamanos[i] > 27 ? '${alimentos[i].substring(0, 2)} ...' : alimentos[i]}, ',
+                                                        style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                        ),
+                                                      )
+                                                    : Text(".."),
                                           ],
                                         ),
                                         SizedBox(
@@ -215,7 +212,16 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: ((caloriasFoods
+                                                                    .ceil() +
+                                                                proteinasFoods
+                                                                    .ceil() +
+                                                                grasasFoods
+                                                                    .ceil() +
+                                                                carbohidratosFoods
+                                                                    .ceil()) /
+                                                            4)
+                                                        .ceil(),
                                                     child: Text(
                                                       '${caloriasFoods.toStringAsFixed(2)} kcal',
                                                       style: TextStyle(
@@ -237,7 +243,16 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: ((caloriasFoods
+                                                                    .ceil() +
+                                                                proteinasFoods
+                                                                    .ceil() +
+                                                                grasasFoods
+                                                                    .ceil() +
+                                                                carbohidratosFoods
+                                                                    .ceil()) /
+                                                            4)
+                                                        .ceil(),
                                                     child: Text(
                                                       '${proteinasFoods.toStringAsFixed(2)} g',
                                                       style: TextStyle(
@@ -248,7 +263,8 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: carbohidratosFoods.ceil(),
+                                                  flex:
+                                                      carbohidratosFoods.ceil(),
                                                   child: Container(
                                                     height: 10,
                                                     color: Color.fromARGB(
@@ -259,7 +275,16 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: ((caloriasFoods
+                                                                    .ceil() +
+                                                                proteinasFoods
+                                                                    .ceil() +
+                                                                grasasFoods
+                                                                    .ceil() +
+                                                                carbohidratosFoods
+                                                                    .ceil()) /
+                                                            4)
+                                                        .ceil(),
                                                     child: Text(
                                                       '${carbohidratosFoods.toStringAsFixed(2)} g',
                                                       style: TextStyle(
@@ -281,7 +306,16 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: ((caloriasFoods
+                                                                    .ceil() +
+                                                                proteinasFoods
+                                                                    .ceil() +
+                                                                grasasFoods
+                                                                    .ceil() +
+                                                                carbohidratosFoods
+                                                                    .ceil()) /
+                                                            4)
+                                                        .ceil(),
                                                     child: Text(
                                                       '${grasasFoods.toStringAsFixed(2)} g',
                                                       style: TextStyle(
@@ -311,12 +345,12 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                               widget.tipoDeComida
                                                   .trim()
                                                   .toLowerCase(),
-                                              widget.day
+                                              formattedDate
                                                   .trim()
                                                   .toLowerCase());
                                           _navigateMostrarTipoComida(
                                               context,
-                                              widget.day,
+                                              formattedDate,
                                               widget.tipoDeComida,
                                               widget.nombreUsuario);
                                         },

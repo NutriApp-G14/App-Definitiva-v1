@@ -6,17 +6,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:my_app/model/Alimento.dart';
 
-<<<<<<< HEAD
-final urlConection = 'http://34.78.253.14:8080';
-=======
-// final urlConection = 'http://localhost:8080';
-// final urlConexion = 'http://localhost:8080';
-
-
-final urlConection = 'http://34.78.253.14:8080';
-final urlConexion = 'http://34.78.253.14:8080';
-
->>>>>>> pablo
+final urlConection = 'http://localhost:8080';
 
 class RegistroHelper {
   // Add Registro
@@ -76,6 +66,18 @@ class RegistroHelper {
 
     final response = await ioClient.get(Uri.parse(
         "${urlConection}/registro/registros/$fecha/$tipoDeComida/$nombreUsuario"));
+
+    return json.decode(response.body);
+  }
+
+  Future<List> getRegistroDiario(String nombreUsuario, String fecha) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient.get(
+        Uri.parse("${urlConection}/registro/registros/$fecha/$nombreUsuario"));
 
     return json.decode(response.body);
   }

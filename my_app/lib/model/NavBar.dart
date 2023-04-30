@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
+import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/BuscadorNuevo.dart';
@@ -24,6 +25,7 @@ class NutriAppBar extends StatefulWidget {
 
 class _NutriAppBarState extends State<NutriAppBar> {
   DataBaseHelper dataBaseHelper = DataBaseHelper();
+  RegistroHelper dataRegistroHelper = RegistroHelper();
   DateTime now = DateTime.now();
   late String formattedDate;
 
@@ -53,10 +55,14 @@ class _NutriAppBarState extends State<NutriAppBar> {
 
   _navigateEstadisticas(BuildContext context) async {
     String usuarioNombreUsuario = widget.nombreUsuario;
+    Future<List> registrosDiario = dataRegistroHelper.getRegistroDiario(
+        usuarioNombreUsuario.trim().toLowerCase(),
+        formattedDate.trim().toLowerCase());
+    List registros = await registrosDiario;
 
     Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          StatisticsPage(nombreUsuario: usuarioNombreUsuario),
+      pageBuilder: (context, animation, secondaryAnimation) => StatisticsPage(
+          nombreUsuario: usuarioNombreUsuario, registros: registros),
       transitionDuration: Duration(seconds: 0),
     ));
   }

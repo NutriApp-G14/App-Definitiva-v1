@@ -48,7 +48,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
         MaterialPageRoute(
             builder: (context) => BuscadorAlimentos(
                 nombreUsuario: widget.nombreUsuario,
-                day: widget.fecha,
+                fecha: widget.fecha,
                 tipoDeComida: widget.tipoDeComida)));
   }
 

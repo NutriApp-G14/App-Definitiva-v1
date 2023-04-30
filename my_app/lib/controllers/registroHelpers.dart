@@ -6,7 +6,17 @@ import 'package:http/http.dart' as http;
 
 import 'package:my_app/model/Alimento.dart';
 
+<<<<<<< HEAD
 final urlConection = 'http://34.78.253.14:8080';
+=======
+// final urlConection = 'http://localhost:8080';
+// final urlConexion = 'http://localhost:8080';
+
+
+final urlConection = 'http://34.78.253.14:8080';
+final urlConexion = 'http://34.78.253.14:8080';
+
+>>>>>>> pablo
 
 class RegistroHelper {
   // Add Registro

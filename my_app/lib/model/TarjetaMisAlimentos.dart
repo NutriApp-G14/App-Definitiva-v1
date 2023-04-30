@@ -54,12 +54,13 @@ class TarjetaMisAlimento extends StatefulWidget {
 class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
   Future<void> deleteData(int id) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-    final response = await ioClient..delete(
-      Uri.parse("$urlConection/foods/$id"),
-    );
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+    final response = await ioClient
+      ..delete(
+        Uri.parse("$urlConection/foods/$id"),
+      );
     _refreshListAlimentos();
   }
 
@@ -120,6 +121,9 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                           codigoDeBarras: widget.codigoDeBarras,
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
+                          showBotonAlimentos: false,
+                          showBotonRegistro: true,
+                          showBotonGuardar: false,
                         )));
           },
           child: Column(

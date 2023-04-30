@@ -32,6 +32,9 @@ class MostrarFood extends StatefulWidget {
   final double azucar;
   final double fibra;
   final String image;
+  final bool showBotonAlimentos;
+  final bool showBotonRegistro;
+  final bool showBotonGuardar;
 
   const MostrarFood({
     required this.id,
@@ -48,6 +51,9 @@ class MostrarFood extends StatefulWidget {
     required this.azucar,
     required this.fibra,
     required this.image,
+    required this.showBotonAlimentos,
+    required this.showBotonRegistro,
+    required this.showBotonGuardar,
   });
   @override
   _MostrarFoodState createState() => _MostrarFoodState();
@@ -451,7 +457,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Calorías (Cal):               ',
+                                              'Calorías (KCal):               ',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -460,7 +466,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             ),
                                             nueva_cantidad != 100.0
                                                 ? Text(
-                                                    '${calculoCalorias.toStringAsFixed(2)} Cal',
+                                                    '${calculoCalorias.toStringAsFixed(2)} KCal',
                                                     style: TextStyle(
                                                       fontSize: 13.0,
                                                       color: Color.fromARGB(
@@ -469,7 +475,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                   )
                                                 : Container(),
                                             Text(
-                                              '${widget.calorias.toStringAsFixed(2)} Cal',
+                                              '${widget.calorias.toStringAsFixed(2)} KCal',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -1095,337 +1101,434 @@ class _MostrarFoodState extends State<MostrarFood> {
                       ],
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            insertarAlimento(
-                                widget.nombreUsuario,
-                                widget.name,
-                                widget.calorias,
-                                widget.cantidad,
-                                widget.unidadesCantidad,
-                                widget.grasas,
-                                widget.proteinas,
-                                widget.carbohidratos,
-                                widget.sodio,
-                                widget.azucar,
-                                widget.fibra,
-                                widget.image,
-                                widget.codigoDeBarras);
-                          },
-                          child: Text('Añadir "Mis alimentos"'),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
+                        widget.showBotonAlimentos == true
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  insertarAlimento(
+                                      widget.nombreUsuario,
+                                      widget.name,
+                                      widget.calorias,
+                                      widget.cantidad,
+                                      widget.unidadesCantidad,
+                                      widget.grasas,
+                                      widget.proteinas,
+                                      widget.carbohidratos,
+                                      widget.sodio,
+                                      widget.azucar,
+                                      widget.fibra,
+                                      widget.image,
+                                      widget.codigoDeBarras);
+                                },
+                                child: Text('Añadir "Mis alimentos"'),
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
 
-                            /// minimumSize: //Size(100, 40),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            //Lógica para el botón Registro
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                  title: Text('Elija un Registro'),
-                                  content: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                alimentosRegistro = [];
-                                                alimentosRegistro.add(Alimento(
-                                                    name: widget.name,
-                                                    cantidad: nueva_cantidad,
-                                                    unidadesCantidad:
-                                                        widget.unidadesCantidad,
-                                                    calorias: widget.calorias,
-                                                    grasas: widget.grasas,
-                                                    proteinas: widget.proteinas,
-                                                    carbohidratos:
-                                                        widget.carbohidratos,
-                                                    azucar: widget.azucar,
-                                                    fibra: widget.fibra,
-                                                    sodio: widget.sodio,
-                                                    image: widget.image));
-                                                registrohelper.addRegistro(
-                                                  widget.codigoDeBarras
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  nueva_cantidad,
-                                                  widget.nombreUsuario
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  formattedDate
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  'Desayuno'
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  widget.name.trim(),
-                                                  alimentosRegistro,
-                                                );
-                                              },
-                                              child: Text('Desayuno'),
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                ),
-                                                //  minimumSize: Size(100, 40),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                alimentosRegistro = [];
-                                                alimentosRegistro.add(Alimento(
-                                                    name: widget.name,
-                                                    cantidad: nueva_cantidad,
-                                                    unidadesCantidad:
-                                                        widget.unidadesCantidad,
-                                                    calorias: widget.calorias,
-                                                    grasas: widget.grasas,
-                                                    proteinas: widget.proteinas,
-                                                    carbohidratos:
-                                                        widget.carbohidratos,
-                                                    azucar: widget.azucar,
-                                                    fibra: widget.fibra,
-                                                    sodio: widget.sodio,
-                                                    image: widget.image));
-                                                registrohelper.addRegistro(
-                                                  widget.codigoDeBarras
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  nueva_cantidad,
-                                                  widget.nombreUsuario
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  formattedDate
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  'Almuerzo'
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  widget.name.trim(),
-                                                  alimentosRegistro,
-                                                );
-                                              },
-                                              child: Text('Almuerzo'),
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                ),
-                                                //minimumSize: Size(100, 40),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                alimentosRegistro = [];
-                                                alimentosRegistro.add(Alimento(
-                                                    name: widget.name,
-                                                    cantidad: nueva_cantidad,
-                                                    unidadesCantidad:
-                                                        widget.unidadesCantidad,
-                                                    calorias: widget.calorias,
-                                                    grasas: widget.grasas,
-                                                    proteinas: widget.proteinas,
-                                                    carbohidratos:
-                                                        widget.carbohidratos,
-                                                    azucar: widget.azucar,
-                                                    fibra: widget.fibra,
-                                                    sodio: widget.sodio,
-                                                    image: widget.image));
-                                                registrohelper.addRegistro(
-                                                  widget.codigoDeBarras
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  nueva_cantidad,
-                                                  widget.nombreUsuario
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  formattedDate
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  'Comida'.trim().toLowerCase(),
-                                                  widget.name.trim(),
-                                                  alimentosRegistro,
-                                                );
-                                              },
-                                              child: Text('Comida'),
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                ),
-                                                // minimumSize: Size(100, 40),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                alimentosRegistro = [];
-                                                alimentosRegistro.add(Alimento(
-                                                    name: widget.name,
-                                                    cantidad: nueva_cantidad,
-                                                    unidadesCantidad:
-                                                        widget.unidadesCantidad,
-                                                    calorias: widget.calorias,
-                                                    grasas: widget.grasas,
-                                                    proteinas: widget.proteinas,
-                                                    carbohidratos:
-                                                        widget.carbohidratos,
-                                                    azucar: widget.azucar,
-                                                    fibra: widget.fibra,
-                                                    sodio: widget.sodio,
-                                                    image: widget.image));
-                                                registrohelper.addRegistro(
-                                                  widget.codigoDeBarras
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  nueva_cantidad,
-                                                  widget.nombreUsuario
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  formattedDate
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  'Merienda'
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  widget.name.trim(),
-                                                  alimentosRegistro,
-                                                );
-                                              },
-                                              child: Text('Merienda'),
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                ),
-                                                // minimumSize: Size(100, 40),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                alimentosRegistro = [];
-                                                alimentosRegistro.add(Alimento(
-                                                    name: widget.name,
-                                                    cantidad: nueva_cantidad,
-                                                    unidadesCantidad:
-                                                        widget.unidadesCantidad,
-                                                    calorias: widget.calorias,
-                                                    grasas: widget.grasas,
-                                                    proteinas: widget.proteinas,
-                                                    carbohidratos:
-                                                        widget.carbohidratos,
-                                                    azucar: widget.azucar,
-                                                    fibra: widget.fibra,
-                                                    sodio: widget.sodio,
-                                                    image: widget.image));
-                                                registrohelper.addRegistro(
-                                                  widget.codigoDeBarras
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  nueva_cantidad,
-                                                  widget.nombreUsuario
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  formattedDate
-                                                      .trim()
-                                                      .toLowerCase(),
-                                                  'Cena'.trim().toLowerCase(),
-                                                  widget.name.trim(),
-                                                  alimentosRegistro,
-                                                );
-                                              },
-                                              child: Text('Cena'),
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                ),
-                                                // minimumSize: Size(100, 40),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ])),
-                            );
-                          },
-                          child: Text('Registro'),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            // minimumSize: ffi.Size(100, 40),
-                          ),
-                        ),
+                                  /// minimumSize: //Size(100, 40),
+                                ),
+                              )
+                            : Container(),
+                        SizedBox(width: 10),
+                        widget.showBotonRegistro == true
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  //Lógica para el botón Registro
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                            title: Text('Elija un Registro'),
+                                            content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          alimentosRegistro =
+                                                              [];
+                                                          alimentosRegistro.add(Alimento(
+                                                              name: widget.name,
+                                                              cantidad:
+                                                                  nueva_cantidad,
+                                                              unidadesCantidad:
+                                                                  widget
+                                                                      .unidadesCantidad,
+                                                              calorias: widget
+                                                                  .calorias,
+                                                              grasas:
+                                                                  widget.grasas,
+                                                              proteinas: widget
+                                                                  .proteinas,
+                                                              carbohidratos: widget
+                                                                  .carbohidratos,
+                                                              azucar:
+                                                                  widget.azucar,
+                                                              fibra:
+                                                                  widget.fibra,
+                                                              sodio:
+                                                                  widget.sodio,
+                                                              image: widget
+                                                                  .image));
+                                                          registrohelper
+                                                              .addRegistro(
+                                                            widget
+                                                                .codigoDeBarras
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            nueva_cantidad,
+                                                            widget.nombreUsuario
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            formattedDate
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            'Desayuno'
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            widget.name.trim(),
+                                                            alimentosRegistro,
+                                                          );
+                                                        },
+                                                        child: Text('Desayuno'),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.0),
+                                                          ),
+                                                          //  minimumSize: Size(100, 40),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          alimentosRegistro =
+                                                              [];
+                                                          alimentosRegistro.add(Alimento(
+                                                              name: widget.name,
+                                                              cantidad:
+                                                                  nueva_cantidad,
+                                                              unidadesCantidad:
+                                                                  widget
+                                                                      .unidadesCantidad,
+                                                              calorias: widget
+                                                                  .calorias,
+                                                              grasas:
+                                                                  widget.grasas,
+                                                              proteinas: widget
+                                                                  .proteinas,
+                                                              carbohidratos: widget
+                                                                  .carbohidratos,
+                                                              azucar:
+                                                                  widget.azucar,
+                                                              fibra:
+                                                                  widget.fibra,
+                                                              sodio:
+                                                                  widget.sodio,
+                                                              image: widget
+                                                                  .image));
+                                                          registrohelper
+                                                              .addRegistro(
+                                                            widget
+                                                                .codigoDeBarras
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            nueva_cantidad,
+                                                            widget.nombreUsuario
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            formattedDate
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            'Almuerzo'
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            widget.name.trim(),
+                                                            alimentosRegistro,
+                                                          );
+                                                        },
+                                                        child: Text('Almuerzo'),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.0),
+                                                          ),
+                                                          //minimumSize: Size(100, 40),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          alimentosRegistro =
+                                                              [];
+                                                          alimentosRegistro.add(Alimento(
+                                                              name: widget.name,
+                                                              cantidad:
+                                                                  nueva_cantidad,
+                                                              unidadesCantidad:
+                                                                  widget
+                                                                      .unidadesCantidad,
+                                                              calorias: widget
+                                                                  .calorias,
+                                                              grasas:
+                                                                  widget.grasas,
+                                                              proteinas: widget
+                                                                  .proteinas,
+                                                              carbohidratos: widget
+                                                                  .carbohidratos,
+                                                              azucar:
+                                                                  widget.azucar,
+                                                              fibra:
+                                                                  widget.fibra,
+                                                              sodio:
+                                                                  widget.sodio,
+                                                              image: widget
+                                                                  .image));
+                                                          registrohelper
+                                                              .addRegistro(
+                                                            widget
+                                                                .codigoDeBarras
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            nueva_cantidad,
+                                                            widget.nombreUsuario
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            formattedDate
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            'Comida'
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            widget.name.trim(),
+                                                            alimentosRegistro,
+                                                          );
+                                                        },
+                                                        child: Text('Comida'),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.0),
+                                                          ),
+                                                          // minimumSize: Size(100, 40),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          alimentosRegistro =
+                                                              [];
+                                                          alimentosRegistro.add(Alimento(
+                                                              name: widget.name,
+                                                              cantidad:
+                                                                  nueva_cantidad,
+                                                              unidadesCantidad:
+                                                                  widget
+                                                                      .unidadesCantidad,
+                                                              calorias: widget
+                                                                  .calorias,
+                                                              grasas:
+                                                                  widget.grasas,
+                                                              proteinas: widget
+                                                                  .proteinas,
+                                                              carbohidratos: widget
+                                                                  .carbohidratos,
+                                                              azucar:
+                                                                  widget.azucar,
+                                                              fibra:
+                                                                  widget.fibra,
+                                                              sodio:
+                                                                  widget.sodio,
+                                                              image: widget
+                                                                  .image));
+                                                          registrohelper
+                                                              .addRegistro(
+                                                            widget
+                                                                .codigoDeBarras
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            nueva_cantidad,
+                                                            widget.nombreUsuario
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            formattedDate
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            'Merienda'
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            widget.name.trim(),
+                                                            alimentosRegistro,
+                                                          );
+                                                        },
+                                                        child: Text('Merienda'),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.0),
+                                                          ),
+                                                          // minimumSize: Size(100, 40),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          alimentosRegistro =
+                                                              [];
+                                                          alimentosRegistro.add(Alimento(
+                                                              name: widget.name,
+                                                              cantidad:
+                                                                  nueva_cantidad,
+                                                              unidadesCantidad:
+                                                                  widget
+                                                                      .unidadesCantidad,
+                                                              calorias: widget
+                                                                  .calorias,
+                                                              grasas:
+                                                                  widget.grasas,
+                                                              proteinas: widget
+                                                                  .proteinas,
+                                                              carbohidratos: widget
+                                                                  .carbohidratos,
+                                                              azucar:
+                                                                  widget.azucar,
+                                                              fibra:
+                                                                  widget.fibra,
+                                                              sodio:
+                                                                  widget.sodio,
+                                                              image: widget
+                                                                  .image));
+                                                          registrohelper
+                                                              .addRegistro(
+                                                            widget
+                                                                .codigoDeBarras
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            nueva_cantidad,
+                                                            widget.nombreUsuario
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            formattedDate
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            'Cena'
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                            widget.name.trim(),
+                                                            alimentosRegistro,
+                                                          );
+                                                        },
+                                                        child: Text('Cena'),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.0),
+                                                          ),
+                                                          // minimumSize: Size(100, 40),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ])),
+                                  );
+                                },
+                                child: Text('Registro'),
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  // minimumSize: ffi.Size(100, 40),
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
-                    SizedBox(height: 10),
-                    Center(
-                      child: TextButton(
-                        onPressed: () {
-                          // Lógica para actualizar alimento
-                          updateAlimento(
-                              widget.id,
-                              widget.name,
-                              nueva_cantidad,
-                              widget.unidadesCantidad,
-                              widget.calorias,
-                              widget.grasas,
-                              widget.proteinas,
-                              widget.carbohidratos,
-                              widget.image,
-                              widget.nombreUsuario,
-                              widget.sodio,
-                              widget.azucar,
-                              widget.fibra,
-                              widget.codigoDeBarras);
+                    widget.showBotonGuardar == true
+                        ? SizedBox(height: 10)
+                        : Container(),
+                    widget.showBotonGuardar == true
+                        ? Center(
+                            child: TextButton(
+                              onPressed: () {
+                                // Lógica para actualizar alimento
+                                updateAlimento(
+                                    widget.id,
+                                    widget.name,
+                                    nueva_cantidad,
+                                    widget.unidadesCantidad,
+                                    widget.calorias,
+                                    widget.grasas,
+                                    widget.proteinas,
+                                    widget.carbohidratos,
+                                    widget.image,
+                                    widget.nombreUsuario,
+                                    widget.sodio,
+                                    widget.azucar,
+                                    widget.fibra,
+                                    widget.codigoDeBarras);
 
-                          cantidad == 0;
-                        },
-                        child: Text('Guardar cambios'),
-                      ),
-                    ),
+                                cantidad == 0;
+                              },
+                              child: Text('Guardar cambios'),
+                            ),
+                          )
+                        : Container(),
                     SizedBox(height: 20)
                   ],
                 )),

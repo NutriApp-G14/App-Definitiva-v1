@@ -644,6 +644,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                   onChanged: (value) {
                                     setState(() {
                                       _objectiveSeleccionado = value;
+                                      _navigateUsuarioPage(context);
                                     });
                                     dataBaseHelper.updateUsuario(
                                       usuario.nombre,

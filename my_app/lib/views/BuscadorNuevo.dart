@@ -112,10 +112,10 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
 
                     var unidadesCantidad = "gramos";
                     var calorias = (_listaDeAlimentos[i]['nutriments']
-                            ?['sugars_100g'] is String)
+                            ?['energy-kcal_100g'] is String)
                         ? double.parse(
-                            _listaDeAlimentos[i]['nutriments']['sugars_100g'])
-                        : _listaDeAlimentos[i]['nutriments']['sugars_100g']
+                            _listaDeAlimentos[i]['nutriments']['energy-kcal_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['energy-kcal_100g']
                                 ?.toDouble() ??
                             0.0;
                     var grasas = (_listaDeAlimentos[i]['nutriments']
@@ -544,6 +544,9 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                                     ?.toDouble() ??
                                 0.0,
                     image: alimentoCodBar['image_url'] ?? "",
+                    showBotonAlimentos: true,
+                        showBotonRegistro: true,
+                        showBotonGuardar: false,
                   )));
       setState(() {
         _listaDeAlimentos = alimentoCodBar;

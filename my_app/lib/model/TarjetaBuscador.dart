@@ -32,6 +32,7 @@ class TarjetaBuscador extends StatefulWidget {
   final String unidadesCantidad;
   final bool anadirRegistro;
   final String tipoDeComida;
+  final day;
 
   const TarjetaBuscador(
       {required this.nombreUsuario,
@@ -51,7 +52,8 @@ class TarjetaBuscador extends StatefulWidget {
       required this.fibra,
       required this.unidadesCantidad,
       required this.anadirRegistro,
-      required this.tipoDeComida});
+      required this.tipoDeComida,
+      required this.day});
 
   @override
   _TarjetaBuscadorState createState() => _TarjetaBuscadorState();
@@ -249,7 +251,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                                     widget.codigoDeBarras.trim().toLowerCase(),
                                     widget.cantidad,
                                     widget.nombreUsuario.trim().toLowerCase(),
-                                    formattedDate.trim().toLowerCase(),
+                                    widget.day.trim().toLowerCase(),
                                     widget.tipoDeComida.trim().toLowerCase(),
                                     widget.nombreAlimento.trim(),
                                     alimentoRegistro);

@@ -6,12 +6,12 @@ import 'dart:convert';
 
 import 'package:my_app/model/Alimento.dart';
 
-final urlConection = 'http://localhost:8080';
-final urlConexion = 'http://localhost:8080';
+// final urlConection = 'http://localhost:8080';
+// final urlConexion = 'http://localhost:8080';
 
 
-// final urlConection = 'http://34.77.171.152:8080';
-// final urlConexion = 'http://34.77.171.152:8080';
+final urlConection = 'http://34.78.253.14:8080';
+final urlConexion = 'http://34.78.253.14:8080';
 
 
 class RegistroHelper {

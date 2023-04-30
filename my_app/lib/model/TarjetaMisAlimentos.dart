@@ -8,7 +8,7 @@ import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
 //final urlConexion1 = 'http://35.241.179.64:8080';
-final urlConexion1 = 'http://34.77.171.152:8080';
+final urlConexion1 = 'http://34.78.253.14:8080';
 //final urlConexion1 = 'http://35.189.241.218:8080';
 
 class TarjetaMisAlimento extends StatefulWidget {
@@ -113,6 +113,9 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                           codigoDeBarras: widget.codigoDeBarras,
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
+                          showBotonAlimentos: false,
+                          showBotonRegistro: true,
+                          showBotonGuardar: false,
                         )));
           },
           child: Column(

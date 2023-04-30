@@ -69,7 +69,7 @@ void calcularDatos() async {
                 nombreAlimento = widget.nombreAlimento;
                cantidad = widget.cantidad;
                unidadesCantidad = "gramos";
-               calorias = double.parse(alimento[0]['nutriments']['proteins_100g']?.toString() ?? '0.0' );
+               calorias = double.parse(alimento[0]['nutriments']['energy-kcal_100g']?.toString() ?? '0.0' );
                grasas = double.parse(alimento[0]['nutriments']?['fat_100g']?.toString() ?? '0.0' );
                 proteinas = double.parse(alimento[0]['nutriments']?['proteins_100g']?.toString() ?? '0.0' );
 
@@ -163,6 +163,9 @@ void calcularDatos() async {
                           codigoDeBarras: codigoDeBarras,
                           nombreUsuario: nombreDeUsuario,
                           id: 0,
+                          showBotonAlimentos: false,
+                          showBotonRegistro: false,
+                          showBotonGuardar: true,
                         ))); 
             
             //MostrarFood(name: name, cantidad: cantidad, unidadesCantidad: unidadesCantidad, calorias: calorias, grasas: grasas, proteinas: proteinas, carbohidratos: carbohidratos, sodio: sodio, azucar: azucar, fibra: fibra, image: image)

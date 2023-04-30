@@ -104,10 +104,10 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
 
                     var unidadesCantidad = "gramos";
                     var calorias = (_listaDeAlimentos[i]['nutriments']
-                            ?['sugars_100g'] is String)
+                            ?['energy-kcal_100g'] is String)
                         ? double.parse(
-                            _listaDeAlimentos[i]['nutriments']['sugars_100g'])
-                        : _listaDeAlimentos[i]['nutriments']['sugars_100g']
+                            _listaDeAlimentos[i]['nutriments']['energy-kcal_100g'])
+                        : _listaDeAlimentos[i]['nutriments']['energy-kcal_100g']
                                 ?.toDouble() ??
                             0.0;
                     var grasas = (_listaDeAlimentos[i]['nutriments']

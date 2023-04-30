@@ -15,8 +15,8 @@ import 'mostrarFood.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:fl_chart/fl_chart.dart';
 
-final urlConexion1 = 'http://localhost:8080';
-//final urlConexion1 = 'http://34.77.171.152:8080';
+//final urlConexion1 = 'http://localhost:8080';
+final urlConexion1 = 'http://34.78.253.14:8080';
 
 class MostrarFood extends StatefulWidget {
   final int id;
@@ -33,6 +33,9 @@ class MostrarFood extends StatefulWidget {
   final double azucar;
   final double fibra;
   final String image;
+  final bool showBotonAlimentos;
+  final bool showBotonRegistro;
+  final bool showBotonGuardar;
 
   const MostrarFood({
     required this.id,
@@ -49,6 +52,9 @@ class MostrarFood extends StatefulWidget {
     required this.azucar,
     required this.fibra,
     required this.image,
+    required this.showBotonAlimentos,
+    required this.showBotonRegistro,
+    required this.showBotonGuardar,
   });
   @override
   _MostrarFoodState createState() => _MostrarFoodState();
@@ -452,7 +458,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Calorías (Cal):               ',
+                                              'Calorías (KCal):               ',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -461,7 +467,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             ),
                                             nueva_cantidad != 100.0
                                                 ? Text(
-                                                    '${calculoCalorias.toStringAsFixed(2)} Cal',
+                                                    '${calculoCalorias.toStringAsFixed(2)} KCal',
                                                     style: TextStyle(
                                                       fontSize: 13.0,
                                                       color: Color.fromARGB(
@@ -470,7 +476,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                   )
                                                 : Container(),
                                             Text(
-                                              '${widget.calorias.toStringAsFixed(2)} Cal',
+                                              '${widget.calorias.toStringAsFixed(2)} KCal',
                                               style: TextStyle(
                                                 fontSize: 13.0,
                                                 color: Color.fromARGB(
@@ -1096,8 +1102,10 @@ class _MostrarFoodState extends State<MostrarFood> {
                       ],
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
+
                       children: [
+                        widget.showBotonAlimentos == true ?
                         ElevatedButton(
                           onPressed: () {
                             insertarAlimento(
@@ -1123,7 +1131,13 @@ class _MostrarFoodState extends State<MostrarFood> {
 
                             /// minimumSize: //Size(100, 40),
                           ),
-                        ),
+                        )
+                        :
+                        Container()
+                        ,
+                        SizedBox(width: 10),
+
+                        widget.showBotonRegistro == true ?
                         ElevatedButton(
                           onPressed: () {
                             //Lógica para el botón Registro
@@ -1131,9 +1145,10 @@ class _MostrarFoodState extends State<MostrarFood> {
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                   title: Text('Elija un Registro'),
+                                  
                                   content: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      mainAxisSize: MainAxisSize.min ,
+                                    
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
@@ -1188,6 +1203,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             )
                                           ],
                                         ),
+                                        SizedBox(height: 10),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -1239,6 +1255,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             )
                                           ],
                                         ),
+                                        SizedBox(height: 10),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -1288,6 +1305,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             )
                                           ],
                                         ),
+                                        SizedBox(height: 10),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -1339,6 +1357,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             )
                                           ],
                                         ),
+                                        SizedBox(height: 10),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -1398,10 +1417,16 @@ class _MostrarFoodState extends State<MostrarFood> {
                             ),
                             // minimumSize: ffi.Size(100, 40),
                           ),
-                        ),
+                        )
+                        :
+                        Container()
+                        ,
                       ],
                     ),
-                    SizedBox(height: 10),
+                    widget.showBotonGuardar == true ?
+                    SizedBox(height: 10):
+                    Container(),
+                    widget.showBotonGuardar == true ?
                     Center(
                       child: TextButton(
                         onPressed: () {
@@ -1426,7 +1451,9 @@ class _MostrarFoodState extends State<MostrarFood> {
                         },
                         child: Text('Guardar cambios'),
                       ),
-                    ),
+                    ):
+                    Container()
+                    ,     
                     SizedBox(height: 20)
                   ],
                 )),

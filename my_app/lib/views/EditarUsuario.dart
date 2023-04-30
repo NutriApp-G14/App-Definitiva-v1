@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/model/Usuario.dart';
@@ -35,8 +37,14 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   }
 
   Future<Usuario> getUsuarioById(String nombreUsuario) async {
+
+     HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     final response =
-        await http.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
+        await ioClient.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Usuario.fromJson(jsonData);
@@ -46,8 +54,14 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   }
 
   Future<Alergias> getAlergiasById(String nombreUsuario) async {
+
+     HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     final response =
-        await http.get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
+        await ioClient.get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Alergias.fromJson(jsonData);

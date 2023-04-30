@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/views/listviewFood.dart';
@@ -222,7 +224,15 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
       double azucar,
       double fibra,
       String image) async {
-    final response = await http.post(
+
+
+   HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
+
+
+    final response = await ioClient.post(
       Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http/io_client.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:http/http.dart' as http;
 import 'listviewFood.dart';
@@ -37,6 +39,12 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
       String nombreUsuarioController,
       String codigoDeBarras)
        async {
+
+ HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
+  
     var url = "${urlConexion}/foods/add";
     Map data = {
       'name': nameController,
@@ -51,7 +59,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
       'codigoDeBarras':codigoDeBarrasController
     };
     var body = json.encode(data);
-    var response = await http.post(Uri.parse(url),
+    var response = await ioClient.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
 

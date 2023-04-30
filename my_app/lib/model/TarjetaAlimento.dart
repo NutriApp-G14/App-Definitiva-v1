@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/model/PaginaTipoComida.dart';
 import 'package:my_app/views/mostrarFood.dart';
@@ -87,6 +89,7 @@ void calcularDatos() async {
 
 
   Future<List<dynamic>> searchAndDisplayFoodNuevaAPI( String codigoDeBarras) async {
+    
     var url =
         'https://world.openfoodfacts.org/cgi/search.pl?code=$codigoDeBarras&search_simple=1&action=process&json=true';
     var response = await http.get(Uri.parse(url));
@@ -108,10 +111,14 @@ void calcularDatos() async {
   }
 
   Future<void> deleteReg(int id) async {
+       HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
 
     print(widget.registros);
-    final response = await http.delete(
-      Uri.parse("$urlConexion/registro/reg/$id"),
+    final response = await ioClient.delete(
+      Uri.parse("$urlConection/registro/reg/$id"),
     );
     setState(() {});
     widget.registros.removeWhere((element) => element['id'] == id);

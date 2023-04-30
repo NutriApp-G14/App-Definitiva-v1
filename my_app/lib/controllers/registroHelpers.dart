@@ -1,21 +1,12 @@
 import 'dart:core';
-import 'dart:ffi';
-
-import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
+import 'dart:io';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:my_app/model/Alimento.dart';
 
-//final urlConexion = 'http://34.77.36.66:8080';
-//final urlConection = 'http://35.241.179.64:8080';
-final urlConection = 'http://34.77.171.152:8080';
-final urlConexion = 'http://34.77.171.152:8080';
-
-//final urlConexion = 'http://35.189.241.218:8080';
-//final urlConection = 'http://35.189.241.218:8080';
-//final urlConexion = 'http://35.241.179.64:8080';
-
-//finalfinal urlConexion = 'http://35.189.241.218:8080';
+final urlConection = 'http://34.78.253.14:8080';
 
 class RegistroHelper {
   // Add Registro
@@ -27,6 +18,11 @@ class RegistroHelper {
       String tipoDeComidaController,
       String nombreAlimento,
       List<Alimento> alimento) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     print("Funcion ejecutada");
     var url = "${urlConection}/registro/add";
     Map data = {
@@ -40,7 +36,7 @@ class RegistroHelper {
     };
     var body = json.encode(data);
 
-    var response = await http.post(Uri.parse(url),
+    var response = await ioClient.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     return response;
@@ -48,7 +44,12 @@ class RegistroHelper {
 
 // Borrar Registro
   Future<http.Response> deleteRegistro(int id) async {
-    var url = "${urlConexion}/registro/reg/{id}";
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    var url = "${urlConection}/registro/reg/{id}";
     var response = await http
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     print("${response.statusCode}");
@@ -58,8 +59,13 @@ class RegistroHelper {
   // Obtiene los registros a partir de su nombre de usuario,fecha y tipodeComida
   Future<List> getRegistroComidas(
       String nombreUsuario, String tipoDeComida, String fecha) async {
-    final response = await http.get(Uri.parse(
-        "${urlConexion}/registro/registros/$fecha/$tipoDeComida/$nombreUsuario"));
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient.get(Uri.parse(
+        "${urlConection}/registro/registros/$fecha/$tipoDeComida/$nombreUsuario"));
 
     return json.decode(response.body);
   }

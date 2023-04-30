@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/model/Alimento.dart';
@@ -137,7 +138,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                             return Icon(
                               Icons.fastfood,
                               color: Color.fromARGB(221, 255, 181, 71),
-                              size: 100,
+                              size: 90,
                             );
                           }
                         },
@@ -146,7 +147,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                   : Icon(
                       Icons.fastfood,
                       color: Color.fromARGB(221, 255, 181, 71),
-                      size: 100,
+                      size: 90,
                     ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -298,8 +299,12 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
       double azucar,
       double fibra,
       String image) async {
-    final response = await http.post(
-      Uri.parse('${urlConexion}/foods/add'),
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+    final response = await ioClient.post(
+      Uri.parse('${urlConection}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

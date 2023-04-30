@@ -5,6 +5,7 @@ import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/BuscadorNuevo.dart';
 import 'package:my_app/views/CrearUsuario.dart';
+import 'package:my_app/views/Estadisticas.dart';
 import 'package:my_app/views/IniciarSesion.dart';
 //import 'package:my_app/views/NuevoBuscador.dart';
 import 'package:my_app/views/RegistroComidas.dart';
@@ -46,6 +47,16 @@ class _NutriAppBarState extends State<NutriAppBar> {
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
           RegistroComidasPage(nombreUsuario: usuarioNombreUsuario),
+      transitionDuration: Duration(seconds: 0),
+    ));
+  }
+
+  _navigateEstadisticas(BuildContext context) async {
+    String usuarioNombreUsuario = widget.nombreUsuario;
+
+    Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          StatisticsPage(nombreUsuario: usuarioNombreUsuario),
       transitionDuration: Duration(seconds: 0),
     ));
   }
@@ -210,40 +221,41 @@ class _NutriAppBarState extends State<NutriAppBar> {
                   splashRadius: 1.0,
                   hoverColor: Colors.transparent,
                   onPressed: () {
-                    if (widget.isPremium) {
-                      // Código para la acción de estadísticas
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Row(children: [
-                              Text('Solo para premium'),
-                              Icon(
-                                Icons.workspace_premium,
-                                color: Colors.amberAccent,
-                              )
-                            ]),
-                            content: Text(
-                                'Esta funcionalidad está disponible solo para usuarios premium'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Cancelar'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Comprar premium'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
+                    _navigateEstadisticas(context);
+                    // if (widget.isPremium) {
+
+                    // } else {
+                    //   showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext context) {
+                    //       return AlertDialog(
+                    //         title: Row(children: [
+                    //           Text('Solo para premium'),
+                    //           Icon(
+                    //             Icons.workspace_premium,
+                    //             color: Colors.amberAccent,
+                    //           )
+                    //         ]),
+                    //         content: Text(
+                    //             'Esta funcionalidad está disponible solo para usuarios premium'),
+                    //         actions: [
+                    //           TextButton(
+                    //             onPressed: () {
+                    //               Navigator.of(context).pop();
+                    //             },
+                    //             child: Text('Cancelar'),
+                    //           ),
+                    //           TextButton(
+                    //             onPressed: () {
+                    //               Navigator.of(context).pop();
+                    //             },
+                    //             child: Text('Comprar premium'),
+                    //           ),
+                    //         ],
+                    //       );
+                    //     },
+                    //   );
+                    // }
                   },
                 ),
                 IconButton(

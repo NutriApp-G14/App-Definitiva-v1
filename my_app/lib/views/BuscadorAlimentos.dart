@@ -8,12 +8,13 @@ import 'package:my_app/views/listviewfood.dart';
 
 class BuscadorAlimentos extends StatefulWidget {
   final String nombreUsuario;
-  final String fecha;
+  final String day;
   final String tipoDeComida;
+
 
   const BuscadorAlimentos(
       {required this.nombreUsuario,
-      required this.fecha,
+      required this.day,
       required this.tipoDeComida});
 
   @override
@@ -187,6 +188,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                       azucar: azucar,
                       fibra: fibra,
                       anadirRegistro: true,
+                      day: widget.day,
                     );
                   });
             }))

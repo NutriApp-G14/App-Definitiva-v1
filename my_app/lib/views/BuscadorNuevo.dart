@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/model/TarjetaBuscador.dart';
 import 'package:my_app/views/listviewfood.dart';
@@ -191,6 +192,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                       azucar: azucar,
                       fibra: fibra,
                       anadirRegistro: false,
+                      day: DateFormat('dd-MM-yyyy').format(DateTime.now())
                     );
                   });
             }))

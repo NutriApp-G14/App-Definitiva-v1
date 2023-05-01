@@ -45,12 +45,12 @@ class RegistroHelper {
 
 // Borrar Registro
   Future<http.Response> deleteRegistro(int id) async {
-HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-  
-      var url = "${urlConection}/registro/reg/{id}";
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    var url = "${urlConection}/registro/reg/{id}";
     var response = await http
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     print("${response.statusCode}");
@@ -60,13 +60,25 @@ HttpClient httpClient = new HttpClient()
   // Obtiene los registros a partir de su nombre de usuario,fecha y tipodeComida
   Future<List> getRegistroComidas(
       String nombreUsuario, String tipoDeComida, String fecha) async {
-HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-  
-      final response = await ioClient.get(Uri.parse(
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient.get(Uri.parse(
         "${urlConection}/registro/registros/$fecha/$tipoDeComida/$nombreUsuario"));
+
+    return json.decode(response.body);
+  }
+
+  Future<List> getRegistroDiario(String nombreUsuario, String fecha) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient.get(
+        Uri.parse("${urlConection}/registro/registros/$fecha/$nombreUsuario"));
 
     return json.decode(response.body);
   }

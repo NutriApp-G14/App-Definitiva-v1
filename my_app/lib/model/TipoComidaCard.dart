@@ -81,7 +81,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
               alimentos = registroComidas
                   .map((registro) => registro['nombreAlimento'].toString())
                   .toList();
-
+              //print(alimentos);
               foods = registroComidas
                   .map((registro) => registro['alimentos'])
                   .toList();
@@ -102,10 +102,14 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                   foods[i][0]['cantidad'] * foods[i][0]['grasas'] / 100;
             }
 
-            print('Protes: ' );print(proteinasFoods);
-            print('Carb: ' );print(carbohidratosFoods);
-            print('Grasas: ' );print(grasasFoods);
-            print('Calorias: ' );print(caloriasFoods);
+            print('Protes: ');
+            print(proteinasFoods);
+            print('Carb: ');
+            print(carbohidratosFoods);
+            print('Grasas: ');
+            print(grasasFoods);
+            print('Calorias: ');
+            print(caloriasFoods);
 
             return Padding(
                 padding:
@@ -206,7 +210,16 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: ((caloriasFoods
+                                                                    .ceil() +
+                                                                proteinasFoods
+                                                                    .ceil() +
+                                                                grasasFoods
+                                                                    .ceil() +
+                                                                carbohidratosFoods
+                                                                    .ceil()) /
+                                                            4)
+                                                        .ceil(),
                                                     child: Text(
                                                       '${caloriasFoods.toStringAsFixed(2)} kcal',
                                                       style: TextStyle(
@@ -228,7 +241,16 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: ((caloriasFoods
+                                                                    .ceil() +
+                                                                proteinasFoods
+                                                                    .ceil() +
+                                                                grasasFoods
+                                                                    .ceil() +
+                                                                carbohidratosFoods
+                                                                    .ceil()) /
+                                                            4)
+                                                        .ceil(),
                                                     child: Text(
                                                       '${proteinasFoods.toStringAsFixed(2)} g',
                                                       style: TextStyle(
@@ -239,7 +261,8 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: carbohidratosFoods.ceil(),
+                                                  flex:
+                                                      carbohidratosFoods.ceil(),
                                                   child: Container(
                                                     height: 10,
                                                     color: Color.fromARGB(
@@ -250,7 +273,16 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: ((caloriasFoods
+                                                                    .ceil() +
+                                                                proteinasFoods
+                                                                    .ceil() +
+                                                                grasasFoods
+                                                                    .ceil() +
+                                                                carbohidratosFoods
+                                                                    .ceil()) /
+                                                            4)
+                                                        .ceil(),
                                                     child: Text(
                                                       '${carbohidratosFoods.toStringAsFixed(2)} g',
                                                       style: TextStyle(
@@ -272,7 +304,16 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: ((caloriasFoods
+                                                                    .ceil() +
+                                                                proteinasFoods
+                                                                    .ceil() +
+                                                                grasasFoods
+                                                                    .ceil() +
+                                                                carbohidratosFoods
+                                                                    .ceil()) /
+                                                            4)
+                                                        .ceil(),
                                                     child: Text(
                                                       '${grasasFoods.toStringAsFixed(2)} g',
                                                       style: TextStyle(

@@ -107,6 +107,9 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                           codigoDeBarras: widget.codigoDeBarras,
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
+                          showBotonAlimentos: true,
+                          showBotonRegistro: true,
+                          showBotonGuardar: false,
                         )));
           },
           child: Column(

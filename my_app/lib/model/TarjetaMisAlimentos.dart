@@ -120,6 +120,9 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                           codigoDeBarras: widget.codigoDeBarras,
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
+                          showBotonAlimentos: false,
+                          showBotonRegistro: true,
+                          showBotonGuardar: false,
                         )));
           },
           child: Column(

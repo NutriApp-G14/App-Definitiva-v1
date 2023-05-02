@@ -163,7 +163,7 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                   ),
                 ),
                 SizedBox(height: 16.0),
-                TextField(
+                TextFormField(
                   controller: passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password',
@@ -360,6 +360,7 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                       }
                       bool exists = await dataBaseHelper
                           .usuarioExists(nombreUsuarioController.text.trim());
+
                       if (exists) {
                         showDialog(
                           context: context,
@@ -378,6 +379,23 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                           ),
                         );
                         return;
+                      } else if (passwordController.text.length < 8) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Contraseña no valida'),
+                            content: Text(
+                                'La contraseña ha de tener mas de 8 caracteres'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Cerrar'),
+                              ),
+                            ],
+                          ),
+                        );
                       } else {
                         _mostrarDialogoTerminos();
                         if (aceptarTerminos == false) {

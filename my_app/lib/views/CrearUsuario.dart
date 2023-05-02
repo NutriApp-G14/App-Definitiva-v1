@@ -161,7 +161,8 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                   decoration: InputDecoration(
                     labelText: 'Altura',
                     hintText: 'Altura en cm',
-                    icon: Icon(Icons.height),
+                    icon:Icon(Icons.height)
+
                   ),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   // Validamos que solo se ingresen números
@@ -176,7 +177,7 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                   decoration: InputDecoration(
                     labelText: 'Peso',
                     hintText: 'Peso en kg',
-                    icon: Icon(Icons.height),
+                    icon: Icon(Icons.fitness_center),
                   ),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   // Validamos que solo se ingresen números

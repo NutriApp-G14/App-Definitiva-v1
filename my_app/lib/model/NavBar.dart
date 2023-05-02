@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
+import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/BuscadorNuevo.dart';
 import 'package:my_app/views/CrearUsuario.dart';
+import 'package:my_app/views/Estadisticas.dart';
 import 'package:my_app/views/IniciarSesion.dart';
 //import 'package:my_app/views/NuevoBuscador.dart';
 import 'package:my_app/views/RegistroComidas.dart';
@@ -23,6 +25,7 @@ class NutriAppBar extends StatefulWidget {
 
 class _NutriAppBarState extends State<NutriAppBar> {
   DataBaseHelper dataBaseHelper = DataBaseHelper();
+  RegistroHelper dataRegistroHelper = RegistroHelper();
   DateTime now = DateTime.now();
   late String formattedDate;
 
@@ -46,6 +49,20 @@ class _NutriAppBarState extends State<NutriAppBar> {
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
           RegistroComidasPage(nombreUsuario: usuarioNombreUsuario),
+      transitionDuration: Duration(seconds: 0),
+    ));
+  }
+
+  _navigateEstadisticas(BuildContext context) async {
+    String usuarioNombreUsuario = widget.nombreUsuario;
+    Future<List> registrosDiario = dataRegistroHelper.getRegistroDiario(
+        usuarioNombreUsuario.trim().toLowerCase(),
+        formattedDate.trim().toLowerCase());
+    List registros = await registrosDiario;
+
+    Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => StatisticsPage(
+          nombreUsuario: usuarioNombreUsuario, registros: registros),
       transitionDuration: Duration(seconds: 0),
     ));
   }
@@ -183,20 +200,20 @@ class _NutriAppBarState extends State<NutriAppBar> {
                     splashRadius: 1.0,
                     hoverColor: Colors.transparent),
                 IconButton(
-                    icon: Icon(Icons.apple),
+                    icon: Icon(Icons.menu_book),
                     color: Colors.black,
                     onPressed: () {
-                      _navigateAlimentos(context);
+                      _navigateRegistroComidas(context);
                     },
                     highlightColor: Colors
                         .transparent, // desactiva la sombra del botón cuando se presiona
                     splashRadius: 1.0,
                     hoverColor: Colors.transparent),
                 IconButton(
-                    icon: Icon(Icons.menu_book),
+                    icon: Icon(Icons.apple),
                     color: Colors.black,
                     onPressed: () {
-                      _navigateRegistroComidas(context);
+                      _navigateAlimentos(context);
                     },
                     highlightColor: Colors
                         .transparent, // desactiva la sombra del botón cuando se presiona
@@ -210,40 +227,41 @@ class _NutriAppBarState extends State<NutriAppBar> {
                   splashRadius: 1.0,
                   hoverColor: Colors.transparent,
                   onPressed: () {
-                    if (widget.isPremium) {
-                      // Código para la acción de estadísticas
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Row(children: [
-                              Text('Solo para premium'),
-                              Icon(
-                                Icons.workspace_premium,
-                                color: Colors.amberAccent,
-                              )
-                            ]),
-                            content: Text(
-                                'Esta funcionalidad está disponible solo para usuarios premium'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Cancelar'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Comprar premium'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
+                    _navigateEstadisticas(context);
+                    // if (widget.isPremium) {
+
+                    // } else {
+                    //   showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext context) {
+                    //       return AlertDialog(
+                    //         title: Row(children: [
+                    //           Text('Solo para premium'),
+                    //           Icon(
+                    //             Icons.workspace_premium,
+                    //             color: Colors.amberAccent,
+                    //           )
+                    //         ]),
+                    //         content: Text(
+                    //             'Esta funcionalidad está disponible solo para usuarios premium'),
+                    //         actions: [
+                    //           TextButton(
+                    //             onPressed: () {
+                    //               Navigator.of(context).pop();
+                    //             },
+                    //             child: Text('Cancelar'),
+                    //           ),
+                    //           TextButton(
+                    //             onPressed: () {
+                    //               Navigator.of(context).pop();
+                    //             },
+                    //             child: Text('Comprar premium'),
+                    //           ),
+                    //         ],
+                    //       );
+                    //     },
+                    //   );
+                    // }
                   },
                 ),
                 IconButton(

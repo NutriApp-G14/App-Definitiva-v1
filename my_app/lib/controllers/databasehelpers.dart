@@ -1,17 +1,15 @@
 import 'dart:core';
-//import 'dart:ffi';
-
-import 'dart:ffi';
-import 'package:flutter/material.dart';
+import 'package:http/io_client.dart';
+import 'dart:io';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 import 'package:my_app/model/Alergias.dart';
 import 'package:my_app/model/Alimento.dart';
-import 'dart:convert';
-
 import 'package:my_app/model/Usuario.dart';
 
-//final urlConexion = 'http://34.77.252.254:8080';
-final urlConexion = 'http://localhost:8080';
+final urlConexion = 'http://34.78.253.14:8080';
+//final urlConexion = 'http://localhost:8080';
 
 class DataBaseHelper {
 // Add Alimento
@@ -29,6 +27,11 @@ class DataBaseHelper {
       double azucarController,
       double fibraController,
       String codigoDeBarrasController) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/foods/add";
     Map data = {
       'name': nameController,
@@ -46,7 +49,7 @@ class DataBaseHelper {
       'codigoDeBarras': codigoDeBarrasController,
     };
     var body = json.encode(data);
-    var response = await http.post(Uri.parse(url),
+    var response = await ioClient.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     return response;
@@ -65,6 +68,11 @@ class DataBaseHelper {
     String? objectiveController,
     String? imageController,
   ) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/users/add";
     Map data = {
       'nombre': nombreController,
@@ -80,7 +88,7 @@ class DataBaseHelper {
       //'allergies': allergiesController
     };
     var body = json.encode(data);
-    var response = await http.post(Uri.parse(url),
+    var response = await ioClient.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     return response;
@@ -97,6 +105,11 @@ class DataBaseHelper {
       bool mariscosController,
       bool frutosSecosController,
       bool pescadoController) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/allergies/add";
     Map data = {
       'nombreUsuario': nombreUsuarioController,
@@ -110,7 +123,7 @@ class DataBaseHelper {
       'pescado': pescadoController
     };
     var body = json.encode(data);
-    var response = await http.post(Uri.parse(url),
+    var response = await ioClient.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     return response;
@@ -125,6 +138,11 @@ class DataBaseHelper {
       List<String> pasos,
       String imagen,
       String nombreUsuario) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/recipes/add";
     List<Map<String, dynamic>> ingredientesData = [];
     for (var i = 0; i < ingredientes.length; i++) {
@@ -154,7 +172,7 @@ class DataBaseHelper {
       'nombreUsuario': nombreUsuario,
     };
     var body = json.encode(data);
-    var response = await http.post(Uri.parse(url),
+    var response = await ioClient.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     return response;
@@ -162,10 +180,15 @@ class DataBaseHelper {
 
   // // Método para agregar un ingrediente a la lista de ingredientes de la receta
   Future agregarAlimento(int idReceta, Alimento alimento) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     final url = Uri.parse('$urlConexion/$idReceta/addIngrediente');
     final headers = {'Content-Type': 'application/json'};
     final body = json.encode(alimento.toJson());
-    final response = await http.post(url, headers: headers, body: body);
+    final response = await ioClient.post(url, headers: headers, body: body);
     if (response.statusCode != 200) {
       throw Exception('Error al agregar alimento a la receta');
     }
@@ -177,7 +200,7 @@ class DataBaseHelper {
   //   var url = "${urlConexion}/recipes/$recetaId/pasos";
   //   Map data = {'paso': paso};
   //   var body = json.encode(data);
-  //   var response = await http.post(Uri.parse(url),
+  //   var response = await ioClient.post(Uri.parse(url),
   //       headers: {"Content-Type": "application/json"}, body: body);
   //   print("${response.statusCode}");
   //   print("${response.body}");
@@ -188,8 +211,12 @@ class DataBaseHelper {
 
 // Obtener un Usuario al Iniciar sesión comprobando la contraseña
   Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
     final response =
-        await http.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
+        await ioClient.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
       final usuario = Usuario.fromJson(json);
@@ -202,9 +229,13 @@ class DataBaseHelper {
 
 // Comprueba si el Usuario Ya existe en la BBDD
   Future<bool> usuarioExists(String nombreUsuario) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
     var url = Uri.parse("${urlConexion}/users/$nombreUsuario");
-    //print(await http.get(url));
-    var response = await http.get(url);
+    //print(await ioClient.get(url));
+    var response = await ioClient.get(url);
     if (response.statusCode == 200) {
       // var data = jsonDecode(response.body) as List<dynamic>;
       // return data.isNotEmpty;
@@ -218,8 +249,13 @@ class DataBaseHelper {
 
 // Obtener un Usuario con el Nombre de Usuario (id)
   Future<Usuario> getUsuarioById(String nombreUsuario) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     final response =
-        await http.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
+        await ioClient.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Usuario.fromJson(jsonData);
@@ -240,6 +276,11 @@ class DataBaseHelper {
     String? activityController,
     String? objectiveController,
   ) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/users/$nombreUsuarioController";
     Map data = {
       'nombre': nombreController,
@@ -253,7 +294,7 @@ class DataBaseHelper {
       'objective': objectiveController,
     };
     var body = json.encode(data);
-    var response = await http.put(Uri.parse(url),
+    var response = await ioClient.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     return response;
@@ -263,8 +304,13 @@ class DataBaseHelper {
 
 // Obtienen las Alergía de un Usuario a partir de su nombre de Usuario
   Future<Alergias> getAlergiasById(String nombreUsuario) async {
-    final response =
-        await http.get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient
+        .get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Alergias.fromJson(jsonData);
@@ -289,6 +335,11 @@ class DataBaseHelper {
       double azucarController,
       double fibraController,
       String codigoDeBarrasController) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/foods/$idController";
     Map data = {
       'name': nameController,
@@ -306,7 +357,7 @@ class DataBaseHelper {
       'codigoDeBarras': codigoDeBarrasController,
     };
     var body = json.encode(data);
-    var response = await http.put(Uri.parse(url),
+    var response = await ioClient.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     //Navigator.pop(context);
     return response;
@@ -323,6 +374,11 @@ class DataBaseHelper {
       bool mariscosController,
       bool frutosSecosController,
       bool pescadoController) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/allergies/$nombreUsuarioController";
     Map data = {
       'nombreUsuario': nombreUsuarioController,
@@ -336,7 +392,7 @@ class DataBaseHelper {
       'pescado': pescadoController
     };
     var body = json.encode(data);
-    var response = await http.put(Uri.parse(url),
+    var response = await ioClient.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     return response;
@@ -346,6 +402,11 @@ class DataBaseHelper {
 
 // Método para eliminar una receta por ID
   Future<http.Response> deleteReceta(int recetaId) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/recipes/$recetaId";
     var response = await http
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
@@ -355,8 +416,13 @@ class DataBaseHelper {
 
 // Método para obtener todas las recetas de un usuario por nombre de usuario
   Future<List> getRecetas(String nombreUsuario) async {
-    final response =
-        await http.get(Uri.parse("${urlConexion}/recipes/user/$nombreUsuario"));
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient
+        .get(Uri.parse("${urlConexion}/recipes/user/$nombreUsuario"));
     return json.decode(response.body);
   }
 
@@ -372,6 +438,11 @@ class DataBaseHelper {
     String imagenController,
     String nombreUsuarioController,
   ) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/recipes/$idController";
     Map data = {
       'nombre': nombreController,
@@ -385,7 +456,7 @@ class DataBaseHelper {
       'nombreUsuario': nombreUsuarioController,
     };
     var body = json.encode(data);
-    var response = await http.put(Uri.parse(url),
+    var response = await ioClient.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     return response;
@@ -395,7 +466,12 @@ class DataBaseHelper {
 
 // Obtener un Alimento al añadirlo
   Future<bool> getAlimento(int id) async {
-    final response = await http.get(Uri.parse('${urlConexion}/foods/$id'));
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient.get(Uri.parse('${urlConexion}/foods/$id'));
     if (response.statusCode == 200) {
       return true;
     }
@@ -404,8 +480,13 @@ class DataBaseHelper {
 
 // Borrar Alimento
   Future<http.Response> deleteAlimento(int id) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/foods/{id}";
-    var response = await http
+    var response = await ioClient
         .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     print("${response.statusCode}");
     return response;
@@ -413,8 +494,13 @@ class DataBaseHelper {
 
 // Obtiene los alimentos de un usuario a partir de su nombre de usuario
   Future<List> getData(String nombreUsuario) async {
-    final response =
-        await http.get(Uri.parse("${urlConexion}/foods/user/$nombreUsuario"));
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient
+        .get(Uri.parse("${urlConexion}/foods/user/$nombreUsuario"));
 
     return json.decode(response.body);
   }

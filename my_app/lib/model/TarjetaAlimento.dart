@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/model/PaginaTipoComida.dart';
 import 'package:my_app/views/mostrarFood.dart';
@@ -69,7 +71,7 @@ void calcularDatos() async {
                 nombreAlimento = widget.nombreAlimento;
                cantidad = widget.cantidad;
                unidadesCantidad = "gramos";
-               calorias = double.parse(alimento[0]['nutriments']['proteins_100g']?.toString() ?? '0.0' );
+               calorias = double.parse(alimento[0]['nutriments']['energy-kcal_100g']?.toString() ?? '0.0' );
                grasas = double.parse(alimento[0]['nutriments']?['fat_100g']?.toString() ?? '0.0' );
                 proteinas = double.parse(alimento[0]['nutriments']?['proteins_100g']?.toString() ?? '0.0' );
 
@@ -87,6 +89,7 @@ void calcularDatos() async {
 
 
   Future<List<dynamic>> searchAndDisplayFoodNuevaAPI( String codigoDeBarras) async {
+    
     var url =
         'https://world.openfoodfacts.org/cgi/search.pl?code=$codigoDeBarras&search_simple=1&action=process&json=true';
     var response = await http.get(Uri.parse(url));
@@ -108,9 +111,13 @@ void calcularDatos() async {
   }
 
   Future<void> deleteReg(int id) async {
+       HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
 
     print(widget.registros);
-    final response = await http.delete(
+    final response = await ioClient.delete(
       Uri.parse("$urlConection/registro/reg/$id"),
     );
     setState(() {});
@@ -163,6 +170,9 @@ void calcularDatos() async {
                           codigoDeBarras: codigoDeBarras,
                           nombreUsuario: nombreDeUsuario,
                           id: 0,
+                          showBotonAlimentos: false,
+                          showBotonRegistro: false,
+                          showBotonGuardar: true,
                         ))); 
             
             //MostrarFood(name: name, cantidad: cantidad, unidadesCantidad: unidadesCantidad, calorias: calorias, grasas: grasas, proteinas: proteinas, carbohidratos: carbohidratos, sodio: sodio, azucar: azucar, fibra: fibra, image: image)

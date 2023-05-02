@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:my_app/model/TarjetaMisAlimentos.dart';
+import 'package:my_app/model/TarjetaReceta.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/AddRecetasPage.dart';
 import 'package:my_app/views/CrearUsuario.dart';
@@ -80,14 +83,24 @@ class _ListAlimentosState extends State<ListAlimentos> {
   }
 
   Future<void> deleteData(int id) async {
-    final response = await http.delete(
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient.delete(
       Uri.parse("$urlConexion/foods/$id"),
     );
     setState(() {});
   }
 
   Future<void> deleteDataReceta(int id) async {
-    final response = await http.delete(
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient.delete(
       Uri.parse("${urlConexion}/recipes/$id"),
     );
     setState(() {});
@@ -295,33 +308,42 @@ class ItemList extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
-          var nombreAlimento = list[i]['name'].toString() ?? "";
-          var codigoDeBarras= list[i]['codigoDeBarras'] ??"";
-          var imageUrl = ""; 
-          var id =  list[i]['id']; 
-          if (list[i]['image'] != null && list[i]['image'] != ""){
-            imageUrl = list[i]['image'];
-          }
+            var nombreAlimento = list[i]['name'].toString() ?? "";
+            var codigoDeBarras = list[i]['codigoDeBarras'] ?? "";
+            var imageUrl = "";
+            var id = list[i]['id'];
+            if (list[i]['image'] != null && list[i]['image'] != "") {
+              imageUrl = list[i]['image'];
+            }
 
-          var cantidad= list[i]['cantidad']?? 100.0;
-          var calorias= list[i]['calorias']?? 0.0;
-          var grasas= list[i]['grasas']?? 0.0;
-          var proteinas= list[i]['proteinas']?? 0.0;
-          var carbohidratos= list[i]['carbohidratos']?? 0.0;
-          var sodio=  list[i]['sodio'] ?? 0.0;
-          var azucar=  list[i]['azucar'] ?? 0.0;
-          var fibra=  list[i]['fibra'] ?? 0.0;
-          var unidadesCantidad =  list[i]['unidadesCantidad'] ?? "";
+            var cantidad = list[i]['cantidad'] ?? 100.0;
+            var calorias = list[i]['calorias'] ?? 0.0;
+            var grasas = list[i]['grasas'] ?? 0.0;
+            var proteinas = list[i]['proteinas'] ?? 0.0;
+            var carbohidratos = list[i]['carbohidratos'] ?? 0.0;
+            var sodio = list[i]['sodio'] ?? 0.0;
+            var azucar = list[i]['azucar'] ?? 0.0;
+            var fibra = list[i]['fibra'] ?? 0.0;
+            var unidadesCantidad = list[i]['unidadesCantidad'] ?? "";
 
             return SizedBox(
-              height: 100.3,
-              child:  TarjetaMisAlimento(nombreAlimento: nombreAlimento 
-              ,codigoDeBarras: codigoDeBarras, imageUrl: imageUrl, id:id,
-               nombreUsuario: nombreUsuario, cantidad:cantidad, calorias: calorias, grasas: grasas,
-               proteinas: proteinas, carbohidratos:carbohidratos, sodio: sodio , azucar: azucar, fibra:fibra,
-               unidadesCantidad: unidadesCantidad,
-            )
-            );
+                height: 100.3,
+                child: TarjetaMisAlimento(
+                  nombreAlimento: nombreAlimento,
+                  codigoDeBarras: codigoDeBarras,
+                  imageUrl: imageUrl,
+                  id: id,
+                  nombreUsuario: nombreUsuario,
+                  cantidad: cantidad,
+                  calorias: calorias,
+                  grasas: grasas,
+                  proteinas: proteinas,
+                  carbohidratos: carbohidratos,
+                  sodio: sodio,
+                  azucar: azucar,
+                  fibra: fibra,
+                  unidadesCantidad: unidadesCantidad,
+                ));
           },
         );
       } else if (constraints.maxWidth < 1100) {
@@ -334,33 +356,42 @@ class ItemList extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
-          var nombreAlimento = list[i]['name'].toString() ?? "";
-          var codigoDeBarras= list[i]['codigoDeBarras'] ??"";
-          var imageUrl = ""; 
-          var id =  list[i]['id']; 
-          if (list[i]['image'] != null && list[i]['image'] != ""){
-            imageUrl = list[i]['image'];
-          }
+            var nombreAlimento = list[i]['name'].toString() ?? "";
+            var codigoDeBarras = list[i]['codigoDeBarras'] ?? "";
+            var imageUrl = "";
+            var id = list[i]['id'];
+            if (list[i]['image'] != null && list[i]['image'] != "") {
+              imageUrl = list[i]['image'];
+            }
 
-          var cantidad= list[i]['cantidad']?? 100.0;
-          var calorias= list[i]['calorias']?? 0.0;
-          var grasas= list[i]['grasas']?? 0.0;
-          var proteinas= list[i]['proteinas']?? 0.0;
-          var carbohidratos= list[i]['carbohidratos']?? 0.0;
-          var sodio=  list[i]['sodio'] ?? 0.0;
-          var azucar=  list[i]['azucar'] ?? 0.0;
-          var fibra=  list[i]['fibra'] ?? 0.0;
-          var unidadesCantidad =  list[i]['unidadesCantidad'] ?? "";
+            var cantidad = list[i]['cantidad'] ?? 100.0;
+            var calorias = list[i]['calorias'] ?? 0.0;
+            var grasas = list[i]['grasas'] ?? 0.0;
+            var proteinas = list[i]['proteinas'] ?? 0.0;
+            var carbohidratos = list[i]['carbohidratos'] ?? 0.0;
+            var sodio = list[i]['sodio'] ?? 0.0;
+            var azucar = list[i]['azucar'] ?? 0.0;
+            var fibra = list[i]['fibra'] ?? 0.0;
+            var unidadesCantidad = list[i]['unidadesCantidad'] ?? "";
 
             return SizedBox(
-              height: 100.3,
-              child:  TarjetaMisAlimento(nombreAlimento: nombreAlimento 
-              ,codigoDeBarras: codigoDeBarras, imageUrl: imageUrl, id:id,
-               nombreUsuario: nombreUsuario, cantidad:cantidad, calorias: calorias, grasas: grasas,
-               proteinas: proteinas, carbohidratos:carbohidratos, sodio: sodio , azucar: azucar, fibra:fibra,
-               unidadesCantidad:unidadesCantidad ,
-            )
-            );
+                height: 100.3,
+                child: TarjetaMisAlimento(
+                  nombreAlimento: nombreAlimento,
+                  codigoDeBarras: codigoDeBarras,
+                  imageUrl: imageUrl,
+                  id: id,
+                  nombreUsuario: nombreUsuario,
+                  cantidad: cantidad,
+                  calorias: calorias,
+                  grasas: grasas,
+                  proteinas: proteinas,
+                  carbohidratos: carbohidratos,
+                  sodio: sodio,
+                  azucar: azucar,
+                  fibra: fibra,
+                  unidadesCantidad: unidadesCantidad,
+                ));
           },
         );
       } else {
@@ -373,391 +404,47 @@ class ItemList extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
-          var nombreAlimento = list[i]['name'].toString() ?? "";
-          var codigoDeBarras= list[i]['codigoDeBarras'] ??"";
-          var imageUrl = ""; 
-          var id =  list[i]['id']; 
-          if (list[i]['image'] != null && list[i]['image'] != ""){
-            imageUrl = list[i]['image'];
-          }
-          var cantidad= list[i]['cantidad']?? 100.0;
-          var calorias= list[i]['calorias']?? 0.0;
-          var grasas= list[i]['grasas']?? 0.0;
-          var proteinas= list[i]['proteinas']?? 0.0;
-          var carbohidratos= list[i]['carbohidratos']?? 0.0;
-          var sodio=  list[i]['sodio'] ?? 0.0;
-          var azucar=  list[i]['azucar'] ?? 0.0;
-          var fibra=  list[i]['fibra'] ?? 0.0;
-          var unidadesCantidad =  list[i]['unidadesCantidad'] ?? "";
+            var nombreAlimento = list[i]['name'].toString() ?? "";
+            var codigoDeBarras = list[i]['codigoDeBarras'] ?? "";
+            var imageUrl = "";
+            var id = list[i]['id'];
+            if (list[i]['image'] != null && list[i]['image'] != "") {
+              imageUrl = list[i]['image'];
+            }
+            var cantidad = list[i]['cantidad'] ?? 100.0;
+            var calorias = list[i]['calorias'] ?? 0.0;
+            var grasas = list[i]['grasas'] ?? 0.0;
+            var proteinas = list[i]['proteinas'] ?? 0.0;
+            var carbohidratos = list[i]['carbohidratos'] ?? 0.0;
+            var sodio = list[i]['sodio'] ?? 0.0;
+            var azucar = list[i]['azucar'] ?? 0.0;
+            var fibra = list[i]['fibra'] ?? 0.0;
+            var unidadesCantidad = list[i]['unidadesCantidad'] ?? "";
 
             return SizedBox(
-              height: 100.3,
-              child: TarjetaMisAlimento(nombreAlimento: nombreAlimento 
-              ,codigoDeBarras: codigoDeBarras, imageUrl: imageUrl, id:id,
-               nombreUsuario: nombreUsuario, cantidad:cantidad, calorias: calorias, grasas: grasas,
-               proteinas: proteinas, carbohidratos:carbohidratos, sodio: sodio , azucar: azucar, fibra:fibra,
-               unidadesCantidad: unidadesCantidad,
-            ));
+                height: 100.3,
+                child: TarjetaMisAlimento(
+                  nombreAlimento: nombreAlimento,
+                  codigoDeBarras: codigoDeBarras,
+                  imageUrl: imageUrl,
+                  id: id,
+                  nombreUsuario: nombreUsuario,
+                  cantidad: cantidad,
+                  calorias: calorias,
+                  grasas: grasas,
+                  proteinas: proteinas,
+                  carbohidratos: carbohidratos,
+                  sodio: sodio,
+                  azucar: azucar,
+                  fibra: fibra,
+                  unidadesCantidad: unidadesCantidad,
+                ));
           },
         );
       }
     });
   }
 }
-
-//Pintar las Recetas
-
-// class ItemListReceta extends StatelessWidget {
-//   final String nombreUsuario;
-//   final List list;
-//   final Function(int) deleteItem;
-
-//   const ItemListReceta({required this.list, required this.deleteItem, required this.nombreUsuario});
-//   @override
-//   Widget build(BuildContext context) {
-//     return LayoutBuilder(
-//         builder: (BuildContext context, BoxConstraints constraints) {
-//       if (constraints.maxWidth < 600) {
-//         return GridView.builder(
-//           padding: const EdgeInsets.all(10.0),
-//           itemCount: list == null ? 0 : list.length,
-//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//             crossAxisCount: 2,
-//             crossAxisSpacing: 10.0,
-//             mainAxisSpacing: 10.0,
-//           ),
-//           itemBuilder: (context, i) {
-//             print("media");
-//             return SizedBox(
-//               height: 100.3,
-//               child: Card(
-//                 color: Colors.orange[200],
-//                 child: Stack(
-//                   children: [
-//                     Align(
-//                       alignment: Alignment.center,
-//                       child: list[i]['imagen'] != null &&
-//                               list[i]['imagen'] != ""
-//                           ? FutureBuilder(
-//                               future: http.head(Uri.parse(list[i]['imagen'])),
-//                               builder: (BuildContext context,
-//                                   AsyncSnapshot<http.Response> snapshot) {
-//                                 if (snapshot.hasData &&
-//                                     snapshot.data!.statusCode == 200) {
-//                                   return FadeInImage.assetNetwork(
-//                                     placeholder: 'assets/placeholder_image.png',
-//                                     image: list[i]['imagen'],
-//                                     fit: BoxFit.cover,
-//                                   );
-//                                 } else {
-//                                   return Icon(
-//                                     Icons.fastfood,
-//                                     color: Colors.white,
-//                                     size: 50,
-//                                   );
-//                                 }
-//                               },
-//                             )
-//                           : Icon(
-//                               Icons.fastfood,
-//                               color: Colors.white,
-//                               size: 50,
-//                             ),
-//                     ),
-//                     Align(
-//                       alignment: Alignment.topRight,
-//                       child: IconButton(
-//                         icon: Icon(Icons.delete_outline),
-//                         color: Colors.orange,
-//                         onPressed: () {
-//                           deleteItem(list[i]['id']);
-//                         },
-//                       ),
-//                     ),
-//                     Align(
-//                       alignment: Alignment.bottomLeft,
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(8.0),
-//                         child: Text(
-//                           list[i]['nombre'].toString(),
-//                           style: const TextStyle(
-//                             fontWeight: FontWeight.bold,
-//                             fontStyle: FontStyle.normal,
-//                             fontFamily: "Open Sans",
-//                             fontSize: 18.0,
-//                             // color: Color.fromARGB(255, 255, 255, 255),
-//                             color: Colors.orange,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     Align(
-//                       alignment: Alignment.bottomRight,
-//                       child: IconButton(
-//                         icon: Icon(Icons.remove_red_eye),
-//                         //color: Color.fromARGB(255, 255, 255, 255),
-//                         color: Colors.orange,
-//                         onPressed: () {
-//                           print("codigo");
-//                           print(list[i]['codigoDeBarras']);
-//                           Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (context) => MostrarFood(
-//                                 id: list[i]['id'] ?? 0,
-//                                 codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
-//                                 nombreUsuario: nombreUsuario,
-//                                 name: list[i]['name'],
-//                                 cantidad: list[i]['cantidad'],
-//                                 unidadesCantidad: list[i]['unidadesCantidad'],
-//                                 calorias: list[i]['calorias'],
-//                                 grasas: list[i]['grasas'],
-//                                 proteinas: list[i]['proteinas'],
-//                                 carbohidratos: list[i]['carbohidratos'],
-//                                 sodio: list[i]['sodio'] ?? 0.0,
-//                                 azucar: list[i]['azucar'] ?? 0.0,
-//                                 fibra: list[i]['fibra'] ?? 0.0,
-//                                 image: list[i]['image'],
-//                               ),
-//                             ),
-//                           );
-//                         },
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             );
-//           },
-//         );
-//       } else if (constraints.maxWidth < 1100) {
-//         return GridView.builder(
-//           padding: const EdgeInsets.all(10.0),
-//           itemCount: list == null ? 0 : list.length,
-//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//             crossAxisCount: 3,
-//             crossAxisSpacing: 10.0,
-//             mainAxisSpacing: 10.0,
-//           ),
-//           itemBuilder: (context, i) {
-//             return SizedBox(
-//               height: 100.3,
-//               child: Card(
-//                 color: Colors.orange[200],
-//                 child: Stack(
-//                   children: [
-//                     Align(
-//                       alignment: Alignment.center,
-//                       child: list[i]['imagen'] != null &&
-//                               list[i]['imagen'] != ""
-//                           ? FutureBuilder(
-//                               future: http.head(Uri.parse(list[i]['imagen'])),
-//                               builder: (BuildContext context,
-//                                   AsyncSnapshot<http.Response> snapshot) {
-//                                 if (snapshot.hasData &&
-//                                     snapshot.data!.statusCode == 200) {
-//                                   return FadeInImage.assetNetwork(
-//                                     placeholder: 'assets/placeholder_image.png',
-//                                     image: list[i]['imagen'],
-//                                     fit: BoxFit.cover,
-//                                   );
-//                                 } else {
-//                                   return Icon(
-//                                     Icons.fastfood,
-//                                     color: Colors.white,
-//                                     size: 50,
-//                                   );
-//                                 }
-//                               },
-//                             )
-//                           : Icon(
-//                               Icons.fastfood,
-//                               color: Colors.white,
-//                               size: 50,
-//                             ),
-//                     ),
-//                     Align(
-//                       alignment: Alignment.topRight,
-//                       child: IconButton(
-//                         icon: Icon(Icons.delete_outline),
-//                         color: Colors.orange,
-//                         onPressed: () {
-//                           deleteItem(list[i]['id']);
-//                         },
-//                       ),
-//                     ),
-//                     Align(
-//                       alignment: Alignment.bottomLeft,
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(8.0),
-//                         child: Text(
-//                           list[i]['nombre'].toString(),
-//                           style: const TextStyle(
-//                             fontWeight: FontWeight.bold,
-//                             fontStyle: FontStyle.normal,
-//                             fontFamily: "Open Sans",
-//                             fontSize: 18.0,
-//                             // color: Color.fromARGB(255, 255, 255, 255),
-//                             color: Colors.orange,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     Align(
-//                       alignment: Alignment.bottomRight,
-//                       child: IconButton(
-//                         icon: Icon(Icons.remove_red_eye),
-//                         //color: Color.fromARGB(255, 255, 255, 255),
-//                         color: Colors.orange,
-//                         onPressed: () {
-//                           print("codigo");
-//                           print(list[i]['codigoDeBarras']);
-//                           Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (context) => MostrarFood(
-//                                 id: list[i]['id'] ?? 0.0,
-//                                 codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
-//                                 nombreUsuario: nombreUsuario,
-//                                 name: list[i]['name'],
-//                                 cantidad: list[i]['cantidad'],
-//                                 unidadesCantidad: list[i]['unidadesCantidad'],
-//                                 calorias: list[i]['calorias'],
-//                                 grasas: list[i]['grasas'],
-//                                 proteinas: list[i]['proteinas'],
-//                                 carbohidratos: list[i]['carbohidratos'],
-//                                 sodio: list[i]['sodio'] ?? 0.0,
-//                                 azucar: list[i]['azucar'] ?? 0.0,
-//                                 fibra: list[i]['fibra'] ?? 0.0,
-//                                 image: list[i]['image'],
-//                               ),
-//                             ),
-//                           );
-//                         },
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             );
-//           },
-//         );
-//       } else {
-//         return GridView.builder(
-//           padding: const EdgeInsets.all(10.0),
-//           itemCount: list == null ? 0 : list.length,
-//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//             crossAxisCount: 6,
-//             crossAxisSpacing: 10.0,
-//             mainAxisSpacing: 10.0,
-//           ),
-//           itemBuilder: (context, i) {
-//             return SizedBox(
-//               height: 100.3,
-//               child: Card(
-//                 color: Colors.orange[200],
-//                 child: Stack(
-//                   children: [
-//                     Align(
-//                       alignment: Alignment.center,
-//                       child: list[i]['imagen'] != null &&
-//                               list[i]['imagen'] != ""
-//                           ? FutureBuilder(
-//                               future: http.head(Uri.parse(list[i]['imagen'])),
-//                               builder: (BuildContext context,
-//                                   AsyncSnapshot<http.Response> snapshot) {
-//                                 if (snapshot.hasData &&
-//                                     snapshot.data!.statusCode == 200) {
-//                                   return FadeInImage.assetNetwork(
-//                                     placeholder: 'assets/placeholder_image.png',
-//                                     image: list[i]['imagen'],
-//                                     fit: BoxFit.cover,
-//                                   );
-//                                 } else {
-//                                   return Icon(
-//                                     Icons.fastfood,
-//                                     color: Colors.white,
-//                                     size: 50,
-//                                   );
-//                                 }
-//                               },
-//                             )
-//                           : Icon(
-//                               Icons.fastfood,
-//                               color: Colors.white,
-//                               size: 50,
-//                             ),
-//                     ),
-//                     Align(
-//                       alignment: Alignment.topRight,
-//                       child: IconButton(
-//                         icon: Icon(Icons.delete_outline),
-//                         color: Colors.orange,
-//                         onPressed: () {
-//                           deleteItem(list[i]['id']);
-//                         },
-//                       ),
-//                     ),
-//                     Align(
-//                       alignment: Alignment.bottomLeft,
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(8.0),
-//                         child: Text(
-//                           list[i]['nombre'].toString(),
-//                           style: const TextStyle(
-//                             fontWeight: FontWeight.bold,
-//                             fontStyle: FontStyle.normal,
-//                             fontFamily: "Open Sans",
-//                             fontSize: 18.0,
-//                             // color: Color.fromARGB(255, 255, 255, 255),
-//                             color: Colors.orange,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     Align(
-//                       alignment: Alignment.bottomRight,
-//                       child: IconButton(
-//                         icon: Icon(Icons.remove_red_eye),
-//                         //color: Color.fromARGB(255, 255, 255, 255),
-//                         color: Colors.orange,
-//                         onPressed: () {
-//                           Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (context) => MostrarFood(
-//                                 id: list[i]['id'] ?? 0.0,
-//                                 codigoDeBarras: list[i]['codigoDeBarras'] ?? "",
-//                                 nombreUsuario: nombreUsuario,
-//                                 name: list[i]['name'],
-//                                 cantidad: list[i]['cantidad'],
-//                                 unidadesCantidad: list[i]['unidadesCantidad'],
-//                                 calorias: list[i]['calorias'],
-//                                 grasas: list[i]['grasas'],
-//                                 proteinas: list[i]['proteinas'],
-//                                 carbohidratos: list[i]['carbohidratos'],
-//                                 sodio: list[i]['sodio'] ?? 0.0,
-//                                 azucar: list[i]['azucar'] ?? 0.0,
-//                                 fibra: list[i]['fibra'] ?? 0.0,
-//                                 image: list[i]['image'],
-//                               ),
-//                             ),
-//                           );
-//                         },
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             );
-//           },
-//         );
-//       }
-//     });
-//   }
-// }
-
-//Pintar las Recetas
 
 class ItemListReceta extends StatelessWidget {
   final List list;
@@ -774,117 +461,40 @@ class ItemListReceta extends StatelessWidget {
         builder: (BuildContext context, BoxConstraints constraints) {
       if (constraints.maxWidth < 600) {
         return GridView.builder(
-          padding: const EdgeInsets.all(10.0),
-          itemCount: list == null ? 0 : list.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10.0,
-            mainAxisSpacing: 10.0,
-          ),
-          itemBuilder: (context, i) {
-            return SizedBox(
-              height: 100.3,
-              child: Card(
-                color: Colors.white,
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: list[i]['imagen'] != null &&
-                              list[i]['imagen'] != ""
-                          ? FutureBuilder(
-                              future: http.head(Uri.parse(list[i]['imagen'])),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<http.Response> snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data!.statusCode == 200) {
-                                  return FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: list[i]['imagen'],
-                                    fit: BoxFit.cover,
-                                  );
-                                } else {
-                                  return Icon(
-                                    Icons.fastfood,
-                                    color: Colors.orange[200],
-                                    size: 50,
-                                  );
-                                }
-                              },
-                            )
-                          : Icon(
-                              Icons.fastfood,
-                              color: Colors.orange[200],
-                              size: 50,
-                            ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.black,
-                        onPressed: () {
-                          deleteItem(list[i]['id']);
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
+            padding: const EdgeInsets.all(10.0),
+            itemCount: list == null ? 0 : list.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10.0,
+              mainAxisSpacing: 10.0,
+            ),
+            itemBuilder: (context, i) {
+              var imageUrl = "";
+              var id = list[i]['id'];
+              if (list[i]['image'] != null && list[i]['image'] != "") {
+                imageUrl = list[i]['image'];
+              }
+              var name = list[i]['nombre'] ?? "";
+              var cantidad = list[i]['porciones'] ?? 0;
+              var unidadesCantidad = list[i]['unidadesMedida'] ?? "";
 
-                          list[i]['nombre'].toString().length > 16
-                  ? '${list[i]['nombre'].toString().substring(0,15)}...'
-                  : list[i]['nombre'].toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                            fontFamily: "Open Sans",
-                            fontSize: 15.0,
-                            // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.remove_red_eye),
-                        //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.black,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MostrarReceta(
-                                  name: list[i]['nombre'],
-                                  cantidad: list[i]['porciones'],
-                                  unidadesCantidad: list[i]['unidadesMedida'],
-                                  ingredientes: list[i]['ingredientes'],
-                                  descripcion: list[i]['descripcion'],
-                                  pasos: list[i]['pasos'],
-                                  nombreUsuario: nombreUsuario,
-                                  // calorias: list[i]['calorias'],
-                                  // grasas: list[i]['grasas'],
-                                  // proteinas: list[i]['proteinas'],
-                                  // carbohidratos: list[i]['carbohidratos'],
-                                  // sodio: list[i]['sodio'] ?? 0.0,
-                                  // azucar: list[i]['azucar'] ?? 0.0,
-                                  // fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['imagen']),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+              var ingredientes = list[i]['ingredientes'] ?? [];
+              var descripcion = list[i]['descripcion'] ?? '';
+              var pasos = list[i]['pasos'] ?? [];
+
+              return SizedBox(
+                  height: 100.3,
+                  child: TarjetaReceta(
+                      imageUrl: imageUrl,
+                      id: id,
+                      nombreUsuario: nombreUsuario,
+                      cantidad: cantidad,
+                      unidadesCantidad: unidadesCantidad,
+                      name: name,
+                      descripcion: descripcion,
+                      pasos: pasos,
+                      ingredientes: ingredientes));
+            });
       } else if (constraints.maxWidth < 1100) {
         return GridView.builder(
           padding: const EdgeInsets.all(10.0),
@@ -895,107 +505,31 @@ class ItemListReceta extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
+            var imageUrl = "";
+            var id = list[i]['id'];
+            if (list[i]['image'] != null && list[i]['image'] != "") {
+              imageUrl = list[i]['image'];
+            }
+            var name = list[i]['nombre'] ?? "";
+            var cantidad = list[i]['porciones'] ?? 0;
+            var unidadesCantidad = list[i]['unidadesMedida'] ?? "";
+
+            var ingredientes = list[i]['ingredientes'] ?? [];
+            var descripcion = list[i]['descripcion'] ?? '';
+            var pasos = list[i]['pasos'] ?? [];
+
             return SizedBox(
-              height: 100.3,
-              child: Card(
-                color: Colors.white,
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: list[i]['imagen'] != null &&
-                              list[i]['imagen'] != ""
-                          ? FutureBuilder(
-                              future: http.head(Uri.parse(list[i]['imagen'])),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<http.Response> snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data!.statusCode == 200) {
-                                  return FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: list[i]['imagen'],
-                                    height: 90,
-                                    fit: BoxFit.cover,
-                                    
-                                  );
-                                } else {
-                                  return Icon(
-                                    Icons.fastfood,
-                                    color: Colors.white,
-                                    size: 50,
-                                  );
-                                }
-                              },
-                            )
-                          : Icon(
-                              Icons.fastfood,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.black,
-                        onPressed: () {
-                          deleteItem(list[i]['id']);
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          list[i]['nombre'].toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal,
-                            fontFamily: "Open Sans",
-                            fontSize: 18.0,
-                            // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.orange,
-                            backgroundColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.remove_red_eye),
-                        //color: Color.fromARGB(255, 255, 255, 255),
-                        color: Colors.orange,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MostrarReceta(
-                                  name: list[i]['nombre'],
-                                  cantidad: list[i]['porciones'],
-                                  unidadesCantidad: list[i]['unidadesMedida'],
-                                  ingredientes: list[i]['ingredientes'],
-                                  descripcion: list[i]['descripcion'],
-                                  pasos: list[i]['pasos'],
-                                  nombreUsuario: nombreUsuario,
-                                  // calorias: list[i]['calorias'],
-                                  // grasas: list[i]['grasas'],
-                                  // proteinas: list[i]['proteinas'],
-                                  // carbohidratos: list[i]['carbohidratos'],
-                                  // sodio: list[i]['sodio'] ?? 0.0,
-                                  // azucar: list[i]['azucar'] ?? 0.0,
-                                  // fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['imagen']),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+                height: 100.3,
+                child: TarjetaReceta(
+                    imageUrl: imageUrl,
+                    id: id,
+                    nombreUsuario: nombreUsuario,
+                    cantidad: cantidad,
+                    unidadesCantidad: unidadesCantidad,
+                    name: name,
+                    descripcion: descripcion,
+                    pasos: pasos,
+                    ingredientes: ingredientes));
           },
         );
       } else {
@@ -1008,106 +542,31 @@ class ItemListReceta extends StatelessWidget {
             mainAxisSpacing: 10.0,
           ),
           itemBuilder: (context, i) {
+            var imageUrl = "";
+            var id = list[i]['id'];
+            if (list[i]['image'] != null && list[i]['image'] != "") {
+              imageUrl = list[i]['image'];
+            }
+            var name = list[i]['nombre'] ?? "";
+            var cantidad = list[i]['porciones'] ?? 0;
+            var unidadesCantidad = list[i]['unidadesMedida'] ?? "";
+
+            var ingredientes = list[i]['ingredientes'] ?? [];
+            var descripcion = list[i]['descripcion'] ?? '';
+            var pasos = list[i]['pasos'] ?? [];
+
             return SizedBox(
-              height: 100.3,
-              child: Card(
-                color: Colors.orange[200],
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: list[i]['imagen'] != null &&
-                              list[i]['imagen'] != ""
-                          ? FutureBuilder(
-                              future: http.head(Uri.parse(list[i]['imagen'])),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<http.Response> snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data!.statusCode == 200) {
-                                  return FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: list[i]['imagen'],
-                                    fit: BoxFit.cover,
-                                  );
-                                } else {
-                                  return Icon(
-                                    Icons.fastfood,
-                                    color: Colors.white,
-                                    size: 50,
-                                  );
-                                }
-                              },
-                            )
-                          : Icon(
-                              Icons.fastfood,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.delete_outline),
-                        color: Colors.orange,
-                        onPressed: () {
-                          deleteItem(list[i]['id']);
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          list[i]['nombre'].toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal,
-                            fontFamily: "Open Sans",
-                            fontSize: 18.0,
-                            // color: Color.fromARGB(255, 255, 255, 255),
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(Icons.remove_red_eye),
-                        //color: Color.fromARGB(255, 255, 255, 255),
-                        //color: Colors.orange,
-                        focusColor:Colors.black,
-                        
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MostrarReceta(
-                                  name: list[i]['nombre'],
-                                  cantidad: list[i]['porciones'],
-                                  unidadesCantidad: list[i]['unidadesMedida'],
-                                  ingredientes: list[i]['ingredientes'],
-                                  descripcion: list[i]['descripcion'],
-                                  pasos: list[i]['pasos'],
-                                  nombreUsuario: nombreUsuario,
-                                  // calorias: list[i]['calorias'],
-                                  // grasas: list[i]['grasas'],
-                                  // proteinas: list[i]['proteinas'],
-                                  // carbohidratos: list[i]['carbohidratos'],
-                                  // sodio: list[i]['sodio'] ?? 0.0,
-                                  // azucar: list[i]['azucar'] ?? 0.0,
-                                  // fibra: list[i]['fibra'] ?? 0.0,
-                                  image: list[i]['imagen']),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+                height: 100.3,
+                child: TarjetaReceta(
+                    imageUrl: imageUrl,
+                    id: id,
+                    nombreUsuario: nombreUsuario,
+                    cantidad: cantidad,
+                    unidadesCantidad: unidadesCantidad,
+                    name: name,
+                    descripcion: descripcion,
+                    pasos: pasos,
+                    ingredientes: ingredientes));
           },
         );
       }

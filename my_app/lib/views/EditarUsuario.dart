@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/model/Usuario.dart';
@@ -35,8 +37,13 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   }
 
   Future<Usuario> getUsuarioById(String nombreUsuario) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     final response =
-        await http.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
+        await ioClient.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Usuario.fromJson(jsonData);
@@ -46,8 +53,13 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   }
 
   Future<Alergias> getAlergiasById(String nombreUsuario) async {
-    final response =
-        await http.get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response = await ioClient
+        .get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Alergias.fromJson(jsonData);
@@ -62,8 +74,8 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   final TextEditingController nombreUsuarioController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
-  final TextEditingController heightController= TextEditingController();
-  final TextEditingController weightController= TextEditingController();
+  final TextEditingController heightController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
 
   late bool cacahueteController;
 
@@ -191,34 +203,36 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                       ),
                       SizedBox(height: 10.0),
                       TextField(
-                  controller: heightController,
-                  decoration: InputDecoration(
-                    labelText: 'Altura',
-                    hintText: 'Altura en cm',
-                    icon: Icon(Icons.height),
-                  ),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  // Validamos que solo se ingresen números
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}')),
-                  ],
-                ),
-                SizedBox(height: 10.0),
-                TextField(
-                  controller: weightController,
-                  decoration: InputDecoration(
-                    labelText: 'Peso',
-                    hintText: 'Peso en kg',
-                    icon: Icon(Icons.height),
-                  ),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  // Validamos que solo se ingresen números
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}')),
-                  ],
-                ),
+                        controller: heightController,
+                        decoration: InputDecoration(
+                          labelText: 'Altura',
+                          hintText: 'Altura en cm',
+                          icon: Icon(Icons.height),
+                        ),
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        // Validamos que solo se ingresen números
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d{0,2}')),
+                        ],
+                      ),
+                      SizedBox(height: 10.0),
+                      TextField(
+                        controller: weightController,
+                        decoration: InputDecoration(
+                          labelText: 'Peso',
+                          hintText: 'Peso en kg',
+                          icon: Icon(Icons.height),
+                        ),
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        // Validamos que solo se ingresen números
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d{0,2}')),
+                        ],
+                      ),
                       SizedBox(height: 10.0),
                       DropdownButtonFormField(
                         decoration: InputDecoration(
@@ -371,3 +385,13 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
     );
   }
 }
+
+            //final double total = double.parse(remaining) + double.parse(consumed);
+    // final double progress = double.parse(consumed) / total;
+    // final bool goalReached = double.parse(remaining) <= 0; 
+    // goalReached
+            //     ? Text('Objetivo cumplido')
+            //     : LinearProgressIndicator(
+            //         value: progress,
+            //         valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+            //         backgroundColor: Colors.grey[300],

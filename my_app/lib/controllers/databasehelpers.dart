@@ -266,16 +266,16 @@ class DataBaseHelper {
 
 // Actualizar Usuario
   Future<http.Response> updateUsuario(
-    String nombreController,
-    String nombreUsuarioController,
-    String passwordController,
-    String? ageController,
-    String? heightController,
-    String? weightController,
-    String? genderController,
-    String? activityController,
-    String? objectiveController,
-  ) async {
+      String nombreController,
+      String nombreUsuarioController,
+      String passwordController,
+      String? ageController,
+      String? heightController,
+      String? weightController,
+      String? genderController,
+      String? activityController,
+      String? objectiveController,
+      String? imageController) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -292,6 +292,7 @@ class DataBaseHelper {
       'gender': genderController,
       'activity': activityController,
       'objective': objectiveController,
+      'imageString': imageController,
     };
     var body = json.encode(data);
     var response = await ioClient.put(Uri.parse(url),

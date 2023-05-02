@@ -336,6 +336,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                                     ? usuario.activity
                                     : _nivelActividadSeleccionado,
                                 usuario.objective,
+                                "",
                                 //luego hay q cambiar esto
                               );
 

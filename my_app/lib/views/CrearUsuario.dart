@@ -338,8 +338,7 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                               .trim()
                               .isEmpty ||
                           weightController.text.trim().isEmpty ||
-                          heightController.text.trim().isEmpty ||
-                          _aceptado == false) {
+                          heightController.text.trim().isEmpty) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -378,9 +377,56 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                         );
                         return;
                       } else {
-                        _mostrarDialogoTerminos();
-                        if (aceptarTerminos == false) {
-                          //print("hola");
+                        if (_aceptado == false) {
+                          _mostrarDialogoTerminos();
+                        } else {
+                          dataBaseHelper.addUsuario(
+                              nombreController.text.trim(),
+                              nombreUsuarioController.text.trim(),
+                              passwordController.text.trim(),
+                              ageController.text.trim(),
+                              heightController.text.trim(),
+                              weightController.text.trim(),
+                              _generoSeleccionado,
+                              _nivelActividadSeleccionado,
+                              "ninguno",
+                              "");
+                          Map<String, bool> alergiasSeleccionadas =
+                              seleccionarAlergias(alergias, seleccionadas);
+                          bool cacahuetesController =
+                              alergiasSeleccionadas['Cacahuetes'] ?? false;
+                          bool lecheController =
+                              alergiasSeleccionadas['Leche'] ?? false;
+                          bool huevoController =
+                              alergiasSeleccionadas['Huevo'] ?? false;
+                          bool trigoController =
+                              alergiasSeleccionadas['Trigo'] ?? false;
+                          bool sojaController =
+                              alergiasSeleccionadas['Soja'] ?? false;
+                          bool mariscosController =
+                              alergiasSeleccionadas['Mariscos'] ?? false;
+                          bool frutosSecosController =
+                              alergiasSeleccionadas['Frutos secos'] ?? false;
+                          bool pescadoController =
+                              alergiasSeleccionadas['Pescado'] ?? false;
+
+                          dataBaseHelper.addAlergias(
+                              nombreUsuarioController.text.trim(),
+                              cacahuetesController,
+                              lecheController,
+                              huevoController,
+                              trigoController,
+                              sojaController,
+                              mariscosController,
+                              frutosSecosController,
+                              pescadoController);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ListAlimentos(
+                                    nombreUsuario:
+                                        nombreUsuarioController.text.trim())),
+                          );
                         }
                       }
                     },
@@ -419,66 +465,12 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Términos de uso'),
-          content: Text('Aquí va la información de los términos de uso.'),
+          content: Text('Por favor, acepte los términos de uso'),
           actions: [
             TextButton(
-              child: Text('Cancelar'),
+              child: Text('Ok'),
               onPressed: () {
-                setState(() {
-                  aceptarTerminos = false;
-                });
                 Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Aceptar'),
-              onPressed: () {
-                setState(() {
-                  aceptarTerminos = true;
-                });
-                dataBaseHelper.addUsuario(
-                    nombreController.text.trim(),
-                    nombreUsuarioController.text.trim(),
-                    passwordController.text.trim(),
-                    ageController.text.trim(),
-                    heightController.text.trim(),
-                    weightController.text.trim(),
-                    _generoSeleccionado,
-                    _nivelActividadSeleccionado,
-                    "ninguno",
-                    "");
-                Map<String, bool> alergiasSeleccionadas =
-                    seleccionarAlergias(alergias, seleccionadas);
-                bool cacahuetesController =
-                    alergiasSeleccionadas['Cacahuetes'] ?? false;
-                bool lecheController = alergiasSeleccionadas['Leche'] ?? false;
-                bool huevoController = alergiasSeleccionadas['Huevo'] ?? false;
-                bool trigoController = alergiasSeleccionadas['Trigo'] ?? false;
-                bool sojaController = alergiasSeleccionadas['Soja'] ?? false;
-                bool mariscosController =
-                    alergiasSeleccionadas['Mariscos'] ?? false;
-                bool frutosSecosController =
-                    alergiasSeleccionadas['Frutos secos'] ?? false;
-                bool pescadoController =
-                    alergiasSeleccionadas['Pescado'] ?? false;
-
-                dataBaseHelper.addAlergias(
-                    nombreUsuarioController.text.trim(),
-                    cacahuetesController,
-                    lecheController,
-                    huevoController,
-                    trigoController,
-                    sojaController,
-                    mariscosController,
-                    frutosSecosController,
-                    pescadoController);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ListAlimentos(
-                          nombreUsuario: nombreUsuarioController.text.trim())),
-                );
-                // Navigator.of(context).pop();
               },
             ),
           ],

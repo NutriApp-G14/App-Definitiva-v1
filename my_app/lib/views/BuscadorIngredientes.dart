@@ -67,66 +67,38 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
       var alimentoCodBar = body['product'];
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MostrarFood(
-                    id: 0,
-                    codigoDeBarras: alimentoCodBar['_id'],
-                    nombreUsuario: widget.nombreUsuario,
-                    name: alimentoCodBar['product_name'] ?? "",
-                    cantidad: 100.0,
-                    unidadesCantidad: "grams",
-                    calorias: (alimentoCodBar['nutriments']?['energy-kcal_100g']
-                            is String)
-                        ? double.parse(
-                            alimentoCodBar['nutriments']['energy-kcal_100g'])
-                        : alimentoCodBar['nutriments']['energy-kcal_100g']
-                                ?.toDouble() ??
-                            0.0,
-                    grasas: (alimentoCodBar['nutriments']?['fat_100g']
-                            is String)
-                        ? double.parse(alimentoCodBar['nutriments']['fat_100g'])
-                        : alimentoCodBar['nutriments']['fat_100g']
-                                ?.toDouble() ??
-                            0.0,
-                    proteinas: (alimentoCodBar['nutriments']?['proteins_100g']
-                            is String)
-                        ? double.parse(
-                            alimentoCodBar['nutriments']['proteins_100g'])
-                        : alimentoCodBar['nutriments']['proteins_100g']
-                                ?.toDouble() ??
-                            0.0,
-                    carbohidratos: (alimentoCodBar['nutriments']
-                            ?['carbohydrates_100g'] is String)
-                        ? double.parse(
-                            alimentoCodBar['nutriments']['carbohydrates_100g'])
-                        : alimentoCodBar['nutriments']['carbohydrates_100g']
-                                ?.toDouble() ??
-                            0.0,
-                    sodio:
-                        (alimentoCodBar['nutriments']?['sodium_100g'] is String)
-                            ? double.parse(
-                                alimentoCodBar['nutriments']['sodium_100g'])
-                            : alimentoCodBar['nutriments']['sodium_100g']
-                                    ?.toDouble() ??
-                                0.0,
-                    azucar:
-                        (alimentoCodBar['nutriments']?['sugars_100g'] is String)
-                            ? double.parse(
-                                alimentoCodBar['nutriments']['sugars_100g'])
-                            : alimentoCodBar['nutriments']['sugars_100g']
-                                    ?.toDouble() ??
-                                0.0,
-                    fibra:
-                        (alimentoCodBar['nutriments']?['fiber_100g'] is String)
-                            ? double.parse(
-                                alimentoCodBar['nutriments']['fiber_100g'])
-                            : alimentoCodBar['nutriments']['fiber_100g']
-                                    ?.toDouble() ??
-                                0.0,
-                    image: alimentoCodBar['image_url'] ?? "",
-                  )));
+      widget.ingredientes.add(Alimento(
+        name: alimentoCodBar['product_name'] ?? "",
+        cantidad: 100.0,
+        unidadesCantidad: "grams",
+        calorias: (alimentoCodBar['nutriments']?['energy-kcal_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['energy-kcal_100g'])
+            : alimentoCodBar['nutriments']['energy-kcal_100g']?.toDouble() ??
+                0.0,
+        grasas: (alimentoCodBar['nutriments']?['fat_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['fat_100g'])
+            : alimentoCodBar['nutriments']['fat_100g']?.toDouble() ?? 0.0,
+        proteinas: (alimentoCodBar['nutriments']?['proteins_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['proteins_100g'])
+            : alimentoCodBar['nutriments']['proteins_100g']?.toDouble() ?? 0.0,
+        carbohidratos: (alimentoCodBar['nutriments']?['carbohydrates_100g']
+                is String)
+            ? double.parse(alimentoCodBar['nutriments']['carbohydrates_100g'])
+            : alimentoCodBar['nutriments']['carbohydrates_100g']?.toDouble() ??
+                0.0,
+        sodio: (alimentoCodBar['nutriments']?['sodium_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['sodium_100g'])
+            : alimentoCodBar['nutriments']['sodium_100g']?.toDouble() ?? 0.0,
+        azucar: (alimentoCodBar['nutriments']?['sugars_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['sugars_100g'])
+            : alimentoCodBar['nutriments']['sugars_100g']?.toDouble() ?? 0.0,
+        fibra: (alimentoCodBar['nutriments']?['fiber_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['fiber_100g'])
+            : alimentoCodBar['nutriments']['fiber_100g']?.toDouble() ?? 0.0,
+        image: alimentoCodBar['image_url'] ?? "",
+      ));
+      Navigator.of(context)
+          .pop(widget.onIngredientesUpdated(widget.ingredientes));
       setState(() {
         _listaDeAlimentos = alimentoCodBar;
       });
@@ -326,13 +298,10 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
       double azucar,
       double fibra,
       String image) async {
-
-
-   HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     final response = await ioClient.post(
       Uri.parse('${urlConexion}/foods/add'),

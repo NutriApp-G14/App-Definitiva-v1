@@ -240,7 +240,7 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
                                           : Colors.grey,
                                     ),
                                     Text('${fechaUtimos7Dias[0]}',
-                                        style: TextStyle(fontSize: 10))
+                                        style: TextStyle(fontSize: 7))
                                   ]),
                                   Column(children: [
                                     Icon(
@@ -254,7 +254,7 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
                                           : Colors.grey,
                                     ),
                                     Text('${fechaUtimos7Dias[1]}',
-                                        style: TextStyle(fontSize: 10))
+                                        style: TextStyle(fontSize: 7))
                                   ]),
                                   Column(children: [
                                     Icon(
@@ -268,7 +268,7 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
                                           : Colors.grey,
                                     ),
                                     Text('${fechaUtimos7Dias[2]}',
-                                        style: TextStyle(fontSize: 10))
+                                        style: TextStyle(fontSize: 7))
                                   ]),
                                   Column(children: [
                                     Icon(
@@ -283,7 +283,7 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
                                     ),
                                     Text(
                                       '${fechaUtimos7Dias[3]}',
-                                      style: TextStyle(fontSize: 10),
+                                      style: TextStyle(fontSize: 7),
                                     )
                                   ]),
                                   Column(children: [
@@ -298,7 +298,7 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
                                           : Colors.grey,
                                     ),
                                     Text('${fechaUtimos7Dias[4]}',
-                                        style: TextStyle(fontSize: 10))
+                                        style: TextStyle(fontSize: 7))
                                   ]),
                                   Column(children: [
                                     Icon(
@@ -312,7 +312,7 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
                                           : Colors.grey,
                                     ),
                                     Text('${fechaUtimos7Dias[5]}',
-                                        style: TextStyle(fontSize: 10))
+                                        style: TextStyle(fontSize: 7))
                                   ]),
                                   Column(children: [
                                     Icon(
@@ -326,7 +326,7 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
                                           : Colors.grey,
                                     ),
                                     Text('${fechaUtimos7Dias[6]}',
-                                        style: TextStyle(fontSize: 10))
+                                        style: TextStyle(fontSize: 7))
                                   ]),
                                 ])),
                       ]))));
@@ -366,39 +366,28 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // if (index == 0) ...{
-                        //   Text(
-                        //     'Hoy',
-                        //     style: TextStyle(fontWeight: FontWeight.bold),
-                        //   ),
-                        // } else if (index == 1) ...{
-                        //   Text(
-                        //     'Ayer',
-                        //     style: TextStyle(fontWeight: FontWeight.bold),
-                        //   ),
-                        // } else if (index == 2) ...{
-                        //   Text(
-                        //     'Anteayer',
-                        //     style: TextStyle(fontWeight: FontWeight.bold),
-                        //   ),
-                        // } else ...{
                         Text(
                           '${fechaUtimos7Dias[index]}',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 7),
                         ),
                         // },
-                        Text('Calorías: ${datosDia[0].toStringAsFixed(2)}',
+                        Text('Cal: ${datosDia[0].toStringAsFixed(2)}',
                             style: TextStyle(
-                                color: Color.fromARGB(255, 205, 184, 31))),
-                        Text('Proteínas: ${datosDia[1].toStringAsFixed(2)}',
+                                color: Color.fromARGB(255, 205, 184, 31),
+                                fontSize: 10)),
+                        Text('P: ${datosDia[1].toStringAsFixed(2)}',
                             style: TextStyle(
-                                color: Color.fromARGB(238, 104, 201, 253))),
-                        Text('Carbohidratos: ${datosDia[2].toStringAsFixed(2)}',
+                                color: Color.fromARGB(238, 104, 201, 253),
+                                fontSize: 10)),
+                        Text('H: ${datosDia[2].toStringAsFixed(2)}',
                             style: TextStyle(
-                                color: Color.fromARGB(251, 93, 223, 54))),
-                        Text('Grasas: ${datosDia[3].toStringAsFixed(2)}',
+                                color: Color.fromARGB(251, 93, 223, 54),
+                                fontSize: 10)),
+                        Text('G: ${datosDia[3].toStringAsFixed(2)}',
                             style: TextStyle(
-                                color: Color.fromARGB(234, 236, 97, 87))),
+                                color: Color.fromARGB(234, 236, 97, 87),
+                                fontSize: 10)),
                       ],
                     ),
                   );

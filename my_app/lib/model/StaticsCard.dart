@@ -382,16 +382,19 @@ class BarChart extends StatelessWidget {
               children: List.generate(
                 data.length,
                 (index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
                   child: Row(
                     children: [
                       Container(
-                        width: 16,
-                        height: 16,
+                        width: 12,
+                        height: 12,
                         color: colors[index],
                       ),
-                      SizedBox(width: 8),
-                      Text(labels![index]),
+                      SizedBox(width: 4),
+                      Text(labels![index],
+                          style: TextStyle(
+                            fontSize: 10,
+                          )),
                     ],
                   ),
                 ),
@@ -423,17 +426,29 @@ class BarChartPainter extends CustomPainter {
       final paint = Paint()..color = colors[i];
       canvas.drawRect(rect, paint);
 
-      // Añadir texto de leyenda a cada barra
-      // final label = data[i].toStringAsFixed(1);
-      // final textPainter = TextPainter(
-      //   text: TextSpan(
-      //     text: '$label\n',
-      //     style: TextStyle(color: Colors.black, fontSize: 12),
-      //   ),
-      //   textDirection: TextDirection.ltr,
-      // );
-      // textPainter.layout();
-      // textPainter.paint(canvas, Offset(x, y - textPainter.height));
+      //Añadir texto de leyenda a cada barra
+      final label = data[i].toStringAsFixed(1);
+      final textPainter = TextPainter(
+        text: i == 0
+            ? TextSpan(
+                text: '$label Kcal \n',
+                style: TextStyle(color: Colors.black, fontSize: 12),
+              )
+            : TextSpan(
+                text: '$label g \n',
+                style: TextStyle(color: Colors.black, fontSize: 12),
+              ),
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+
+      final textWidth = textPainter.width;
+      final textHeight = textPainter.height;
+
+      final x1 = i * barWidth + (barWidth - textWidth) / 2;
+      final y1 = (size.height - padding) - barHeight;
+
+      textPainter.paint(canvas, Offset(x1, y1 - textHeight));
     }
   }
 

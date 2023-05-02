@@ -38,7 +38,9 @@ Widget buildNutrientCard(String title, double remaining, double consumed,
           ])),
       ListTile(
         title: goalReached
-            ? Text('Objetivo cumplido', style: TextStyle(color: Colors.green))
+            ? Center(
+                child: Text('Objetivo cumplido',
+                    style: TextStyle(color: Colors.green)))
             : LinearProgressIndicator(
                 value: progress,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.green),

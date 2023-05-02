@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/CrearUsuario.dart';
-import 'package:my_app/views/listviewfood.dart';
+import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/model/Alergias.dart';
 import 'package:my_app/views/UsuarioPage.dart';
 
@@ -31,7 +32,6 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
     super.initState();
     _futureUsuario = getUsuarioById(widget.nombreUsuario);
     _futureAlergias = getAlergiasById(widget.nombreUsuario);
-    print(_futureAlergias);
   }
 
   Future<Usuario> getUsuarioById(String nombreUsuario) async {
@@ -62,6 +62,9 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   final TextEditingController nombreUsuarioController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
+  final TextEditingController heightController= TextEditingController();
+  final TextEditingController weightController= TextEditingController();
+
   late bool cacahueteController;
 
   var _generoSeleccionado;
@@ -187,45 +190,35 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                         ),
                       ),
                       SizedBox(height: 10.0),
-                      DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          labelText: usuario.height,
-                          hintText: 'Cambiar altura en cm',
-                          icon: Icon(Icons.height),
-                        ),
-                        value: alturaSeleccionada,
-                        items: alturas.map((int altura) {
-                          return DropdownMenuItem<int>(
-                            value: altura,
-                            child: Text(altura.toString() + "cm"),
-                          );
-                        }).toList(),
-                        onChanged: (nuevaAltura) {
-                          setState(() {
-                            alturaSeleccionada = nuevaAltura!;
-                          });
-                        },
-                      ),
-                      SizedBox(height: 10.0),
-                      DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          labelText: usuario.weight,
-                          hintText: 'Cambiar peso en kg',
-                          icon: Icon(Icons.fitness_center),
-                        ),
-                        value: pesoSeleccionado,
-                        items: pesos.map((int peso) {
-                          return DropdownMenuItem<int>(
-                            value: peso,
-                            child: Text(peso.toString() + " kg"),
-                          );
-                        }).toList(),
-                        onChanged: (nuevoPeso) {
-                          setState(() {
-                            pesoSeleccionado = nuevoPeso!;
-                          });
-                        },
-                      ),
+                      TextField(
+                  controller: heightController,
+                  decoration: InputDecoration(
+                    labelText: 'Altura',
+                    hintText: 'Altura en cm',
+                    icon: Icon(Icons.height),
+                  ),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  // Validamos que solo se ingresen números
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
+                ),
+                SizedBox(height: 10.0),
+                TextField(
+                  controller: weightController,
+                  decoration: InputDecoration(
+                    labelText: 'Peso',
+                    hintText: 'Peso en kg',
+                    icon: Icon(Icons.height),
+                  ),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  // Validamos que solo se ingresen números
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
+                ),
                       SizedBox(height: 10.0),
                       DropdownButtonFormField(
                         decoration: InputDecoration(
@@ -237,7 +230,6 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                           setState(() {
                             _generoSeleccionado = value;
                           });
-                          print('${_generoSeleccionado}');
                         },
                         items: [
                           DropdownMenuItem(
@@ -295,41 +287,43 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                           width: 150,
                           child: ElevatedButton(
                             onPressed: () {
-                              print(seleccionadas);
                               dataBaseHelper.updateUsuario(
-                                  (nombreController.text.trim() == null ||
-                                          nombreController.text.trim() == '')
-                                      ? usuario.nombre
-                                      : nombreController.text.trim(),
-                                  (nombreUsuarioController.text.trim() == null ||
-                                          nombreUsuarioController.text.trim() ==
-                                              '')
-                                      ? usuario.nombreUsuario
-                                      : nombreUsuarioController.text.trim(),
-                                  (passwordController.text.trim() == null ||
-                                          passwordController.text.trim() == '')
-                                      ? usuario.password
-                                      : passwordController.text.trim(),
-                                  (ageController.text.trim() == null ||
-                                          ageController.text.trim() == '')
-                                      ? usuario.age
-                                      : ageController.text.trim(),
-                                  (alturaSeleccionada == null ||
-                                          alturaSeleccionada.toString() == '')
-                                      ? usuario.height
-                                      : alturaSeleccionada.toString(),
-                                  (pesoSeleccionado == null || pesoSeleccionado.toString() == '')
-                                      ? usuario.weight
-                                      : pesoSeleccionado.toString(),
-                                  (_generoSeleccionado == null || _generoSeleccionado == '')
-                                      ? usuario.gender
-                                      : _generoSeleccionado,
-                                  (_nivelActividadSeleccionado == null ||
-                                          _nivelActividadSeleccionado == '')
-                                      ? usuario.activity
-                                      : _nivelActividadSeleccionado,
-                                  usuario.objective //luego hay q cambiar esto
-                                  );
+                                (nombreController.text.trim() == null ||
+                                        nombreController.text.trim() == '')
+                                    ? usuario.nombre
+                                    : nombreController.text.trim(),
+                                (nombreUsuarioController.text.trim() == null ||
+                                        nombreUsuarioController.text.trim() ==
+                                            '')
+                                    ? usuario.nombreUsuario
+                                    : nombreUsuarioController.text.trim(),
+                                (passwordController.text.trim() == null ||
+                                        passwordController.text.trim() == '')
+                                    ? usuario.password
+                                    : passwordController.text.trim(),
+                                (ageController.text.trim() == null ||
+                                        ageController.text.trim() == '')
+                                    ? usuario.age
+                                    : ageController.text.trim(),
+                                (heightController == null ||
+                                        heightController.text.trim() == '')
+                                    ? usuario.height
+                                    : heightController.text.trim(),
+                                (weightController == null ||
+                                        weightController.text.trim() == '')
+                                    ? usuario.weight
+                                    : weightController.text.trim(),
+                                (_generoSeleccionado == null ||
+                                        _generoSeleccionado == '')
+                                    ? usuario.gender
+                                    : _generoSeleccionado,
+                                (_nivelActividadSeleccionado == null ||
+                                        _nivelActividadSeleccionado == '')
+                                    ? usuario.activity
+                                    : _nivelActividadSeleccionado,
+                                usuario.objective,
+                                //luego hay q cambiar esto
+                              );
 
                               dataBaseHelper.updateAlergias(
                                 (nombreController.text.trim() == null ||

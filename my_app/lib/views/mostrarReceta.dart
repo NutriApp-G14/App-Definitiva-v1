@@ -241,7 +241,7 @@ class MostrarReceta extends StatelessWidget {
                     SizedBox(height: 50.0),
                     Card(
                         child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
+                            padding: EdgeInsets.fromLTRB(16, 16, 0, 16),
                             child: Row(children: [
                               Column(
                                 children: [
@@ -254,7 +254,7 @@ class MostrarReceta extends StatelessWidget {
                                   ),
                                   Padding(
                                       padding:
-                                          EdgeInsets.fromLTRB(26, 10, 0, 0),
+                                          EdgeInsets.fromLTRB(10, 10, 0, 0),
                                       child: Text(
                                         ' $descripcion',
                                         style: TextStyle(fontSize: 12),

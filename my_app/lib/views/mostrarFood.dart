@@ -1197,6 +1197,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                             widget.name.trim(),
                                                             alimentosRegistro,
                                                           );
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                         child: Text('Desayuno'),
                                                         style: ElevatedButton
@@ -1265,6 +1267,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                             widget.name.trim(),
                                                             alimentosRegistro,
                                                           );
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                         child: Text('Almuerzo'),
                                                         style: ElevatedButton
@@ -1333,6 +1337,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                             widget.name.trim(),
                                                             alimentosRegistro,
                                                           );
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                         child: Text('Comida'),
                                                         style: ElevatedButton
@@ -1401,6 +1407,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                             widget.name.trim(),
                                                             alimentosRegistro,
                                                           );
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                         child: Text('Merienda'),
                                                         style: ElevatedButton
@@ -1469,6 +1477,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                             widget.name.trim(),
                                                             alimentosRegistro,
                                                           );
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                         child: Text('Cena'),
                                                         style: ElevatedButton

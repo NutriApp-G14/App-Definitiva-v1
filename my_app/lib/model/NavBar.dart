@@ -200,20 +200,20 @@ class _NutriAppBarState extends State<NutriAppBar> {
                     splashRadius: 1.0,
                     hoverColor: Colors.transparent),
                 IconButton(
-                    icon: Icon(Icons.apple),
+                    icon: Icon(Icons.menu_book),
                     color: Colors.black,
                     onPressed: () {
-                      _navigateAlimentos(context);
+                      _navigateRegistroComidas(context);
                     },
                     highlightColor: Colors
                         .transparent, // desactiva la sombra del botón cuando se presiona
                     splashRadius: 1.0,
                     hoverColor: Colors.transparent),
                 IconButton(
-                    icon: Icon(Icons.menu_book),
+                    icon: Icon(Icons.apple),
                     color: Colors.black,
                     onPressed: () {
-                      _navigateRegistroComidas(context);
+                      _navigateAlimentos(context);
                     },
                     highlightColor: Colors
                         .transparent, // desactiva la sombra del botón cuando se presiona

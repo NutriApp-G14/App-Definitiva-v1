@@ -4,34 +4,31 @@ import 'dart:core';
 import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-//import 'package:my_app/model/Alergenos.dart';
 import 'package:my_app/model/Alergias.dart';
 import 'package:my_app/model/Alimento.dart';
 import 'dart:convert';
 
 import 'package:my_app/model/Usuario.dart';
 
-//final urlConexion = 'http://34.77.171.152:8080';
+//final urlConexion = 'http://34.77.252.254:8080';
 final urlConexion = 'http://localhost:8080';
 
 class DataBaseHelper {
 // Add Alimento
   Future<http.Response> addAlimento(
-    String nameController,
-    double cantidadController,
-    String unidadesCantidadController,
-    double caloriasController,
-    double grasasController,
-    double proteinasController,
-    double carbohidratosController,
-    String imageController,
-    String nombreUsuarioController,
-    double sodioController,
-    double azucarController,
-    double fibraController,
-    String codigoDeBarrasController,
-    List<String> alergenosController,
-  ) async {
+      String nameController,
+      double cantidadController,
+      String unidadesCantidadController,
+      double caloriasController,
+      double grasasController,
+      double proteinasController,
+      double carbohidratosController,
+      String imageController,
+      String nombreUsuarioController,
+      double sodioController,
+      double azucarController,
+      double fibraController,
+      String codigoDeBarrasController) async {
     var url = "${urlConexion}/foods/add";
     Map data = {
       'name': nameController,
@@ -47,7 +44,6 @@ class DataBaseHelper {
       'azucar': azucarController,
       'fibra': fibraController,
       'codigoDeBarras': codigoDeBarrasController,
-      'alergenos': alergenosController,
     };
     var body = json.encode(data);
     var response = await http.post(Uri.parse(url),
@@ -277,18 +273,6 @@ class DataBaseHelper {
     }
   }
 
-  // Obtienen las Alergenos del nombre del alimento
-  // Future<Alergenos> getAlergenosById(String name) async {
-  //   final response =
-  //       await http.get(Uri.parse('${urlConexion}/allergens/$name'));
-  //   if (response.statusCode == 200) {
-  //     final jsonData = jsonDecode(response.body);
-  //     return Alergenos.fromJson(jsonData);
-  //   } else {
-  //     throw Exception('Error al cargar el usuario');
-  //   }
-  // }
-
   //actualizaAlimentos
   Future<http.Response> updateAlimento(
       int idController,
@@ -304,8 +288,7 @@ class DataBaseHelper {
       double sodioController,
       double azucarController,
       double fibraController,
-      String codigoDeBarrasController,
-      List<String> alergenosController) async {
+      String codigoDeBarrasController) async {
     var url = "${urlConexion}/foods/$idController";
     Map data = {
       'name': nameController,
@@ -321,7 +304,6 @@ class DataBaseHelper {
       'azucar': azucarController,
       'fibra': fibraController,
       'codigoDeBarras': codigoDeBarrasController,
-      'alergenos': alergenosController,
     };
     var body = json.encode(data);
     var response = await http.put(Uri.parse(url),

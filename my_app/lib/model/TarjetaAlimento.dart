@@ -17,8 +17,8 @@ class TarjetaAlimento extends StatefulWidget {
   final List<String> scoreImages;
   final String codigoDeBarras;
   final double cantidad;
-  final String fecha;
-  final List registros;
+  final String fecha; 
+  final List registros; 
   final String tipodeComida;
 
   const TarjetaAlimento(
@@ -28,11 +28,8 @@ class TarjetaAlimento extends StatefulWidget {
       required this.imageUrl,
       required this.nombreAlimento,
       required this.scoreImages,
-      required this.scoreTitles,
-      required this.id,
-      required this.fecha,
-      required this.registros,
-      required this.tipodeComida});
+      required this.scoreTitles, 
+      required this.id, required this.fecha, required this.registros, required this.tipodeComida});
 
   @override
   _TarjetaAlimentoState createState() => _TarjetaAlimentoState();
@@ -41,61 +38,55 @@ class TarjetaAlimento extends StatefulWidget {
 class _TarjetaAlimentoState extends State<TarjetaAlimento> {
   RegistroHelper dataBaseHelper = RegistroHelper();
   // Agregar una variable para almacenar los datos obtenidos del Future
-
+  
   late var _alimentoFuture;
   var nombreAlimento;
   var cantidad;
-  var calorias;
+  var calorias; 
   var carbohidratos;
-  var grasas;
+  var grasas; 
   var proteinas;
-  var azucar;
-  var sodio;
+  var azucar; 
+  var sodio; 
   var codigoDeBarras;
   var fibra;
   var unidadesCantidad;
   var nombreDeUsuario;
-  var id;
+  var id; 
+
 
   @override
   void initState() {
     super.initState();
-    _alimentoFuture = searchAndDisplayFoodNuevaAPIList(widget.codigoDeBarras);
-    calcularDatos();
+      _alimentoFuture =  searchAndDisplayFoodNuevaAPIList(widget.codigoDeBarras);
+      calcularDatos();
   }
 
-  void calcularDatos() async {
-    _alimentoFuture =
-        await searchAndDisplayFoodNuevaAPIList(widget.codigoDeBarras);
-    var alimento = _alimentoFuture[0];
-    setState(() {
-      nombreAlimento = widget.nombreAlimento;
-      cantidad = widget.cantidad;
-      unidadesCantidad = "gramos";
-      calorias = double.parse(
-          alimento[0]['nutriments']['proteins_100g']?.toString() ?? '0.0');
-      grasas = double.parse(
-          alimento[0]['nutriments']?['fat_100g']?.toString() ?? '0.0');
-      proteinas = double.parse(
-          alimento[0]['nutriments']?['proteins_100g']?.toString() ?? '0.0');
+void calcularDatos() async {
+              _alimentoFuture = await searchAndDisplayFoodNuevaAPIList(widget.codigoDeBarras               );
+               var alimento = _alimentoFuture[0];
+          setState(() {
+                nombreAlimento = widget.nombreAlimento;
+               cantidad = widget.cantidad;
+               unidadesCantidad = "gramos";
+               calorias = double.parse(alimento[0]['nutriments']['proteins_100g']?.toString() ?? '0.0' );
+               grasas = double.parse(alimento[0]['nutriments']?['fat_100g']?.toString() ?? '0.0' );
+                proteinas = double.parse(alimento[0]['nutriments']?['proteins_100g']?.toString() ?? '0.0' );
 
-      carbohidratos = double.parse(
-          alimento[0]['nutriments']?['carbohydrates_100g']?.toString() ??
-              '0.0');
-      sodio = double.parse(
-          alimento[0]['nutriments']?['sodium_100g']?.toString() ?? '0.0');
-      azucar = double.parse(
-          alimento[0]['nutriments']?['sugars_100g']?.toString() ?? '0.0');
-      fibra = double.parse(
-          alimento[0]['nutriments']?['fiber_100g']?.toString() ?? '0.0');
-      codigoDeBarras = widget.codigoDeBarras;
-      nombreDeUsuario = widget.nombreUsuario;
-      id = widget.id;
-    });
-  }
+                carbohidratos=double.parse(alimento[0]['nutriments'] ? ['carbohydrates_100g']?.toString() ?? '0.0' );
+                 sodio=double.parse(alimento[0]['nutriments']?['sodium_100g']?.toString() ?? '0.0' );
+                 azucar=double.parse(alimento[0]['nutriments']?['sugars_100g']?.toString() ?? '0.0' );
+                fibra = double.parse(alimento[0]['nutriments']?['fiber_100g']?.toString() ?? '0.0');
+                codigoDeBarras = widget.codigoDeBarras;
+                nombreDeUsuario = widget.nombreUsuario;
+               id = widget.id;
+          });
 
-  Future<List<dynamic>> searchAndDisplayFoodNuevaAPI(
-      String codigoDeBarras) async {
+               
+}
+
+
+  Future<List<dynamic>> searchAndDisplayFoodNuevaAPI( String codigoDeBarras) async {
     var url =
         'https://world.openfoodfacts.org/cgi/search.pl?code=$codigoDeBarras&search_simple=1&action=process&json=true';
     var response = await http.get(Uri.parse(url));
@@ -108,10 +99,8 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
       return [];
     }
   }
-
   // Agregar un nuevo método para llamar al método de búsqueda para varios códigos de barras
-  Future<List<dynamic>> searchAndDisplayFoodNuevaAPIList(
-      String codigoDeBarras) async {
+  Future<List<dynamic>> searchAndDisplayFoodNuevaAPIList( String codigoDeBarras) async {
     var alimentos = [];
     var alimento = await searchAndDisplayFoodNuevaAPI(codigoDeBarras);
     alimentos.add(alimento);
@@ -119,22 +108,21 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
   }
 
   Future<void> deleteReg(int id) async {
+
     print(widget.registros);
     final response = await http.delete(
-      Uri.parse("$urlConexion/registro/reg/$id"),
+      Uri.parse("$urlConection/registro/reg/$id"),
     );
     setState(() {});
     widget.registros.removeWhere((element) => element['id'] == id);
     print("reg sin el borrado: ${widget.registros}");
-    Navigator.push(
+     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => PaginaTipoComida(
-                nombreUsuario: widget.nombreUsuario,
-                tipoDeComida: widget.tipodeComida,
-                fecha: widget.fecha,
-                registros: widget.registros)));
+            builder: (context) =>PaginaTipoComida(nombreUsuario: widget.nombreUsuario,
+            tipoDeComida : widget.tipodeComida , fecha : widget.fecha, registros: widget.registros)));
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -154,10 +142,10 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
         color: Colors.white,
         child: InkWell(
           borderRadius: BorderRadius.circular(8.0),
-          onTap: () {
-            print("calorias : ${calorias}");
+          onTap: ()  {
+              print("calorias : ${calorias}");
 
-            Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => MostrarFood(
@@ -175,15 +163,14 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                           codigoDeBarras: codigoDeBarras,
                           nombreUsuario: nombreDeUsuario,
                           id: 0,
-                          alergenos: [],
-                        )));
-
+                        ))); 
+            
             //MostrarFood(name: name, cantidad: cantidad, unidadesCantidad: unidadesCantidad, calorias: calorias, grasas: grasas, proteinas: proteinas, carbohidratos: carbohidratos, sodio: sodio, azucar: azucar, fibra: fibra, image: image)
           },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Align(
+  child: Column(
+  crossAxisAlignment: CrossAxisAlignment.stretch,
+  children: [
+      Align(
                 alignment: Alignment.topRight,
                 heightFactor: 0.4,
                 child: IconButton(
@@ -195,84 +182,91 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                   },
                 ),
               ),
-              widget.imageUrl != null && widget.imageUrl != ""
-                  ? Flexible(
-                      child: FutureBuilder(
-                        future: http.head(Uri.parse(widget.imageUrl)),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<http.Response> snapshot) {
-                          if (snapshot.hasData &&
-                              snapshot.data!.statusCode == 200) {
-                            return Padding(
-                              padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: SizedBox(
-                                  child: FadeInImage.assetNetwork(
-                                    placeholder: 'assets/placeholder_image.png',
-                                    image: widget.imageUrl,
-                                    fit: BoxFit
-                                        .fitHeight, // Ajustar la imagen para cubrir todo el espacio disponible
-                                  ),
-                                ),
-                              ),
-                            );
-                          } else {
-                            return Icon(
-                              Icons.fastfood,
-                              color: Color.fromARGB(221, 255, 181, 71),
-                            );
-                          }
-                        },
+    widget.imageUrl != null && widget.imageUrl != ""
+        ? Flexible(
+            child: FutureBuilder(
+              future: http.head(Uri.parse(widget.imageUrl)),
+              builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
+                if (snapshot.hasData && snapshot.data!.statusCode == 200) {
+                  return Padding(
+                    padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: SizedBox(
+                        child: FadeInImage.assetNetwork(
+                          placeholder: 'assets/placeholder_image.png',
+                          image: widget.imageUrl,
+                          fit: BoxFit.fitHeight, // Ajustar la imagen para cubrir todo el espacio disponible
+                        ),
                       ),
+                    ),
+                  );
+                } else {
+                  return Icon(
+                    Icons.fastfood,
+                    color: Color.fromARGB(221, 255, 181, 71),
                     )
-                  : Icon(
-                      Icons.fastfood,
-                      color: Color.fromARGB(221, 255, 181, 71),
+                  ;
+                }
+              },
+            ),
+          )
+        :   Icon(
+                    Icons.fastfood,
+                    color: Color.fromARGB(221, 255, 181, 71),
                     ),
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.nombreAlimento.length > 20
-                          ? '${widget.nombreAlimento.substring(0, 20)}...'
-                          : widget.nombreAlimento,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15.0,
-                      ),
-                    ),
-                    SizedBox(height: 2.0),
-                    Row(
-                      children: [
-                        for (int i = 0; i < widget.scoreTitles.length; i++)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Tooltip(
-                              message: widget.scoreTitles[i],
-                              child: SvgPicture.network(
-                                  height: 20,
-                                  widget.scoreImages[i],
-                                  placeholderBuilder: (BuildContext context) =>
-                                      CircularProgressIndicator.adaptive()),
-                            ),
-                          )
-                      ],
-                    ),
-                    SizedBox(height: 2.0),
-                    Text(
-                      " ${widget.codigoDeBarras}",
-                      style: TextStyle(color: Colors.grey, fontSize: 8.0),
-                    ),
-                  ],
-                ),
+                  
+     Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.nombreAlimento.length > 20
+                  ? '${widget.nombreAlimento.substring(0, 20)}...'
+                  : widget.nombreAlimento,
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 15.0,
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 2.0),
+            Row(
+              children: [
+                for (int i = 0; i < widget.scoreTitles.length; i++)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Tooltip(
+                      message: widget.scoreTitles[i],
+                      child: SvgPicture.network(
+                        height: 20,
+                        widget.scoreImages[i],
+                        placeholderBuilder: (BuildContext context) => CircularProgressIndicator.adaptive( )
+                      ),
+                    ),) 
+                  
+              ],
+            ),
+            SizedBox(height: 2.0),
+            Text(
+              " ${widget.codigoDeBarras}",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 8.0
+              ),
+            ),
+          ],
+        ),
+      ),
+    
+  ],
+),
+
         ),
       ),
     );
   }
+
+
+   
 }

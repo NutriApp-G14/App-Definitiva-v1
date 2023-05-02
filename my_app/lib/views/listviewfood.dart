@@ -319,7 +319,7 @@ class ItemList extends StatelessWidget {
               ,codigoDeBarras: codigoDeBarras, imageUrl: imageUrl, id:id,
                nombreUsuario: nombreUsuario, cantidad:cantidad, calorias: calorias, grasas: grasas,
                proteinas: proteinas, carbohidratos:carbohidratos, sodio: sodio , azucar: azucar, fibra:fibra,
-               unidadesCantidad: unidadesCantidad, 
+               unidadesCantidad: unidadesCantidad,
             )
             );
           },

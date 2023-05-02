@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
-import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/model/PaginaTipoComida.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/AddAlimentoPage.dart';
@@ -56,11 +55,6 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
     ));
   }
 
-  double proteinasFoods = 0;
-  double caloriasFoods = 0;
-  double carbohidratosFoods = 0;
-  double grasasFoods = 0;
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -73,7 +67,6 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
           if (snapshot.hasData) {
             List registroComidas = snapshot.data;
             List<String> alimentos = [];
-            List foods = [];
             List<dynamic> tamanos =
                 List.generate(alimentos.length, (index) => 0);
             int size = 0;
@@ -82,30 +75,12 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                   .map((registro) => registro['nombreAlimento'].toString())
                   .toList();
 
-              foods = registroComidas
-                  .map((registro) => registro['alimentos'])
-                  .toList();
-              //print(foods);
+              print(registroComidas);
               for (int i = 0; i < alimentos.length; i++) {
                 size += alimentos[i].length;
                 tamanos.add(size);
               }
             }
-            for (int i = 0; i < foods.length; i++) {
-              caloriasFoods +=
-                  foods[i][0]['cantidad'] * foods[i][0]['calorias'] / 100;
-              proteinasFoods +=
-                  foods[i][0]['cantidad'] * foods[i][0]['proteinas'] / 100;
-              carbohidratosFoods +=
-                  foods[i][0]['cantidad'] * foods[i][0]['carbohidratos'] / 100;
-              grasasFoods +=
-                  foods[i][0]['cantidad'] * foods[i][0]['grasas'] / 100;
-            }
-
-            print('Protes: ' );print(proteinasFoods);
-            print('Carb: ' );print(carbohidratosFoods);
-            print('Grasas: ' );print(grasasFoods);
-            print('Calorias: ' );print(caloriasFoods);
 
             return Padding(
                 padding:
@@ -196,7 +171,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: caloriasFoods.ceil(),
+                                                  flex: 320,
                                                   child: Container(
                                                       height: 10,
                                                       color: Color.fromARGB(
@@ -206,9 +181,9 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: 125,
                                                     child: Text(
-                                                      '${caloriasFoods.toStringAsFixed(2)} kcal',
+                                                      '320 kcal',
                                                       style: TextStyle(
                                                           fontSize: 10),
                                                     )),
@@ -217,7 +192,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: proteinasFoods.ceil(),
+                                                  flex: 60,
                                                   child: Container(
                                                     height: 10,
                                                     color: Color.fromARGB(
@@ -228,9 +203,9 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: 125,
                                                     child: Text(
-                                                      '${proteinasFoods.toStringAsFixed(2)} g',
+                                                      '60 g',
                                                       style: TextStyle(
                                                           fontSize: 10),
                                                     )),
@@ -239,7 +214,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: carbohidratosFoods.ceil(),
+                                                  flex: 90,
                                                   child: Container(
                                                     height: 10,
                                                     color: Color.fromARGB(
@@ -250,9 +225,9 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: 125,
                                                     child: Text(
-                                                      '${carbohidratosFoods.toStringAsFixed(2)} g',
+                                                      '90 g',
                                                       style: TextStyle(
                                                           fontSize: 10),
                                                     )),
@@ -261,7 +236,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  flex: grasasFoods.ceil(),
+                                                  flex: 30,
                                                   child: Container(
                                                     height: 10,
                                                     color: Color.fromARGB(
@@ -272,9 +247,9 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                                   width: 5,
                                                 ),
                                                 Expanded(
-                                                    flex: ((caloriasFoods.ceil() + proteinasFoods.ceil()+grasasFoods.ceil()+carbohidratosFoods.ceil())/4).ceil(),
+                                                    flex: 125,
                                                     child: Text(
-                                                      '${grasasFoods.toStringAsFixed(2)} g',
+                                                      '30 g',
                                                       style: TextStyle(
                                                           fontSize: 10),
                                                     )),

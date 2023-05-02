@@ -64,6 +64,55 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
   var pesoSeleccionado;
   var alturaSeleccionada;
 
+  bool _aceptado = false;
+  bool _showTerminos = false;
+
+  void _mostrarTerminos() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:
+              Text('Términos de uso y privacidad', textAlign: TextAlign.center),
+          content: SingleChildScrollView(
+            child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'Términos de uso:\n\n'
+                  'NutriApp es una aplicación de seguimiento de la nutrición que proporciona información y herramientas para ayudar a los usuarios a lograr sus objetivos de salud y bienestar.\n\n'
+                  'Los usuarios pueden crear una cuenta en NutriApp y utilizar la aplicación para rastrear sus comidas, nutrientes y otros datos de salud y bienestar.\n\n'
+                  'Al utilizar NutriApp, los usuarios aceptan que la aplicación es solo una herramienta de seguimiento y no debe utilizarse como sustituto de la atención médica o el asesoramiento de un profesional de la salud.\n\n'
+                  'NutriApp no se hace responsable de ninguna lesión, enfermedad o daño resultante del uso de la aplicación.\n\n'
+                  'Los usuarios deben ser mayores de 18 años para crear una cuenta en NutriApp, o tener el permiso de un padre o tutor legal.\n\n'
+                  'NutriApp se reserva el derecho de modificar o actualizar estos términos de uso en cualquier momento, y los usuarios deben revisar regularmente los términos actualizados.\n\n'
+                  'Privacidad:\n\n'
+                  'NutriApp recopila información personal de los usuarios, como su nombre, dirección de correo electrónico y datos de salud, para proporcionar servicios personalizados y mejorar la experiencia del usuario.\n\n'
+                  'NutriApp se compromete a proteger la privacidad de los usuarios y no compartirá su información personal con terceros sin su consentimiento explícito.\n\n'
+                  'NutriApp utiliza cookies y tecnologías similares para recopilar información sobre el uso de la aplicación, como las páginas visitadas y las acciones realizadas.\n\n'
+                  'Los usuarios pueden optar por no participar en la recopilación de datos de NutriApp al cambiar su configuración de privacidad en la aplicación.\n\n'
+                  'NutriApp se reserva el derecho de utilizar datos agregados y anónimos para fines de investigación y análisis de mercado.',
+                  textAlign: TextAlign.center,
+                )),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cerrar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _cerrarTerminos() {
+    setState(() {
+      _showTerminos = false;
+    });
+  }
+
   int calcularEdad(DateTime fechaNacimiento) {
     final ahora = DateTime.now();
     int edad = ahora.year - fechaNacimiento.year;
@@ -159,11 +208,9 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                 TextField(
                   controller: heightController,
                   decoration: InputDecoration(
-                    labelText: 'Altura',
-                    hintText: 'Altura en cm',
-                    icon:Icon(Icons.height)
-
-                  ),
+                      labelText: 'Altura',
+                      hintText: 'Altura en cm',
+                      icon: Icon(Icons.height)),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   // Validamos que solo se ingresen números
                   inputFormatters: [
@@ -223,23 +270,23 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                   items: [
                     DropdownMenuItem(
                       value: 'sedentario',
-                      child: Text('Sedentario'),
+                      child: Text('Sedentario (0 días)'),
                     ),
                     DropdownMenuItem(
                       value: 'poco activo',
-                      child: Text('Poco activo'),
+                      child: Text('Poco activo (1 día)'),
                     ),
                     DropdownMenuItem(
                       value: 'moderadamente activo',
-                      child: Text('Moderadamente Activo'),
+                      child: Text('Moderadamente Activo (2-3 días)'),
                     ),
                     DropdownMenuItem(
                       value: 'activo',
-                      child: Text('Activo'),
+                      child: Text('Activo (4-5 días)'),
                     ),
                     DropdownMenuItem(
                       value: 'muy activo',
-                      child: Text('Muy activo'),
+                      child: Text('Muy activo (más de 5 días)'),
                     ),
                   ],
                 ),
@@ -251,7 +298,30 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
           //Column(
           //  children: _crearAlergias(),
           //),
-          SizedBox(height: 32.0),
+          Row(
+            children: [
+              Checkbox(
+                value: _aceptado,
+                onChanged: (value) {
+                  setState(() {
+                    _aceptado = value!;
+                  });
+                },
+              ),
+              SizedBox(width: 10),
+              InkWell(
+                onTap: _mostrarTerminos,
+                child: Text(
+                  'Acepto los términos de uso y privacidad',
+                  style: TextStyle(
+                    color: Colors.orange,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
           Column(children: [
             SizedBox(
                 height: 40,
@@ -268,7 +338,8 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                               .trim()
                               .isEmpty ||
                           weightController.text.trim().isEmpty ||
-                          heightController.text.trim().isEmpty) {
+                          heightController.text.trim().isEmpty ||
+                          _aceptado == false) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -308,8 +379,8 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                         return;
                       } else {
                         _mostrarDialogoTerminos();
-                        if (aceptarTerminos) {
-                          print("hola");
+                        if (aceptarTerminos == false) {
+                          //print("hola");
                         }
                       }
                     },

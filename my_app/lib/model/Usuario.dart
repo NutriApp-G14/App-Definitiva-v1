@@ -24,6 +24,19 @@ class Usuario {
     //this.imageString
   );
 
+  String get _password => password;
+
+  void setPassword(String password) {
+    // expresión regular que valida que la contraseña tenga al menos 8 caracteres y una mayúscula
+    final passwordRegExp = RegExp(r'^(?=.*[A-Z]).{8,}$');
+
+    if (!passwordRegExp.hasMatch(password)) {
+      throw ArgumentError(
+          'La contraseña debe tener al menos 8 caracteres y una letra mayúscula.');
+    }
+    password = _password;
+  }
+
   factory Usuario.fromJson(Map<String, dynamic> json) {
     return Usuario(
       json['nombre'],

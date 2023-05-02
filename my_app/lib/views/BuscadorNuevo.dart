@@ -73,9 +73,9 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
               decoration: InputDecoration(
                 hintText: 'Introduce el nombre de la comida',
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.barcode_reader),
+                  icon: Icon(Icons.qr_code_scanner),
                   onPressed: _scanBarcode,
                 ),
               ),

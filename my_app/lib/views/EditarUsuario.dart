@@ -223,7 +223,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                         decoration: InputDecoration(
                           labelText: 'Peso',
                           hintText: 'Peso en kg',
-                          icon: Icon(Icons.height),
+                          icon: Icon(Icons.fitness_center),
                         ),
                         keyboardType:
                             TextInputType.numberWithOptions(decimal: true),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-Widget buildNutrientCard(String title, double remaining, double consumed,
-    bool arrowback, bool arrowforward) {
+Widget buildNutrientCard(String title, double requirement, double remaining,
+    double consumed, bool arrowback, bool arrowforward) {
   final double total = remaining + consumed;
   final double progress = consumed / total;
   final bool goalReached = remaining <= 0;
@@ -63,7 +63,7 @@ Widget buildNutrientCard(String title, double remaining, double consumed,
                 ),
           SizedBox(width: 10),
           Text(
-            ' Consumidas ${consumed.toStringAsFixed(2)}',
+            ' Consumido ${consumed.toStringAsFixed(2)} / ${requirement.toStringAsFixed(2)}',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ],

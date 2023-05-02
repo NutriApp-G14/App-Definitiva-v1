@@ -289,6 +289,7 @@ class _StaticsCardState extends State<StaticsCard> {
                                         case 0:
                                           return buildNutrientCard(
                                               'Calorías',
+                                              requerimientoCalorico['calories'],
                                               requerimientoCalorico[
                                                       'calories'] -
                                                   totalCalorias,
@@ -298,6 +299,7 @@ class _StaticsCardState extends State<StaticsCard> {
                                         case 1:
                                           return buildNutrientCard(
                                               'Proteínas',
+                                              requerimientoCalorico['protein'],
                                               requerimientoCalorico['protein'] -
                                                   totalProteinas,
                                               totalProteinas,
@@ -306,6 +308,7 @@ class _StaticsCardState extends State<StaticsCard> {
                                         case 2:
                                           return buildNutrientCard(
                                               'Carbohidratos',
+                                              requerimientoCalorico['carb'],
                                               requerimientoCalorico['carb'] -
                                                   totalCarbohidratos,
                                               totalCarbohidratos,
@@ -314,6 +317,7 @@ class _StaticsCardState extends State<StaticsCard> {
                                         case 3:
                                           return buildNutrientCard(
                                               'Grasas',
+                                              requerimientoCalorico['fat'],
                                               requerimientoCalorico['fat'] -
                                                   totalGrasas,
                                               totalGrasas,

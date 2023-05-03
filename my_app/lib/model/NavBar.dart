@@ -54,7 +54,6 @@ class _NutriAppBarState extends State<NutriAppBar> {
   }
 
   _navigateEstadisticas(BuildContext context) async {
-    print("navegando");
     String usuarioNombreUsuario = widget.nombreUsuario;
     Future<List> registrosDiario = dataRegistroHelper.getRegistroDiario(
         usuarioNombreUsuario.trim().toLowerCase(),

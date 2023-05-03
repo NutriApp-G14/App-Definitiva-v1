@@ -325,25 +325,26 @@ class ItemList extends StatelessWidget {
             var azucar = list[i]['azucar'] ?? 0.0;
             var fibra = list[i]['fibra'] ?? 0.0;
             var unidadesCantidad = list[i]['unidadesCantidad'] ?? "";
-
+            List<dynamic> alergenos_dynamic = list[i]['alergenos'] ?? [''];
+            var alergenos = alergenos_dynamic.map((e) => e.toString()).toList();
             return SizedBox(
                 height: 100.3,
                 child: TarjetaMisAlimento(
-                  nombreAlimento: nombreAlimento,
-                  codigoDeBarras: codigoDeBarras,
-                  imageUrl: imageUrl,
-                  id: id,
-                  nombreUsuario: nombreUsuario,
-                  cantidad: cantidad,
-                  calorias: calorias,
-                  grasas: grasas,
-                  proteinas: proteinas,
-                  carbohidratos: carbohidratos,
-                  sodio: sodio,
-                  azucar: azucar,
-                  fibra: fibra,
-                  unidadesCantidad: unidadesCantidad,
-                ));
+                    nombreAlimento: nombreAlimento,
+                    codigoDeBarras: codigoDeBarras,
+                    imageUrl: imageUrl,
+                    id: id,
+                    nombreUsuario: nombreUsuario,
+                    cantidad: cantidad,
+                    calorias: calorias,
+                    grasas: grasas,
+                    proteinas: proteinas,
+                    carbohidratos: carbohidratos,
+                    sodio: sodio,
+                    azucar: azucar,
+                    fibra: fibra,
+                    unidadesCantidad: unidadesCantidad,
+                    alergenos: alergenos));
           },
         );
       } else if (constraints.maxWidth < 1100) {
@@ -373,7 +374,8 @@ class ItemList extends StatelessWidget {
             var azucar = list[i]['azucar'] ?? 0.0;
             var fibra = list[i]['fibra'] ?? 0.0;
             var unidadesCantidad = list[i]['unidadesCantidad'] ?? "";
-
+            List<dynamic> alergenos_dynamic = list[i]['alergenos'] ?? [''];
+            var alergenos = alergenos_dynamic.map((e) => e.toString()).toList();
             return SizedBox(
                 height: 100.3,
                 child: TarjetaMisAlimento(
@@ -391,6 +393,7 @@ class ItemList extends StatelessWidget {
                   azucar: azucar,
                   fibra: fibra,
                   unidadesCantidad: unidadesCantidad,
+                  alergenos: alergenos,
                 ));
           },
         );
@@ -420,7 +423,8 @@ class ItemList extends StatelessWidget {
             var azucar = list[i]['azucar'] ?? 0.0;
             var fibra = list[i]['fibra'] ?? 0.0;
             var unidadesCantidad = list[i]['unidadesCantidad'] ?? "";
-
+            List<dynamic> alergenos_dynamic = list[i]['alergenos'] ?? [''];
+            var alergenos = alergenos_dynamic.map((e) => e.toString()).toList();
             return SizedBox(
                 height: 100.3,
                 child: TarjetaMisAlimento(
@@ -438,6 +442,7 @@ class ItemList extends StatelessWidget {
                   azucar: azucar,
                   fibra: fibra,
                   unidadesCantidad: unidadesCantidad,
+                  alergenos: alergenos,
                 ));
           },
         );

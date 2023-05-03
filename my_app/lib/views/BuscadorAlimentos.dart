@@ -159,8 +159,8 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
-                       var alergenos = _listaDeAlimentos[i]['allergens_hierarchy']
-                            ?? [];
+                      var alergenos =
+                          _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
@@ -195,7 +195,8 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                         azucar: azucar,
                         fibra: fibra,
                         anadirRegistro: true,
-                        day: widget.day, alergenos: alergenos,
+                        day: widget.day,
+                        alergenos: alergenos,
                       );
                     });
               } else if (constraints.maxWidth < 1100) {
@@ -310,7 +311,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                         azucar: azucar,
                         fibra: fibra,
                         anadirRegistro: true,
-                        day: widget.day, 
+                        day: widget.day,
                         alergenos: alergenos,
                       );
                     });
@@ -390,8 +391,8 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
-                      var alergenos = _listaDeAlimentos[i]['allergens_hierarchy']
-                            ?? [];
+                      var alergenos =
+                          _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
@@ -401,7 +402,6 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                         cantidad: cantidad,
                         nombreAlimento: nombreAlimento,
                         imageUrl: imageUrl,
-                        alergenos: alergenos,
                         scoreImages: [
                           nutriscore == ""
                               ? ""
@@ -428,6 +428,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                         fibra: fibra,
                         anadirRegistro: true,
                         day: widget.day,
+                        alergenos: alergenos,
                       );
                     });
               }
@@ -468,7 +469,8 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
       double sodio,
       double azucar,
       double fibra,
-      String image) async {
+      String image,
+      List<String> alergenos) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -492,7 +494,8 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
         'azucar': azucar,
         'image': image,
         'nombreUsuario': widget.nombreUsuario,
-        'codigoDeBarras': codigoDeBarras
+        'codigoDeBarras': codigoDeBarras,
+        'alergenos': alergenos
       }),
     );
     Navigator.pop(context);

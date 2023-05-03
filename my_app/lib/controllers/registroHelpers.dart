@@ -82,5 +82,4 @@ class RegistroHelper {
 
     return json.decode(response.body);
   }
-
 }

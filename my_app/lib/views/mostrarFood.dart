@@ -18,7 +18,6 @@ import 'package:my_app/model/Alergias.dart';
 //final urlConection = 'http://35.241.179.64:8080';
 //final urlConection = 'http://35.189.241.218:8080';
 
-
 List<String> alergias_ = [];
 List<String> alergiasCoincidentes = [];
 List<String> _alergias(Alergias alergia) {
@@ -99,6 +98,7 @@ class _MostrarFoodState extends State<MostrarFood> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    List<String> alergiasCoincidentes = [];
     formattedDate = DateFormat('dd-MM-yyyy').format(now);
     _futureAlergias = dataBaseHelper.getAlergiasById(widget.nombreUsuario);
   }
@@ -145,6 +145,7 @@ class _MostrarFoodState extends State<MostrarFood> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> alergiasCoincidentes = [];
     var nueva_cantidad = cantidad != 0.0 ? cantidad : widget.cantidad;
     calorias = _recalucularInformacion(widget.calorias, nueva_cantidad, 100);
     proteinas = _recalucularInformacion(widget.proteinas, nueva_cantidad, 100);
@@ -166,7 +167,6 @@ class _MostrarFoodState extends State<MostrarFood> {
       "Hidratos": calculoCarbohidratos,
       "Grasas": calculoGrasas,
     };
-
     for (final code in widget.alergenos) {
       final name = allergenNames[code];
       if (name != null) {
@@ -761,9 +761,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                   TextButton(
                                                                     onPressed:
                                                                         () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
+                                                                      Navigator.pop(
+                                                                          context);
                                                                     },
                                                                     child: Text(
                                                                         'Cancelar'),
@@ -1777,14 +1776,13 @@ class _MostrarFoodState extends State<MostrarFood> {
       double sodioController,
       double azucarController,
       double fibraController,
-      String codigoDeBarrasController) async {
+      String codigoDeBarrasController,
+      List<String> alergenos) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
-   HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-
-  
     var url = "${urlConection}/foods/$idController";
     Map data = {
       'name': nameController,
@@ -1800,6 +1798,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       'azucar': azucarController,
       'fibra': fibraController,
       'codigoDeBarras': codigoDeBarrasController,
+      'alergenos': alergenos,
     };
     var body = json.encode(data);
     var response = await ioClient.put(Uri.parse(url),

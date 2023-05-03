@@ -29,6 +29,7 @@ class TarjetaMisAlimento extends StatefulWidget {
   final double azucar;
   final double fibra;
   final String unidadesCantidad;
+  final List<String> alergenos;
 
   const TarjetaMisAlimento({
     required this.codigoDeBarras,
@@ -45,6 +46,7 @@ class TarjetaMisAlimento extends StatefulWidget {
     required this.azucar,
     required this.fibra,
     required this.unidadesCantidad,
+    required this.alergenos,
   });
 
   @override

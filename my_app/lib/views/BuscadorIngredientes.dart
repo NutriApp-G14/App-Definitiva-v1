@@ -297,7 +297,8 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
       double sodio,
       double azucar,
       double fibra,
-      String image) async {
+      String image,
+      List<String> alergenos) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -320,7 +321,8 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
         'sodio': sodio,
         'azucar': azucar,
         'image': image,
-        'nombreUsuario': widget.nombreUsuario
+        'nombreUsuario': widget.nombreUsuario,
+        'alergenos': alergenos
       }),
     );
     Navigator.pop(context);

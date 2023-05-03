@@ -164,7 +164,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                                   ?.toDouble() ??
                               0.0;
                       var alergenos =
-                        _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
+                          _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
@@ -198,9 +198,9 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         sodio: sodio,
                         azucar: azucar,
                         fibra: fibra,
-                        alergenos: alergenos,
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                        alergenos: alergenos,
                       );
                     });
               } else if (constraints.maxWidth < 1100) {
@@ -280,8 +280,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                                   ?.toDouble() ??
                               0.0;
                       var alergenos =
-                        _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
-
+                          _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
                         id: 0,
@@ -314,9 +313,9 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         sodio: sodio,
                         azucar: azucar,
                         fibra: fibra,
-                        alergenos: alergenos,
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                        alergenos: alergenos,
                       );
                     });
               } else {
@@ -396,8 +395,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                                   ?.toDouble() ??
                               0.0;
                       var alergenos =
-                        _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
-
+                          _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
                         id: 0,
@@ -431,8 +429,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         azucar: azucar,
                         fibra: fibra,
                         anadirRegistro: false,
-                        alergenos: alergenos,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                        alergenos: alergenos,
                       );
                     });
               }
@@ -549,10 +547,10 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                                     ?.toDouble() ??
                                 0.0,
                     image: alimentoCodBar['image_url'] ?? "",
+                    alergenos: alimentoCodBar['allergens_hierarchy'] ?? "",
                     showBotonAlimentos: true,
                     showBotonRegistro: true,
                     showBotonGuardar: false,
-                    alergenos: [],
                   )));
       setState(() {
         _listaDeAlimentos = alimentoCodBar;
@@ -574,7 +572,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
       double sodio,
       double azucar,
       double fibra,
-      String image) async {
+      String image,
+      List<String> alergenosController) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -598,7 +597,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
         'azucar': azucar,
         'image': image,
         'nombreUsuario': widget.nombreUsuario,
-        'codigoDeBarras': codigoDeBarras
+        'codigoDeBarras': codigoDeBarras,
+        'alergenos': alergenosController,
       }),
     );
     Navigator.pop(context);

@@ -73,9 +73,9 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
               decoration: InputDecoration(
                 hintText: 'Introduce el nombre de la comida',
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.barcode_reader),
+                  icon: Icon(Icons.qr_code_scanner),
                   onPressed: _scanBarcode,
                 ),
               ),
@@ -163,6 +163,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
+                      var alergenos =
+                          _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
@@ -198,6 +200,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         fibra: fibra,
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                        alergenos: alergenos,
                       );
                     });
               } else if (constraints.maxWidth < 1100) {
@@ -276,7 +279,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
-
+                      var alergenos =
+                          _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
                         id: 0,
@@ -311,6 +315,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         fibra: fibra,
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                        alergenos: alergenos,
                       );
                     });
               } else {
@@ -389,7 +394,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
-
+                      var alergenos =
+                          _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
                         id: 0,
@@ -424,6 +430,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         fibra: fibra,
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                        alergenos: alergenos,
                       );
                     });
               }
@@ -540,6 +547,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                                     ?.toDouble() ??
                                 0.0,
                     image: alimentoCodBar['image_url'] ?? "",
+                    alergenos: alimentoCodBar['allergens_hierarchy'] ?? "",
                     showBotonAlimentos: true,
                     showBotonRegistro: true,
                     showBotonGuardar: false,
@@ -564,7 +572,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
       double sodio,
       double azucar,
       double fibra,
-      String image) async {
+      String image,
+      List<String> alergenosController) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -588,7 +597,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
         'azucar': azucar,
         'image': image,
         'nombreUsuario': widget.nombreUsuario,
-        'codigoDeBarras': codigoDeBarras
+        'codigoDeBarras': codigoDeBarras,
+        'alergenos': alergenosController,
       }),
     );
     Navigator.pop(context);

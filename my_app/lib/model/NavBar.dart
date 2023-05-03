@@ -78,7 +78,7 @@ class _NutriAppBarState extends State<NutriAppBar> {
     ));
   }
 
-  _navigateCrearUsuarioPage(BuildContext context) async {
+  _navigateInicioPage(BuildContext context) async {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => IniciarSesionPage()));
   }
@@ -133,11 +133,7 @@ class _NutriAppBarState extends State<NutriAppBar> {
                               // Lógica para cerrar sesión
                               // Cerrar el cuadro de diálogo
                               Navigator.of(context).pop();
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => CrearUsuarioPage(),
-                                ),
-                              );
+                              _navigateInicioPage(context);
                             },
                             child: Text('Confirmar'),
                           ),

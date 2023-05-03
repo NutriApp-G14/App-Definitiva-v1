@@ -24,8 +24,9 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
   final TextEditingController proteinasController = TextEditingController();
   final TextEditingController carbohidratosController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
-  final TextEditingController codigoDeBarrasController= TextEditingController();
-
+  final TextEditingController codigoDeBarrasController =
+      TextEditingController();
+  final TextEditingController alergenosController = TextEditingController();
 
   Future<http.Response> addAlimento(
       String nameController,
@@ -37,14 +38,12 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
       double carbohidratosController,
       String imageController,
       String nombreUsuarioController,
-      String codigoDeBarras)
-       async {
+      String codigoDeBarras) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
- HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-  
     var url = "${urlConexion}/foods/add";
     Map data = {
       'name': nameController,
@@ -56,7 +55,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
       'carbohidratos': '$carbohidratosController',
       'image': imageController,
       'nombreUsuario': nombreUsuarioController,
-      'codigoDeBarras':codigoDeBarrasController
+      'codigoDeBarras': codigoDeBarrasController
     };
     var body = json.encode(data);
     var response = await ioClient.post(Uri.parse(url),
@@ -197,7 +196,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
                 ),
               ),
             ),
-           Container(
+            Container(
               child: TextField(
                 controller: codigoDeBarrasController,
                 decoration: InputDecoration(
@@ -210,44 +209,44 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
             const SizedBox(height: 32.0),
             Column(children: [
               Center(
-                child: SizedBox(
+                  child: SizedBox(
                 height: 40,
                 width: 150,
                 child: ElevatedButton(
                   onPressed: () async {
-                    bool exists = await dataBaseHelper.usuarioExists(codigoDeBarrasController.text.trim());
-                      if (exists) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text('Codigo de barras existente'),
-                            content: Text(
-                                'Ese alimento ya está añadido'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Cerrar'),
-                              ),
-                            ],
-                          ),
-                        );
-                        return;
-                      } else {
-                        addAlimento(
-                      nameController.text.trim(),
-                      double.parse(cantidadController.text.trim()),
-                      _unidadSeleccionadas,
-                      double.parse(caloriasController.text.trim()),
-                      double.parse(grasasController.text.trim()),
-                      double.parse(proteinasController.text.trim()),
-                      double.parse(carbohidratosController.text.trim()),
-                      imageController.text.trim(),
-                      widget.nombreUsuario.trim(),
-                      codigoDeBarrasController.text.trim() ?? "",
-                    );   
-                  }
+                    bool exists = await dataBaseHelper
+                        .usuarioExists(codigoDeBarrasController.text.trim());
+                    if (exists) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Codigo de barras existente'),
+                          content: Text('Ese alimento ya está añadido'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Cerrar'),
+                            ),
+                          ],
+                        ),
+                      );
+                      return;
+                    } else {
+                      addAlimento(
+                        nameController.text.trim(),
+                        double.parse(cantidadController.text.trim()),
+                        _unidadSeleccionadas,
+                        double.parse(caloriasController.text.trim()),
+                        double.parse(grasasController.text.trim()),
+                        double.parse(proteinasController.text.trim()),
+                        double.parse(carbohidratosController.text.trim()),
+                        imageController.text.trim(),
+                        widget.nombreUsuario.trim(),
+                        codigoDeBarrasController.text.trim() ?? "",
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
@@ -256,8 +255,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
                   ),
                   child: const Text('Añadir'),
                 ),
-              )
-              )
+              ))
             ])
           ],
         )));

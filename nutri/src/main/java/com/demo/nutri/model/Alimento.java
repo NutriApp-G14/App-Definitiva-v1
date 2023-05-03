@@ -28,6 +28,7 @@ public class Alimento {
     private Receta receta;
     @ManyToOne
     private RegistroComidas registroComidas;
+    @ElementCollection
     private List<String> alergenos;
 
     public String getCodigoDeBarras() {

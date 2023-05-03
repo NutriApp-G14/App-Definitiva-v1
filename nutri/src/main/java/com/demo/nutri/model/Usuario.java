@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class Usuario {
@@ -17,6 +18,7 @@ public class Usuario {
     private String gender;
     private String activity;
     private String objective;
+    @Lob
     private String imageString;
 
     public String getPassword() {

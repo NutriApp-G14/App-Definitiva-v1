@@ -8,25 +8,27 @@ import 'package:my_app/model/Alergias.dart';
 import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/model/Usuario.dart';
 
-final urlConexion = 'https://34.78.253.14:8443';
+final urlConexion = 'https://35.240.26.205:8443';
 //final urlConexion = 'http://localhost:8080';
 
 class DataBaseHelper {
 // Add Alimento
   Future<http.Response> addAlimento(
-      String nameController,
-      double cantidadController,
-      String unidadesCantidadController,
-      double caloriasController,
-      double grasasController,
-      double proteinasController,
-      double carbohidratosController,
-      String imageController,
-      String nombreUsuarioController,
-      double sodioController,
-      double azucarController,
-      double fibraController,
-      String codigoDeBarrasController) async {
+    String nameController,
+    double cantidadController,
+    String unidadesCantidadController,
+    double caloriasController,
+    double grasasController,
+    double proteinasController,
+    double carbohidratosController,
+    String imageController,
+    String nombreUsuarioController,
+    double sodioController,
+    double azucarController,
+    double fibraController,
+    String codigoDeBarrasController,
+    List<String> alergenosController,
+  ) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -47,6 +49,7 @@ class DataBaseHelper {
       'azucar': azucarController,
       'fibra': fibraController,
       'codigoDeBarras': codigoDeBarrasController,
+      'alergenos': alergenosController,
     };
     var body = json.encode(data);
     var response = await ioClient.post(Uri.parse(url),
@@ -335,7 +338,8 @@ class DataBaseHelper {
       double sodioController,
       double azucarController,
       double fibraController,
-      String codigoDeBarrasController) async {
+      String codigoDeBarrasController,
+      List<String> alergenosController) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -356,6 +360,7 @@ class DataBaseHelper {
       'azucar': azucarController,
       'fibra': fibraController,
       'codigoDeBarras': codigoDeBarrasController,
+      'alergenos': alergenosController
     };
     var body = json.encode(data);
     var response = await ioClient.put(Uri.parse(url),

@@ -83,9 +83,13 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
         break;
       default:
         calorieRequirement = tmb;
+        break;
     }
 
     switch (_objectiveSeleccionado) {
+      case 'ninguno':
+        calorieRequirement = calorieRequirement;
+        break;
       case 'perder peso rapidamente':
         calorieRequirement *= 0.8;
         break;
@@ -103,6 +107,7 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
         break;
       default:
         calorieRequirement = calorieRequirement;
+        break;
     }
 
     // Calculate macronutrient ranges
@@ -182,17 +187,9 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
               _sexo = usuario.gender;
               _objectiveSeleccionado = usuario.objective;
               double _tmb = _calculateTmb(_peso, _altura, _sexo, _edad);
-              if (_objectiveSeleccionado != "ninguno") {
-                requerimientoCalorico = _factorActividad(
-                    usuario.activity, _tmb, _objectiveSeleccionado, _peso);
-              } else {
-                requerimientoCalorico = {
-                  'calorias': 0,
-                  'proteinas': 0,
-                  'carbohidratos': 0,
-                  'grasas': 0,
-                };
-              }
+              requerimientoCalorico = _factorActividad(
+                  usuario.activity, _tmb, _objectiveSeleccionado, _peso);
+
               print(fechaUtimos7Dias);
               return Padding(
                   padding:

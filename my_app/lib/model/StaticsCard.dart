@@ -253,13 +253,9 @@ class _StaticsCardState extends State<StaticsCard> {
                       _sexo = usuario.gender;
                       _objectiveSeleccionado = usuario.objective;
                       double _tmb = _calculateTmb(_peso, _altura, _sexo, _edad);
-                      if (_objectiveSeleccionado != "ninguno") {
-                        requerimientoCalorico = _factorActividad(
-                            usuario.activity,
-                            _tmb,
-                            _objectiveSeleccionado,
-                            _peso);
-                      }
+
+                      requerimientoCalorico = _factorActividad(usuario.activity,
+                          _tmb, _objectiveSeleccionado, _peso);
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(

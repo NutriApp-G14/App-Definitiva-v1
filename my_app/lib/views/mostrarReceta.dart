@@ -322,6 +322,7 @@ class MostrarReceta extends StatelessWidget {
                                                     0.0,
                                                 image: ingredientes[index]
                                                     ['image'],
+                                                alergenos: [],
                                                 showBotonAlimentos: false,
                                                 showBotonRegistro: false,
                                                 showBotonGuardar: true,

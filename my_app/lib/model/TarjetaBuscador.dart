@@ -34,27 +34,30 @@ class TarjetaBuscador extends StatefulWidget {
   final bool anadirRegistro;
   final String tipoDeComida;
   final day;
+  final List alergenos;
 
-  const TarjetaBuscador(
-      {required this.nombreUsuario,
-      required this.cantidad,
-      required this.codigoDeBarras,
-      required this.imageUrl,
-      required this.nombreAlimento,
-      required this.scoreImages,
-      required this.scoreTitles,
-      required this.id,
-      required this.calorias,
-      required this.grasas,
-      required this.proteinas,
-      required this.carbohidratos,
-      required this.sodio,
-      required this.azucar,
-      required this.fibra,
-      required this.unidadesCantidad,
-      required this.anadirRegistro,
-      required this.tipoDeComida,
-      required this.day});
+  const TarjetaBuscador({
+    required this.nombreUsuario,
+    required this.cantidad,
+    required this.codigoDeBarras,
+    required this.imageUrl,
+    required this.nombreAlimento,
+    required this.scoreImages,
+    required this.scoreTitles,
+    required this.id,
+    required this.calorias,
+    required this.grasas,
+    required this.proteinas,
+    required this.carbohidratos,
+    required this.sodio,
+    required this.azucar,
+    required this.fibra,
+    required this.unidadesCantidad,
+    required this.anadirRegistro,
+    required this.tipoDeComida,
+    required this.day,
+    required this.alergenos,
+  });
 
   @override
   _TarjetaBuscadorState createState() => _TarjetaBuscadorState();
@@ -92,6 +95,9 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
         child: InkWell(
           borderRadius: BorderRadius.circular(8.0),
           onTap: () {
+            List<String> listaAlergenos = widget.alergenos
+                .map((elemento) => elemento.toString())
+                .toList();
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -110,6 +116,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                           codigoDeBarras: widget.codigoDeBarras,
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
+                          alergenos: listaAlergenos,
                           showBotonAlimentos: true,
                           showBotonRegistro: true,
                           showBotonGuardar: false,

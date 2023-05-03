@@ -1194,14 +1194,13 @@ class _MostrarFoodState extends State<MostrarFood> {
                           final alergia = snapshot.data!;
                           final listaAlergias = _alergias(alergia);
                           return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               widget.showBotonAlimentos == true
                             ? 
                               ElevatedButton(
                                 onPressed: () {
-                                  print(
-                                      "ha entrado en el boton"); //funciona con ambos
+                                  print("ha entrado en el boton"); //funciona con ambos
                                   print(nombreAlergenos);
                                   print(listaAlergias);
                                   // Verificar si hay alguna coincidencia con los alergenos del alimento
@@ -1218,9 +1217,10 @@ class _MostrarFoodState extends State<MostrarFood> {
                                       hayCoincidencia = true;
                                       alergiasCoincidentes.add(
                                           item); // Agregar el elemento coincidente al array
-                                      break;
+                                      //break;
                                     }
                                   }
+                                  print("alergiasCoincidentes");
                                   print(alergiasCoincidentes);
                                   bool verificarAlergenos(
                                       List<String> alergenos) {
@@ -1235,6 +1235,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
+                                        print(alergiasCoincidentes);
                                         return AlertDialog(
                                           title: Text('Advertencia'),
                                           content: Column(
@@ -1242,13 +1243,16 @@ class _MostrarFoodState extends State<MostrarFood> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
+                                             (widget.showBotonAlimentos == true)  ? 
                                               Text(
-                                                  'Este alimento contiene alergenos que podrían afectar tu salud.'),
+                                                  'Este alimento contiene alergenos que podrían afectar tu salud.')
+                                              : Text(""),
                                               SizedBox(height: 25.0),
                                               Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
+                                                  
                                                   for (String item
                                                       in alergiasCoincidentes)
                                                     Row(
@@ -1270,6 +1274,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                           actions: [
                                             TextButton(
                                               onPressed: () {
+                                                print("insertar preisonado");
                                                 insertarAlimento(
                                                   widget.nombreUsuario,
                                                   widget.name,
@@ -1286,9 +1291,10 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                   widget.codigoDeBarras,
                                                   widget.alergenos,
                                                 );
-                                                Navigator.pop(context);
+                                                
+                                               
                                               },
-                                              child: Text('Aceptar'),
+                                              child: Text('Añadir igualmente'),
                                             ),
                                             TextButton(
                                               onPressed: () =>
@@ -1851,8 +1857,9 @@ class _MostrarFoodState extends State<MostrarFood> {
         'alergenos': alergenos
       }),
     );
-    Navigator.pop(context);
+     Navigator.pop(context);
     _navigateListAlimento(context);
+   
     return response;
   }
 }

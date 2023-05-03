@@ -95,6 +95,9 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
         child: InkWell(
           borderRadius: BorderRadius.circular(8.0),
           onTap: () {
+            List<String> listaAlergenos = widget.alergenos
+                .map((elemento) => elemento.toString())
+                .toList();
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -113,6 +116,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                           codigoDeBarras: widget.codigoDeBarras,
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
+                          alergenos: listaAlergenos,
                           showBotonAlimentos: true,
                           showBotonRegistro: true,
                           showBotonGuardar: false,

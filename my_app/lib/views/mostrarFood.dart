@@ -96,6 +96,7 @@ class _MostrarFoodState extends State<MostrarFood> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    List<String> alergiasCoincidentes = [];
     formattedDate = DateFormat('dd-MM-yyyy').format(now);
     _futureAlergias = dataBaseHelper.getAlergiasById(widget.nombreUsuario);
   }
@@ -141,6 +142,7 @@ class _MostrarFoodState extends State<MostrarFood> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> alergiasCoincidentes = [];
     var nueva_cantidad = cantidad != 0.0 ? cantidad : widget.cantidad;
     calorias = _recalucularInformacion(widget.calorias, nueva_cantidad, 100);
     proteinas = _recalucularInformacion(widget.proteinas, nueva_cantidad, 100);
@@ -756,9 +758,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                   TextButton(
                                                                     onPressed:
                                                                         () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
+                                                                      Navigator.pop(
+                                                                          context);
                                                                     },
                                                                     child: Text(
                                                                         'Cancelar'),

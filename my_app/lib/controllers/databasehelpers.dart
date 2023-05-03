@@ -8,7 +8,7 @@ import 'package:my_app/model/Alergias.dart';
 import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/model/Usuario.dart';
 
-final urlConexion = 'https://34.78.253.14:8443';
+final urlConexion = 'https://35.240.26.205:8443';
 //final urlConexion = 'http://localhost:8080';
 
 class DataBaseHelper {

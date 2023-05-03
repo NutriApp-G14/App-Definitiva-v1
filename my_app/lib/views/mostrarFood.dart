@@ -1745,7 +1745,11 @@ class _MostrarFoodState extends State<MostrarFood> {
                               widget.sodio,
                               widget.azucar,
                               widget.fibra,
-                              widget.codigoDeBarras);
+                              widget.codigoDeBarras,
+                            []
+                                                          );
+
+                              
 
                           cantidad == 0;
                         },

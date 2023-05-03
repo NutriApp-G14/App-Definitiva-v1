@@ -1,120 +1,101 @@
-// import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:math';
 
-// class ForgotPasswordButton extends StatefulWidget {
-//   @override
-//   _ForgotPasswordButtonState createState() => _ForgotPasswordButtonState();
-// }
+import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
+import 'package:my_app/controllers/databasehelpers.dart';
+import 'package:my_app/views/IniciarSesion.dart';
 
-// class _ForgotPasswordButtonState extends State<ForgotPasswordButton> {
-//   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-//   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-//   String _email;
-//   String _newPassword;
 
-//   void _sendPasswordResetEmail() async {
-//     if (_formKey.currentState.validate()) {
-//       _formKey.currentState.save();
-//       try {
-//         await _firebaseAuth.sendPasswordResetEmail(email: _email);
-//         showDialog(
-//           context: context,
-//           builder: (BuildContext context) {
-//             return AlertDialog(
-//               title: Text('Correo enviado'),
-//               content: Text('Se ha enviado un correo electrónico a $_email con instrucciones para restablecer la contraseña.'),
-//               actions: <Widget>[
-//                 FlatButton(
-//                   child: Text('Cerrar'),
-//                   onPressed: () {
-//                     Navigator.of(context).pop();
-//                   },
-//                 ),
-//               ],
-//             );
-//           },
-//         );
-//       } catch (error) {
-//         showDialog(
-//           context: context,
-//           builder: (BuildContext context) {
-//             return AlertDialog(
-//               title: Text('Error'),
-//               content: Text('Ocurrió un error al enviar el correo electrónico de restablecimiento de contraseña. Por favor, intenta de nuevo.'),
-//               actions: <Widget>[
-//                 FlatButton(
-//                   child: Text('Cerrar'),
-//                   onPressed: () {
-//                     Navigator.of(context).pop();
-//                   },
-//                 ),
-//               ],
-//             );
-//           },
-//         );
-//       }
-//     }
-//   }
+class RecuperarContrasenaPage extends StatefulWidget {
+  final String nombreUsuario;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return RaisedButton(
-//       child: Text('Olvidé mi contraseña'),
-//       onPressed: () {
-//         showDialog(
-//           context: context,
-//           builder: (BuildContext context) {
-//             return AlertDialog(
-//               title: Text('Restablecer contraseña'),
-//               content: Form(
-//                 key: _formKey,
-//                 child: Column(
-//                   mainAxisSize: MainAxisSize.min,
-//                   children: <Widget>[
-//                     TextFormField(
-//                       decoration: InputDecoration(hintText: 'Ingresa tu correo electrónico'),
-//                       validator: (value) {
-//                         if (value.isEmpty) {
-//                           return 'Por favor, ingresa una dirección de correo electrónico válida.';
-//                         }
-//                         return null;
-//                       },
-//                       onSaved: (value) {
-//                         _email = value.trim();
-//                       },
-//                     ),
-//                     TextFormField(
-//                       decoration: InputDecoration(hintText: 'Ingresa una nueva contraseña'),
-//                       obscureText: true,
-//                       validator: (value) {
-//                         if (value.isEmpty) {
-//                           return 'Por favor, ingresa una nueva contraseña.';
-//                         }
-//                         return null;
-//                       },
-//                       onSaved: (value) {
-//                         _newPassword = value.trim();
-//                       },
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               actions: <Widget>[
-//                 FlatButton(
-//                   child: Text('Cancelar'),
-//                   onPressed: () {
-//                     Navigator.of(context).pop();
-//                   },
-//                 ),
-//                 FlatButton(
-//                   child: Text('Enviar'),
-//                   onPressed: _sendPasswordResetEmail,
-//                 ),
-//               ],
-//             );
-//           },
-//         );
-//       },
-//     );
-//   }
-// }
+  const RecuperarContrasenaPage({required this.nombreUsuario});
+  @override
+  _RecuperarContrasenaPageState createState() => _RecuperarContrasenaPageState();
+}
+
+class _RecuperarContrasenaPageState extends State<RecuperarContrasenaPage> {
+  final emailController = TextEditingController();
+  final nombreUsuarioController = TextEditingController();
+
+  final dataBaseHelper = DataBaseHelper();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Recuperar contraseña'),
+        foregroundColor: Colors.white,
+      ),
+      body: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Nombre de Usuario',
+                hintText: 'Introduce tu nombre de usuario',
+              ),
+              controller: nombreUsuarioController,
+            ),
+            
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Correo electrónico',
+                hintText: 'Introduce tu correo electrónico',
+              ),
+              controller: emailController,
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              
+              onPressed: () {
+                sendPasswordRecoveryEmail(emailController.text,nombreUsuarioController.text);
+                
+              },
+              child: Text(
+              'Enviar correo electrónico',
+              style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),),
+              
+
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void sendPasswordRecoveryEmail(String email, String nombreusuario) async {
+  final smtpServer = gmail('gruponutriapp@gmail.com', 'gevelldiwglrnedz');
+
+
+  var random = Random();
+  var newPass = random.nextInt(100000000).toString();
+
+  final message = Message()
+    ..from = Address('gruponutriapp@gmail.com', 'NutriApp Team')
+    ..recipients.add(email)
+    ..subject = 'Recuperación de contraseña'
+    ..text = 'Aquí está tu nueva contraseña: $newPass';
+
+  try {
+    await send(message, smtpServer);
+    print('Correo electrónico enviado correctamente');
+
+    dataBaseHelper.updatePassword(nombreusuario, newPass);
+
+    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => IniciarSesionPage()));
+              
+  } catch (e) {
+    print('Error al enviar el correo electrónico: $e');
+  }
+}
+
+}

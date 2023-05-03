@@ -316,6 +316,28 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
     return response;
   }
 
+
+  // Actualizar Usuario
+  Future<http.Response> updatePassword(
+       String nombreUsuarioController,
+      String passwordController,
+     ) async {
+    HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
+
+    var url = "${urlConexion}/users/password/$nombreUsuarioController";
+    Map data = {
+      'password': passwordController,
+    };
+    var body = json.encode(data);
+    var response = await ioClient.put(Uri.parse(url),
+        headers: {"Content-Type": "application/json"}, body: body);
+    print("${response.statusCode}");
+    return response;
+  }
+
 // Funciones Para Alergías
 
 // Obtienen las Alergía de un Usuario a partir de su nombre de Usuario

@@ -153,7 +153,7 @@
     },
     {
       "name": "intl",
-      "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/intl-0.18.1",
+      "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/intl-0.17.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -168,6 +168,18 @@
       "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/lints-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "logging",
+      "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/logging-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "mailer",
+      "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/mailer-5.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "matcher",
@@ -188,6 +200,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "mime",
+      "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/mime-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "multiselect_formfield",
       "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/multiselect_formfield-0.1.7",
       "packageUri": "lib/",
@@ -202,6 +220,12 @@
     {
       "name": "path_parsing",
       "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/path_parsing-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "pedantic",
+      "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/pedantic-1.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -338,7 +362,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-05-03T15:21:18.972031Z",
+  "generated": "2023-05-03T16:31:06.558928Z",
   "generator": "pub",
   "generatorVersion": "2.19.5"
 }

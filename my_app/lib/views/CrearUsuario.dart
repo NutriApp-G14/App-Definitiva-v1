@@ -5,6 +5,7 @@ import 'package:my_app/views/IniciarSesion.dart';
 import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/model/Alergias.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/views/restaurarContrasenaPage.dart';
 
 final bool cacahuetesController = false;
 final bool lecheController = false;
@@ -468,6 +469,7 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
               },
               child: Text('¿Ya tienes cuenta? Inicia sesión'),
             ),
+        
             SizedBox(
               height: 15,
             ),

@@ -5,6 +5,7 @@ import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/listviewFood.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_app/views/restaurarContrasenaPage.dart';
 
 import '../model/Usuario.dart';
 
@@ -137,6 +138,16 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
                 },
                 child: Text('¿Aún no eres miembro? Crea una cuenta'),
               ),
+              TextButton(
+              onPressed: () {
+                // Lógica para ir a la página de inicio de sesión
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RecuperarContrasenaPage(nombreUsuario: nombreUsuarioController.text.trim())));
+              },
+              child: Text('¿Has olvidado tu contraseña?'),
+            ),
             ])
           ],
         ),

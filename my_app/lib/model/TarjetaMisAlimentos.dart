@@ -4,13 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
-// //final urlConexion1 = 'http://35.241.179.64:8080';
-// final urlConexion1 = 'http://34.77.252.254:8080';
-// //final urlConexion1 = 'http://35.189.241.218:8080';
+//final urlConexion1 = 'http://35.241.179.64:8080';
+final urlConexion1 = 'http://34.77.171.152:8080';
+//final urlConexion1 = 'http://35.189.241.218:8080';
 
 class TarjetaMisAlimento extends StatefulWidget {
   final int id;
@@ -52,7 +51,7 @@ class TarjetaMisAlimento extends StatefulWidget {
 class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
   Future<void> deleteData(int id) async {
     final response = await http.delete(
-      Uri.parse("$urlConection/foods/$id"),
+      Uri.parse("$urlConexion1/foods/$id"),
     );
     _refreshListAlimentos();
   }
@@ -114,6 +113,7 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                           codigoDeBarras: widget.codigoDeBarras,
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
+                          alergenos: [],
                         )));
           },
           child: Column(

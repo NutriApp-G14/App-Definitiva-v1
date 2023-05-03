@@ -31,6 +31,7 @@ class TarjetaBuscador extends StatefulWidget {
   final String unidadesCantidad;
   final bool anadirRegistro;
   final String tipoDeComida;
+  final List alergenos;
 
   const TarjetaBuscador(
       {required this.nombreUsuario,
@@ -50,6 +51,7 @@ class TarjetaBuscador extends StatefulWidget {
       required this.fibra,
       required this.unidadesCantidad,
       required this.anadirRegistro,
+      required this.alergenos,
       required this.tipoDeComida});
 
   @override
@@ -88,6 +90,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
         child: InkWell(
           borderRadius: BorderRadius.circular(8.0),
           onTap: () {
+            List<String> listaAlergenos = widget.alergenos.map((elemento) => elemento.toString()).toList();
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -105,6 +108,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                           image: widget.imageUrl,
                           codigoDeBarras: widget.codigoDeBarras,
                           nombreUsuario: widget.nombreUsuario,
+                          alergenos: listaAlergenos,
                           id: 0,
                         )));
           },
@@ -137,7 +141,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                             return Icon(
                               Icons.fastfood,
                               color: Color.fromARGB(221, 255, 181, 71),
-                              size: 90,
+                              size: 100,
                             );
                           }
                         },
@@ -146,7 +150,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                   : Icon(
                       Icons.fastfood,
                       color: Color.fromARGB(221, 255, 181, 71),
-                      size: 90,
+                      size: 100,
                     ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -299,7 +303,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
       double fibra,
       String image) async {
     final response = await http.post(
-      Uri.parse('${urlConection}/foods/add'),
+      Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

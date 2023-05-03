@@ -81,9 +81,9 @@
     },
     {
       "name": "flutter_plugin_android_lifecycle",
-      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.13",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.9",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_svg",
@@ -105,9 +105,9 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/http-0.13.6",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/http-0.13.5",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "2.14"
     },
     {
       "name": "http_parser",
@@ -129,7 +129,7 @@
     },
     {
       "name": "image_picker_android",
-      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_android-0.8.6+11",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_android-0.8.6+7",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -237,9 +237,9 @@
     },
     {
       "name": "petitparser",
-      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-5.4.0",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-5.1.0",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "2.18"
     },
     {
       "name": "pie_chart",
@@ -303,19 +303,19 @@
     },
     {
       "name": "vector_graphics",
-      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics-1.1.5+1",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics-1.1.5",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "vector_graphics_codec",
-      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_codec-1.1.5+1",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_codec-1.1.5",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "vector_graphics_compiler",
-      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_compiler-1.1.5+1",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_compiler-1.1.5",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -327,9 +327,9 @@
     },
     {
       "name": "xml",
-      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/xml-6.3.0",
+      "rootUri": "file:///C:/Users/lucia/AppData/Local/Pub/Cache/hosted/pub.dev/xml-6.2.2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "2.18"
     },
     {
       "name": "my_app",
@@ -338,7 +338,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-05-02T11:33:52.633229Z",
+  "generated": "2023-05-02T11:37:35.145881Z",
   "generator": "pub",
   "generatorVersion": "3.0.0-398.0.dev"
 }

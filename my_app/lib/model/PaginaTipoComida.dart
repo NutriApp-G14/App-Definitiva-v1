@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'dart:convert';
 
 import 'package:my_app/model/NavBar.dart';
 import 'package:my_app/model/TarjetaAlimento.dart';
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_app/views/AddAlimentoPage.dart';
+//import 'package:my_app/views/AddAlimentoPage.dart';
 import 'package:my_app/views/BuscadorAlimentos.dart';
 
 class PaginaTipoComida extends StatefulWidget {
@@ -28,7 +28,6 @@ class PaginaTipoComida extends StatefulWidget {
 
 class _PaginaTipoComidaState extends State<PaginaTipoComida> {
   RegistroHelper dataBaseHelper = RegistroHelper();
-  late List<dynamic> _alimento;
 
   // Agregar una variable para almacenar los datos obtenidos del Future
   late Future<List<dynamic>> _alimentoFuture;
@@ -48,7 +47,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
         MaterialPageRoute(
             builder: (context) => BuscadorAlimentos(
                 nombreUsuario: widget.nombreUsuario,
-                fecha: widget.fecha,
+                day: widget.fecha,
                 tipoDeComida: widget.tipoDeComida)));
   }
 

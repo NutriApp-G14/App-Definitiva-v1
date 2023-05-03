@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -53,6 +57,7 @@ class UsuarioPage extends StatefulWidget {
 class _UsuarioPageState extends State<UsuarioPage> {
   late Future<Usuario> _futureUsuario;
   late Future<Alergias> _futureAlergias;
+  late String profileImage;
   var _edad;
   var _peso;
   var _altura;
@@ -205,20 +210,34 @@ class _UsuarioPageState extends State<UsuarioPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void _pickImageFromGallery() async {
+  void _pickImageFromGallery(Usuario usuario) async {
     final ImagePicker picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    var image1 = "";
+    var uint8List;
     if (pickedFile != null) {
       setState(() {
         _profileImage = File(pickedFile.path);
         _profileImageURL = null;
+        uint8List = Uint8List.fromList(_profileImage!.readAsBytesSync());
       });
+      dataBaseHelper.updateUsuario(
+          usuario.nombre,
+          usuario.nombreUsuario,
+          usuario.password,
+          usuario.age,
+          usuario.height,
+          usuario.weight,
+          usuario.gender,
+          usuario.activity,
+          _objectiveSeleccionado,
+          '');
     } else {
       showSnackBar('No se ha seleccionado ninguna imagen');
     }
   }
 
-  Future<void> _showUrlDialog() async {
+  Future<void> _showUrlDialog(Usuario usuario) async {
     String url = '';
     await showDialog(
       context: context,
@@ -244,17 +263,36 @@ class _UsuarioPageState extends State<UsuarioPage> {
             TextButton(
               child: Text('Aceptar'),
               onPressed: () {
-                Navigator.of(context).pop();
                 setState(() {
                   _profileImage = null;
                   _profileImageURL = url;
+                  _navigateUsuarioPage(context);
                 });
+                dataBaseHelper.updateUsuario(
+                    usuario.nombre,
+                    usuario.nombreUsuario,
+                    usuario.password,
+                    usuario.age,
+                    usuario.height,
+                    usuario.weight,
+                    usuario.gender,
+                    usuario.activity,
+                    _objectiveSeleccionado,
+                    _profileImageURL);
               },
             ),
           ],
         );
       },
     );
+  }
+
+  bool isUrl(String str) {
+    final regex = RegExp(
+        r"^(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]",
+        caseSensitive: false);
+    print(regex.hasMatch(str));
+    return regex.hasMatch(str);
   }
 
   @override
@@ -273,7 +311,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
             builder: (BuildContext context, AsyncSnapshot<Usuario> snapshot) {
               if (snapshot.hasData) {
                 final usuario = snapshot.data!;
-
+                profileImage = usuario.imageString;
                 _edad = calcularEdad(
                     usuario.age); // llamamos a la función para calcular la edad
                 _peso = double.parse(usuario.weight);
@@ -365,7 +403,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                                     'Seleccionar imagen de galería'),
                                                 onTap: () {
                                                   Navigator.of(context).pop();
-                                                  _pickImageFromGallery();
+                                                  _pickImageFromGallery(
+                                                      usuario);
                                                 },
                                               ),
                                               ListTile(
@@ -373,8 +412,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                                 title:
                                                     Text('Pegar URL de imagen'),
                                                 onTap: () {
-                                                  Navigator.of(context).pop();
-                                                  _showUrlDialog();
+                                                  _showUrlDialog(usuario);
                                                 },
                                               ),
                                             ],
@@ -388,10 +426,11 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                     backgroundImage: _profileImage != null
                                         ? FileImage(_profileImage!)
                                             as ImageProvider<Object>?
-                                        : _profileImageURL != null
-                                            ? NetworkImage(_profileImageURL!)
+                                        : profileImage == "" ||
+                                                profileImage == null
+                                            ? AssetImage("assets/user.jpeg")
                                                 as ImageProvider<Object>?
-                                            : AssetImage("assets/user.jpeg")
+                                            : NetworkImage(profileImage)
                                                 as ImageProvider<Object>?,
                                     child: Align(
                                       alignment: Alignment.bottomRight,
@@ -647,16 +686,16 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                       _navigateUsuarioPage(context);
                                     });
                                     dataBaseHelper.updateUsuario(
-                                      usuario.nombre,
-                                      usuario.nombreUsuario,
-                                      usuario.password,
-                                      usuario.age,
-                                      usuario.height,
-                                      usuario.weight,
-                                      usuario.gender,
-                                      usuario.activity,
-                                      _objectiveSeleccionado,
-                                    );
+                                        usuario.nombre,
+                                        usuario.nombreUsuario,
+                                        usuario.password,
+                                        usuario.age,
+                                        usuario.height,
+                                        usuario.weight,
+                                        usuario.gender,
+                                        usuario.activity,
+                                        _objectiveSeleccionado,
+                                        usuario.imageString);
 
                                     requerimientoCalorico = _factorActividad(
                                         usuario.activity,

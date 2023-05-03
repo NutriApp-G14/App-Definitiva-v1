@@ -10,6 +10,7 @@ import 'package:http/io_client.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/model/Alimento.dart';
+import 'package:my_app/model/PaginaTipoComida.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
@@ -32,6 +33,7 @@ class TarjetaBuscador extends StatefulWidget {
   final String unidadesCantidad;
   final bool anadirRegistro;
   final String tipoDeComida;
+  final day;
 
   const TarjetaBuscador(
       {required this.nombreUsuario,
@@ -51,7 +53,8 @@ class TarjetaBuscador extends StatefulWidget {
       required this.fibra,
       required this.unidadesCantidad,
       required this.anadirRegistro,
-      required this.tipoDeComida});
+      required this.tipoDeComida,
+      required this.day});
 
   @override
   _TarjetaBuscadorState createState() => _TarjetaBuscadorState();
@@ -245,11 +248,11 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                                   sodio: widget.sodio,
                                   image: widget.imageUrl));
                               if (widget.anadirRegistro) {
-                                registrohelper.addRegistro(
+                                addRegistro(
                                     widget.codigoDeBarras.trim().toLowerCase(),
                                     widget.cantidad,
                                     widget.nombreUsuario.trim().toLowerCase(),
-                                    formattedDate.trim().toLowerCase(),
+                                    widget.day.trim().toLowerCase(),
                                     widget.tipoDeComida.trim().toLowerCase(),
                                     widget.nombreAlimento.trim(),
                                     alimentoRegistro);
@@ -267,12 +270,6 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                                     widget.azucar,
                                     widget.fibra,
                                     widget.imageUrl);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ListAlimentos(
-                                            nombreUsuario:
-                                                widget.nombreUsuario)));
                               }
                             },
                           ),
@@ -327,7 +324,8 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
         'codigoDeBarras': codigoDeBarras
       }),
     );
-
+    Navigator.pop(context);
+    _navigateListAlimento(context);
     return response;
   }
 
@@ -337,5 +335,52 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
         MaterialPageRoute(
             builder: (context) =>
                 ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+  }
+
+  Future<http.Response> addRegistro(
+      String codigoDeBarrasController,
+      double cantidadController,
+      String nombreUsuarioController,
+      String fechaController,
+      String tipoDeComidaController,
+      String nombreAlimento,
+      List<Alimento> alimento) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    print("Funcion ejecutada");
+    var url = "${urlConection}/registro/add";
+    Map data = {
+      'codigoDeBarras': codigoDeBarrasController,
+      'cantidad': cantidadController,
+      'nombreUsuario': nombreUsuarioController,
+      'fecha': fechaController,
+      'tipoDeComida': tipoDeComidaController,
+      'nombreAlimento': nombreAlimento,
+      'alimentos': alimento,
+    };
+    var body = json.encode(data);
+
+    var response = await ioClient.post(Uri.parse(url),
+        headers: {"Content-Type": "application/json"}, body: body);
+    print("${response.statusCode}");
+    Navigator.pop(context);
+    _navigateTipoComida(context);
+    return response;
+  }
+
+  _navigateTipoComida(BuildContext context) async {
+    List registro = await registrohelper.getRegistroComidas(
+        widget.nombreUsuario, widget.tipoDeComida, widget.day);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PaginaTipoComida(
+                nombreUsuario: widget.nombreUsuario,
+                fecha: widget.day,
+                tipoDeComida: widget.tipoDeComida.trim().toLowerCase(),
+                registros: registro)));
   }
 }

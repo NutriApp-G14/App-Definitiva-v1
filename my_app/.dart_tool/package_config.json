@@ -171,15 +171,23 @@
     },
     {
       "name": "matcher",
+<<<<<<< HEAD
       "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/matcher-0.12.13",
+=======
+      "rootUri": "file:///C:/Users/anton/AppData/Local/Pub/Cache/hosted/pub.dev/matcher-0.12.15",
+>>>>>>> antonio
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "material_color_utilities",
+<<<<<<< HEAD
       "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/material_color_utilities-0.2.0",
+=======
+      "rootUri": "file:///C:/Users/anton/AppData/Local/Pub/Cache/hosted/pub.dev/material_color_utilities-0.3.0",
+>>>>>>> antonio
       "packageUri": "lib/",
-      "languageVersion": "2.13"
+      "languageVersion": "2.17"
     },
     {
       "name": "meta",
@@ -261,9 +269,13 @@
     },
     {
       "name": "source_span",
+<<<<<<< HEAD
       "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/source_span-1.9.1",
+=======
+      "rootUri": "file:///C:/Users/anton/AppData/Local/Pub/Cache/hosted/pub.dev/source_span-1.10.0",
+>>>>>>> antonio
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.18"
     },
     {
       "name": "stack_trace",
@@ -291,7 +303,11 @@
     },
     {
       "name": "test_api",
+<<<<<<< HEAD
       "rootUri": "file:///Users/cris/.pub-cache/hosted/pub.dev/test_api-0.4.16",
+=======
+      "rootUri": "file:///C:/Users/anton/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.5.2",
+>>>>>>> antonio
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -338,7 +354,13 @@
       "languageVersion": "2.17"
     }
   ],
+<<<<<<< HEAD
   "generated": "2023-05-01T09:49:47.636274Z",
   "generator": "pub",
   "generatorVersion": "2.19.5"
+=======
+  "generated": "2023-05-02T23:23:50.237613Z",
+  "generator": "pub",
+  "generatorVersion": "3.1.0-56.0.dev"
+>>>>>>> antonio
 }

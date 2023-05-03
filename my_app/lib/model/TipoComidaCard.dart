@@ -19,23 +19,30 @@ import 'package:my_app/views/listviewfood.dart';
 class TipoComidaCard extends StatefulWidget {
   final String nombreUsuario;
   final String tipoDeComida;
+  final String day;
+  final proteinasFoods;
+  final caloriasFoods;
+  final carbohidratosFoods;
+  final grasasFoods;
 
   const TipoComidaCard(
-      {required this.nombreUsuario, required this.tipoDeComida});
+      {required this.nombreUsuario,
+      required this.tipoDeComida,
+      required this.day,
+      required this.proteinasFoods,
+      required this.caloriasFoods,
+      required this.carbohidratosFoods,
+      required this.grasasFoods});
 
   @override
   _TipoComidaCardState createState() => _TipoComidaCardState();
 }
 
 class _TipoComidaCardState extends State<TipoComidaCard> {
-  DateTime now = DateTime.now();
-  late String formattedDate;
   RegistroHelper dataBaseHelper = RegistroHelper();
-
   @override
   void initState() {
     super.initState();
-    formattedDate = DateFormat('dd-MM-yyyy').format(now);
   }
 
   _navigateMostrarTipoComida(BuildContext context, String fecha,
@@ -43,23 +50,18 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
     List registros = await dataBaseHelper.getRegistroComidas(
         nombreUsuario.trim().toLowerCase(),
         tipoDeComida.trim().toLowerCase(),
-        formattedDate.trim().toLowerCase());
+        widget.day.trim().toLowerCase());
 
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => PaginaTipoComida(
         nombreUsuario: nombreUsuario,
         tipoDeComida: tipoDeComida,
-        fecha: fecha,
+        fecha: widget.day,
         registros: registros,
       ),
       transitionDuration: Duration(seconds: 0),
     ));
   }
-
-  double proteinasFoods = 0;
-  double caloriasFoods = 0;
-  double carbohidratosFoods = 0;
-  double grasasFoods = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +69,14 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
         future: dataBaseHelper.getRegistroComidas(
           widget.nombreUsuario.trim().toLowerCase(),
           widget.tipoDeComida.trim().toLowerCase(),
-          formattedDate.trim().toLowerCase(),
+          widget.day.trim().toLowerCase(),
         ),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
+            var proteinasFoods = widget.proteinasFoods;
+            var caloriasFoods = widget.proteinasFoods;
+            var carbohidratosFoods = widget.proteinasFoods;
+            var grasasFoods = widget.proteinasFoods;
             List registroComidas = snapshot.data;
             List<String> alimentos = [];
             List foods = [];
@@ -102,14 +108,14 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                   foods[i][0]['cantidad'] * foods[i][0]['grasas'] / 100;
             }
 
-            print('Protes: ');
-            print(proteinasFoods);
-            print('Carb: ');
-            print(carbohidratosFoods);
-            print('Grasas: ');
-            print(grasasFoods);
-            print('Calorias: ');
-            print(caloriasFoods);
+            // print('Protes: ');
+            // print(proteinasFoods);
+            // print('Carb: ');
+            // print(carbohidratosFoods);
+            // print('Grasas: ');
+            // print(grasasFoods);
+            // print('Calorias: ');
+            // print(caloriasFoods);
 
             return Padding(
                 padding:
@@ -343,12 +349,10 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                               widget.tipoDeComida
                                                   .trim()
                                                   .toLowerCase(),
-                                              formattedDate
-                                                  .trim()
-                                                  .toLowerCase());
+                                              widget.day.trim().toLowerCase());
                                           _navigateMostrarTipoComida(
                                               context,
-                                              formattedDate,
+                                              widget.day,
                                               widget.tipoDeComida,
                                               widget.nombreUsuario);
                                         },

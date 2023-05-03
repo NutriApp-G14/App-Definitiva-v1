@@ -9,6 +9,7 @@ import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/views/listviewFood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 import 'package:my_app/views/AddRecetasPage.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class BuscadorIngredientes extends StatefulWidget {
   final String nombreUsuario;
@@ -34,6 +35,75 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
     if (_query.isNotEmpty) {
       //await searchAndDisplayFood(_query);
       await searchAndDisplayFoodNuevaAPI(_query);
+    }
+  }
+
+  String _barcode = '';
+
+  Future<void> _scanBarcode() async {
+    try {
+      String barcode = await FlutterBarcodeScanner.scanBarcode(
+          '#FF0000', 'Cancel', true, ScanMode.BARCODE);
+
+      if (barcode != '-1') {
+        setState(() {
+          _barcode = barcode;
+          print(_barcode);
+        });
+        await _fetchFood(_barcode);
+      }
+    } catch (e) {
+      print('Error al escanear el código de barras: $e');
+    }
+  }
+
+  Future<http.Response> searchFoodNuevaAPIBarCode(String barcode) async {
+    var url1 = 'https://world.openfoodfacts.org/api/v0/product/$barcode.json';
+    return await http.get(Uri.parse(url1));
+  }
+
+  Future<void> _fetchFood(barcode) async {
+    var response = await searchFoodNuevaAPIBarCode(barcode);
+    if (response.statusCode == 200) {
+      var body = json.decode(response.body);
+      var alimentoCodBar = body['product'];
+      widget.ingredientes.add(Alimento(
+        name: alimentoCodBar['product_name'] ?? "",
+        cantidad: 100.0,
+        unidadesCantidad: "grams",
+        calorias: (alimentoCodBar['nutriments']?['energy-kcal_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['energy-kcal_100g'])
+            : alimentoCodBar['nutriments']['energy-kcal_100g']?.toDouble() ??
+                0.0,
+        grasas: (alimentoCodBar['nutriments']?['fat_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['fat_100g'])
+            : alimentoCodBar['nutriments']['fat_100g']?.toDouble() ?? 0.0,
+        proteinas: (alimentoCodBar['nutriments']?['proteins_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['proteins_100g'])
+            : alimentoCodBar['nutriments']['proteins_100g']?.toDouble() ?? 0.0,
+        carbohidratos: (alimentoCodBar['nutriments']?['carbohydrates_100g']
+                is String)
+            ? double.parse(alimentoCodBar['nutriments']['carbohydrates_100g'])
+            : alimentoCodBar['nutriments']['carbohydrates_100g']?.toDouble() ??
+                0.0,
+        sodio: (alimentoCodBar['nutriments']?['sodium_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['sodium_100g'])
+            : alimentoCodBar['nutriments']['sodium_100g']?.toDouble() ?? 0.0,
+        azucar: (alimentoCodBar['nutriments']?['sugars_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['sugars_100g'])
+            : alimentoCodBar['nutriments']['sugars_100g']?.toDouble() ?? 0.0,
+        fibra: (alimentoCodBar['nutriments']?['fiber_100g'] is String)
+            ? double.parse(alimentoCodBar['nutriments']['fiber_100g'])
+            : alimentoCodBar['nutriments']['fiber_100g']?.toDouble() ?? 0.0,
+        image: alimentoCodBar['image_url'] ?? "",
+      ));
+      Navigator.of(context)
+          .pop(widget.onIngredientesUpdated(widget.ingredientes));
+      setState(() {
+        _listaDeAlimentos = alimentoCodBar;
+      });
+    } else {
+      print('Error al realizar la búsqueda');
     }
   }
 
@@ -63,6 +133,10 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
               hintText: 'Introduce el ingrediente',
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              suffixIcon: IconButton(
+                icon: Icon(Icons.qr_code_scanner),
+                onPressed: _scanBarcode,
+              ),
             ),
           ),
           SizedBox(height: 10),
@@ -224,13 +298,10 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
       double azucar,
       double fibra,
       String image) async {
-
-
-   HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     final response = await ioClient.post(
       Uri.parse('${urlConexion}/foods/add'),

@@ -649,7 +649,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                             style: TextStyle(fontSize: 16),
                                           ),
                                           Text(
-                                            "${_tmb} KCal",
+                                            "${_tmb.toStringAsFixed(2)} KCal",
                                           ),
                                         ],
                                       ),
@@ -663,7 +663,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                             style: TextStyle(fontSize: 16),
                                           ),
                                           Text(
-                                            "${_necesidadAgua} litros ",
+                                            "${_necesidadAgua.toStringAsFixed(2)} litros ",
                                           ),
                                         ],
                                       ),

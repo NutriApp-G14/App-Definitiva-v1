@@ -163,6 +163,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
+                      var alergenos =
+                        _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
@@ -196,6 +198,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         sodio: sodio,
                         azucar: azucar,
                         fibra: fibra,
+                        alergenos: alergenos,
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
                       );
@@ -276,6 +279,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
+                      var alergenos =
+                        _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
@@ -309,6 +314,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         sodio: sodio,
                         azucar: azucar,
                         fibra: fibra,
+                        alergenos: alergenos,
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
                       );
@@ -389,6 +395,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
+                      var alergenos =
+                        _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
@@ -423,6 +431,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         azucar: azucar,
                         fibra: fibra,
                         anadirRegistro: false,
+                        alergenos: alergenos,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
                       );
                     });
@@ -543,6 +552,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                     showBotonAlimentos: true,
                     showBotonRegistro: true,
                     showBotonGuardar: false,
+                    alergenos: [],
                   )));
       setState(() {
         _listaDeAlimentos = alimentoCodBar;

@@ -159,6 +159,8 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
+                       var alergenos = _listaDeAlimentos[i]['allergens_hierarchy']
+                            ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
@@ -193,7 +195,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                         azucar: azucar,
                         fibra: fibra,
                         anadirRegistro: true,
-                        day: widget.day,
+                        day: widget.day, alergenos: alergenos,
                       );
                     });
               } else if (constraints.maxWidth < 1100) {
@@ -272,6 +274,8 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
+                      var alergenos = _listaDeAlimentos[i]['allergens_hierarchy']
+                            ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
@@ -306,7 +310,8 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                         azucar: azucar,
                         fibra: fibra,
                         anadirRegistro: true,
-                        day: widget.day,
+                        day: widget.day, 
+                        alergenos: alergenos,
                       );
                     });
               } else {
@@ -385,6 +390,8 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
+                      var alergenos = _listaDeAlimentos[i]['allergens_hierarchy']
+                            ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,
@@ -394,6 +401,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                         cantidad: cantidad,
                         nombreAlimento: nombreAlimento,
                         imageUrl: imageUrl,
+                        alergenos: alergenos,
                         scoreImages: [
                           nutriscore == ""
                               ? ""

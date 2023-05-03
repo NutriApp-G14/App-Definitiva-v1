@@ -27,7 +27,8 @@ class DataBaseHelper {
       double sodioController,
       double azucarController,
       double fibraController,
-      String codigoDeBarrasController) async {
+      String codigoDeBarrasController,
+       List<String> alergenosController) async {
     
     HttpClient httpClient = new HttpClient()
     ..badCertificateCallback =
@@ -50,6 +51,7 @@ class DataBaseHelper {
       'azucar': azucarController,
       'fibra': fibraController,
       'codigoDeBarras': codigoDeBarrasController,
+      'alergenos': alergenosController,
     };
     var body = json.encode(data);
     var response = await ioClient.post(Uri.parse(url),
@@ -333,6 +335,18 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
     }
   }
 
+  // Obtienen las Alergenos del nombre del alimento
+  // Future<Alergenos> getAlergenosById(String name) async {
+  //   final response =
+  //       await http.get(Uri.parse('${urlConexion}/allergens/$name'));
+  //   if (response.statusCode == 200) {
+  //     final jsonData = jsonDecode(response.body);
+  //     return Alergenos.fromJson(jsonData);
+  //   } else {
+  //     throw Exception('Error al cargar el usuario');
+  //   }
+  // }
+
   //actualizaAlimentos
   Future<http.Response> updateAlimento(
       int idController,
@@ -348,7 +362,8 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
       double sodioController,
       double azucarController,
       double fibraController,
-      String codigoDeBarrasController) async {
+      String codigoDeBarrasController,
+       List<String> alergenosController) async {
     
     HttpClient httpClient = new HttpClient()
     ..badCertificateCallback =
@@ -370,6 +385,7 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
       'azucar': azucarController,
       'fibra': fibraController,
       'codigoDeBarras': codigoDeBarrasController,
+       'alergenos': alergenosController,
     };
     var body = json.encode(data);
     var response = await ioClient.put(Uri.parse(url),

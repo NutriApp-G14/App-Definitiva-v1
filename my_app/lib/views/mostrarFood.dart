@@ -11,11 +11,37 @@ import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:pie_chart/pie_chart.dart';
 //import 'package:fl_chart/fl_chart.dart';
+import 'package:my_app/model/Alergias.dart';
 
 //final urlConection = 'http://localhost:8080';
 //final urlConection = 'http://34.77.252.254:8080';
 //final urlConection = 'http://35.241.179.64:8080';
 //final urlConection = 'http://35.189.241.218:8080';
+
+
+List<String> alergias_ = [];
+List<String> alergiasCoincidentes = [];
+List<String> _alergias(Alergias alergia) {
+  alergias_ = [];
+  final Map<String, bool> alergiasMap = {
+    'Cacahuetes': alergia.cacahuetes,
+    'Leche': alergia.leche,
+    'Huevo': alergia.huevo,
+    'Trigo': alergia.trigo,
+    'Soja': alergia.soja,
+    'Mariscos': alergia.mariscos,
+    'Frutos secos': alergia.frutosSecos,
+    'Pescado': alergia.pescado,
+  };
+
+  alergiasMap.forEach((key, value) {
+    if (value) {
+      alergias_.add(key);
+    }
+  });
+
+  return alergias_;
+}
 
 class MostrarFood extends StatefulWidget {
   final int id;
@@ -35,6 +61,7 @@ class MostrarFood extends StatefulWidget {
   final bool showBotonAlimentos;
   final bool showBotonRegistro;
   final bool showBotonGuardar;
+  final List<String> alergenos;
 
   const MostrarFood({
     required this.id,
@@ -54,6 +81,7 @@ class MostrarFood extends StatefulWidget {
     required this.showBotonAlimentos,
     required this.showBotonRegistro,
     required this.showBotonGuardar,
+    required this.alergenos,
   });
   @override
   _MostrarFoodState createState() => _MostrarFoodState();
@@ -63,6 +91,8 @@ class _MostrarFoodState extends State<MostrarFood> {
   RegistroHelper registrohelper = RegistroHelper();
   DateTime now = DateTime.now();
   late String formattedDate;
+  late Future<Alergias> _futureAlergias;
+
 
   DataBaseHelper dataBaseHelper = DataBaseHelper();
   @override
@@ -70,7 +100,23 @@ class _MostrarFoodState extends State<MostrarFood> {
     // TODO: implement initState
     super.initState();
     formattedDate = DateFormat('dd-MM-yyyy').format(now);
+    _futureAlergias = dataBaseHelper.getAlergiasById(widget.nombreUsuario);
   }
+
+  final Map<String, String> allergenNames = {
+    "en:milk": "Leche",
+    "en:eggs": "Huevo",
+    "en:gluten": "Trigo",
+    "en:nuts": "Frutos Secos",
+    "en:peanuts": "Cacahuetes",
+    "en:soybeans": "Soja",
+    "en:crustaceans": "Marisco",
+    "en:molluscs": "Marisco",
+    "en:fish": "Pescado"
+
+    // Agrega más códigos de alérgenos y nombres de alimentos aquí
+  };
+  final List<String> nombreAlergenos = [];
 
   _navigateListAlimento(BuildContext context) async {
     Navigator.push(
@@ -120,6 +166,13 @@ class _MostrarFoodState extends State<MostrarFood> {
       "Hidratos": calculoCarbohidratos,
       "Grasas": calculoGrasas,
     };
+
+    for (final code in widget.alergenos) {
+      final name = allergenNames[code];
+      if (name != null) {
+        nombreAlergenos.add(name);
+      }
+    }
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -373,7 +426,40 @@ class _MostrarFoodState extends State<MostrarFood> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 50.0),
+                    SizedBox(height: 25.0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Este alimento puede contener trazas de:",
+                          style: TextStyle(fontSize: 11),
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(height: 25.0),
+                            for (String item in nombreAlergenos)
+                              Container(
+                                margin: EdgeInsets.fromLTRB(0, 10, 5, 0),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 243, 173, 111),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Color.fromARGB(255, 243, 173, 111),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Text(
+                                  item,
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 25.0),
                     Row(
                       children: [
                         Expanded(
@@ -1100,26 +1186,137 @@ class _MostrarFoodState extends State<MostrarFood> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        widget.showBotonAlimentos == true
-                            ? ElevatedButton(
+                    FutureBuilder<Alergias>(
+                      future: _futureAlergias,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<Alergias> snapshot) {
+                        if (snapshot.hasData) {
+                          final alergia = snapshot.data!;
+                          final listaAlergias = _alergias(alergia);
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              widget.showBotonAlimentos == true
+                            ? 
+                              ElevatedButton(
                                 onPressed: () {
-                                  insertarAlimento(
-                                      widget.nombreUsuario,
-                                      widget.name,
-                                      widget.calorias,
-                                      widget.cantidad,
-                                      widget.unidadesCantidad,
-                                      widget.grasas,
-                                      widget.proteinas,
-                                      widget.carbohidratos,
-                                      widget.sodio,
-                                      widget.azucar,
-                                      widget.fibra,
-                                      widget.image,
-                                      widget.codigoDeBarras);
+                                  print(
+                                      "ha entrado en el boton"); //funciona con ambos
+                                  print(nombreAlergenos);
+                                  print(listaAlergias);
+                                  // Verificar si hay alguna coincidencia con los alergenos del alimento
+                                  bool hayCoincidencia = false;
+                                  // for (String item in listaAlergias) {
+                                  //   if (nombreAlergenos.contains(item)) {
+                                  //     hayCoincidencia = true;
+                                  //     break;
+                                  //   }
+                                  // }
+                                  alergiasCoincidentes = [];
+                                  for (String item in listaAlergias) {
+                                    if (nombreAlergenos.contains(item)) {
+                                      hayCoincidencia = true;
+                                      alergiasCoincidentes.add(
+                                          item); // Agregar el elemento coincidente al array
+                                      break;
+                                    }
+                                  }
+                                  print(alergiasCoincidentes);
+                                  bool verificarAlergenos(
+                                      List<String> alergenos) {
+                                    return alergenos != null;
+                                  }
+
+                                  bool hayAlergenos =
+                                      verificarAlergenos(widget.alergenos);
+
+                                  // Si hay una coincidencia, mostrar un dialogo emergente
+                                  if (hayCoincidencia) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Advertencia'),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  'Este alimento contiene alergenos que podrían afectar tu salud.'),
+                                              SizedBox(height: 25.0),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  for (String item
+                                                      in alergiasCoincidentes)
+                                                    Row(
+                                                      children: [
+                                                        Icon(Icons.warning,
+                                                            color: Colors.red),
+                                                        SizedBox(width: 10),
+                                                        Text(
+                                                          item,
+                                                          style: TextStyle(
+                                                              fontSize: 14),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                insertarAlimento(
+                                                  widget.nombreUsuario,
+                                                  widget.name,
+                                                  widget.calorias,
+                                                  widget.cantidad,
+                                                  widget.unidadesCantidad,
+                                                  widget.grasas,
+                                                  widget.proteinas,
+                                                  widget.carbohidratos,
+                                                  widget.sodio,
+                                                  widget.azucar,
+                                                  widget.fibra,
+                                                  widget.image,
+                                                  widget.codigoDeBarras,
+                                                  widget.alergenos,
+                                                );
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text('Aceptar'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: Text('Cancelar'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    // Si no hay una coincidencia, agregar el alimento
+                                    insertarAlimento(
+                                        widget.nombreUsuario,
+                                        widget.name,
+                                        widget.calorias,
+                                        widget.cantidad,
+                                        widget.unidadesCantidad,
+                                        widget.grasas,
+                                        widget.proteinas,
+                                        widget.carbohidratos,
+                                        widget.sodio,
+                                        widget.azucar,
+                                        widget.fibra,
+                                        widget.image,
+                                        widget.codigoDeBarras,
+                                        widget.alergenos);
+                                  }
                                 },
                                 child: Text('Añadir "Mis alimentos"'),
                                 style: ElevatedButton.styleFrom(
@@ -1506,44 +1703,58 @@ class _MostrarFoodState extends State<MostrarFood> {
                                   // minimumSize: ffi.Size(100, 40),
                                 ),
                               )
-                            : Container(),
-                      ],
+                               : Container(),
+                            ],
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text("Error: ${snapshot.error}"),
+                          );
+                        } else {
+                          return Center(
+                            child: Text(""), //CircularProgressIndicator(),
+                          );
+                        }
+                      },
                     ),
                     widget.showBotonGuardar == true
                         ? SizedBox(height: 10)
                         : Container(),
                     widget.showBotonGuardar == true
-                        ? Center(
-                            child: TextButton(
-                              onPressed: () {
-                                // Lógica para actualizar alimento
-                                updateAlimento(
-                                    widget.id,
-                                    widget.name,
-                                    nueva_cantidad,
-                                    widget.unidadesCantidad,
-                                    widget.calorias,
-                                    widget.grasas,
-                                    widget.proteinas,
-                                    widget.carbohidratos,
-                                    widget.image,
-                                    widget.nombreUsuario,
-                                    widget.sodio,
-                                    widget.azucar,
-                                    widget.fibra,
-                                    widget.codigoDeBarras);
+                        ? 
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          // Lógica para actualizar alimento
+                          updateAlimento(
+                              widget.id,
+                              widget.name,
+                              nueva_cantidad,
+                              widget.unidadesCantidad,
+                              widget.calorias,
+                              widget.grasas,
+                              widget.proteinas,
+                              widget.carbohidratos,
+                              widget.image,
+                              widget.nombreUsuario,
+                              widget.sodio,
+                              widget.azucar,
+                              widget.fibra,
+                              widget.codigoDeBarras);
 
-                                cantidad == 0;
-                              },
-                              child: Text('Guardar cambios'),
-                            ),
-                          )
-                        : Container(),
+                          cantidad == 0;
+                        },
+                        child: Text('Guardar cambios'),
+                      ),
+                    )
+                    : Container(),
                     SizedBox(height: 20)
                   ],
-                )),
+                )
+            ),
           ],
-        ));
+        )
+    );
   }
 
   Future<http.Response> updateAlimento(
@@ -1610,7 +1821,8 @@ class _MostrarFoodState extends State<MostrarFood> {
       double azucar,
       double fibra,
       String image,
-      String codigoDeBarras) async {
+      String codigoDeBarras,
+      List<String> alergenos) async {
     HttpClient httpClient = new HttpClient()
     ..badCertificateCallback =
         ((X509Certificate cert, String host, int port) => true);
@@ -1635,7 +1847,8 @@ class _MostrarFoodState extends State<MostrarFood> {
         'azucar': azucar,
         'image': image,
         'nombreUsuario': nombreUsuario,
-        'codigoDeBarras': codigoDeBarras
+        'codigoDeBarras': codigoDeBarras,
+        'alergenos': alergenos
       }),
     );
     Navigator.pop(context);

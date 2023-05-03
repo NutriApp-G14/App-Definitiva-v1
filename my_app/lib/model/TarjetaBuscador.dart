@@ -34,6 +34,7 @@ class TarjetaBuscador extends StatefulWidget {
   final bool anadirRegistro;
   final String tipoDeComida;
   final day;
+  final List alergenos;
 
   const TarjetaBuscador(
       {required this.nombreUsuario,
@@ -54,7 +55,8 @@ class TarjetaBuscador extends StatefulWidget {
       required this.unidadesCantidad,
       required this.anadirRegistro,
       required this.tipoDeComida,
-      required this.day});
+      required this.day,
+      required this.alergenos});
 
   @override
   _TarjetaBuscadorState createState() => _TarjetaBuscadorState();
@@ -92,6 +94,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
         child: InkWell(
           borderRadius: BorderRadius.circular(8.0),
           onTap: () {
+            List<String> listaAlergenos = widget.alergenos.map((elemento) => elemento.toString()).toList();
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -113,6 +116,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                           showBotonAlimentos: true,
                           showBotonRegistro: true,
                           showBotonGuardar: false,
+                          alergenos: listaAlergenos,
                         )));
           },
           child: Column(

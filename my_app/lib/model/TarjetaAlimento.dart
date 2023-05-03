@@ -173,6 +173,7 @@ void calcularDatos() async {
                           showBotonAlimentos: false,
                           showBotonRegistro: false,
                           showBotonGuardar: true,
+                          alergenos: [],
                         ))); 
             
             //MostrarFood(name: name, cantidad: cantidad, unidadesCantidad: unidadesCantidad, calorias: calorias, grasas: grasas, proteinas: proteinas, carbohidratos: carbohidratos, sodio: sodio, azucar: azucar, fibra: fibra, image: image)

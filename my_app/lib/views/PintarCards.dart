@@ -63,6 +63,7 @@ class ItemListAlimento extends StatelessWidget {
                         showBotonAlimentos: true,
                         showBotonRegistro: false,
                         showBotonGuardar: false,
+                        alergenos: [],
                       ),
                     ),
                   );
@@ -173,6 +174,7 @@ class ItemListAlimento extends StatelessWidget {
                         showBotonAlimentos: true,
                         showBotonRegistro: false,
                         showBotonGuardar: false,
+                        alergenos: [],
                       ),
                     ),
                   );
@@ -283,6 +285,7 @@ class ItemListAlimento extends StatelessWidget {
                         showBotonAlimentos: true,
                         showBotonRegistro: false,
                         showBotonGuardar: false,
+                        alergenos: [],
                       ),
                     ),
                   );

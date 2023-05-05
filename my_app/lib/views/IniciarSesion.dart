@@ -140,7 +140,6 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
               ),
               TextButton(
               onPressed: () {
-                // Lógica para ir a la página de inicio de sesión
                 Navigator.push(
                     context,
                     MaterialPageRoute(

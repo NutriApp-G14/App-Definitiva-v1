@@ -126,7 +126,6 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                           showBotonAlimentos: false,
                           showBotonRegistro: true,
                           showBotonGuardar: false,
-                          alergenos: [],
                         )));
           },
           child: Column(

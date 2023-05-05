@@ -62,7 +62,6 @@ class MostrarFood extends StatefulWidget {
   final bool showBotonAlimentos;
   final bool showBotonRegistro;
   final bool showBotonGuardar;
-  final List<String> alergenos;
 
   const MostrarFood({
     required this.id,
@@ -83,7 +82,6 @@ class MostrarFood extends StatefulWidget {
     required this.showBotonAlimentos,
     required this.showBotonRegistro,
     required this.showBotonGuardar,
-    required this.alergenos,
   });
   @override
   _MostrarFoodState createState() => _MostrarFoodState();

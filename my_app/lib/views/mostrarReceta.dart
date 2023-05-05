@@ -326,7 +326,6 @@ class MostrarReceta extends StatelessWidget {
                                                 showBotonAlimentos: false,
                                                 showBotonRegistro: false,
                                                 showBotonGuardar: true,
-                                                alergenos: [],
                                               )));
                                 },
                                 child: Card(

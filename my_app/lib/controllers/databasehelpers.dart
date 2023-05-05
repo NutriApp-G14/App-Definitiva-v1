@@ -385,8 +385,7 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
       double azucarController,
       double fibraController,
       String codigoDeBarrasController,
-       List<String> alergenosController) async {
-    
+      List<String> alergenosController) async {
     HttpClient httpClient = new HttpClient()
     ..badCertificateCallback =
         ((X509Certificate cert, String host, int port) => true);
@@ -407,7 +406,7 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
       'azucar': azucarController,
       'fibra': fibraController,
       'codigoDeBarras': codigoDeBarrasController,
-       'alergenos': alergenosController,
+      'alergenos': alergenosController
     };
     var body = json.encode(data);
     var response = await ioClient.put(Uri.parse(url),

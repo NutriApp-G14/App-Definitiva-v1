@@ -121,10 +121,10 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
   }
 
   Future<void> deleteReg(int id) async {
-       HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     print(widget.registros);
     final response = await ioClient.delete(

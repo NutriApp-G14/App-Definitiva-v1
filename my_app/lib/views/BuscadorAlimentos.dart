@@ -275,8 +275,8 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                           : _listaDeAlimentos[i]['nutriments']['fiber_100g']
                                   ?.toDouble() ??
                               0.0;
-                      var alergenos = _listaDeAlimentos[i]['allergens_hierarchy']
-                            ?? [];
+                      var alergenos =
+                          _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
 
                       return TarjetaBuscador(
                         tipoDeComida: widget.tipoDeComida,

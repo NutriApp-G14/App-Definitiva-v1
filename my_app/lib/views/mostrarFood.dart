@@ -114,7 +114,7 @@ class _MostrarFoodState extends State<MostrarFood> {
     "en:molluscs": "Marisco",
     "en:fish": "Pescado"
   };
-  final List<String> nombreAlergenos = [];
+  List<String> nombreAlergenos = [];
 
   _navigateListAlimento(BuildContext context) async {
     Navigator.push(
@@ -308,6 +308,12 @@ class _MostrarFoodState extends State<MostrarFood> {
                                         ),
                                         onChanged: (value) {
                                           setState(() {
+
+                                          nombreAlergenos = [];
+
+
+
+
                                             cantidad = (value.isNotEmpty
                                                 ? double.tryParse(value)
                                                 : 0.0)!;
@@ -1191,7 +1197,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                           final alergia = snapshot.data!;
                           final listaAlergias = _alergias(alergia);
                           return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               widget.showBotonAlimentos == true
                                   ? ElevatedButton(

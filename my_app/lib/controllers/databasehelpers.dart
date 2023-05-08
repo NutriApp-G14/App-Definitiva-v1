@@ -8,9 +8,7 @@ import 'package:my_app/model/Alergias.dart';
 import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/model/Usuario.dart';
 
-//final urlConexion = 'http://34.77.252.254:8080';
 final urlConexion = 'https://localhost:8443';
-//final urlConexion = 'http://localhost:8080';
 
 class DataBaseHelper {
 // Add Alimento
@@ -64,7 +62,7 @@ class DataBaseHelper {
   }
 
   // Add Usuario
-  Future<http.Response> addUsuario(
+  Future<int> addUsuario(
     String nombreController,
     String nombreUsuarioController,
     String passwordController,
@@ -101,7 +99,8 @@ class DataBaseHelper {
         headers: {"Content-Type": "application/json",
         }, body: body);
     print("${response.statusCode}");
-    return response;
+
+    return response.statusCode;
   }
 
 //add Alergias
@@ -283,7 +282,32 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Usuario.fromJson(jsonData);
+
+      
     } else {
+      throw Exception('Error al cargar el usuario');
+    }
+  }
+
+    Future<Usuario?> getUsuarioByNombreUsuarioParaLogin(String nombreUsuario) async {
+
+    HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  IOClient ioClient = IOClient(httpClient);
+
+    final response =
+        await ioClient.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      return Usuario.fromJson(jsonData);
+
+      
+    } else if (response.statusCode == 404) {
+      return null;
+
+      
+    }else {
       throw Exception('Error al cargar el usuario');
     }
   }
@@ -345,6 +369,7 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
     var response = await ioClient.put(Uri.parse(url),
         headers: {"Content-Type": "application/json", }, body: body);
     print("${response.statusCode}");
+ 
     return response;
   }
 

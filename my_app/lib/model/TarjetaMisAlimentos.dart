@@ -61,7 +61,7 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
         ((X509Certificate cert, String host, int port) => true);
   IOClient ioClient = IOClient(httpClient);
     final response = await ioClient..delete(
-      Uri.parse("$urlConection/foods/$id"),
+      Uri.parse("$urlConection/foods/$id"), headers: {"Authorization" : widget.token}
     );
     _refreshListAlimentos();
   }

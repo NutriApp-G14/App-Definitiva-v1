@@ -484,8 +484,10 @@ class ItemListReceta extends StatelessWidget {
             itemBuilder: (context, i) {
               var imageUrl = "";
               var id = list[i]['id'];
-              if (list[i]['image'] != null && list[i]['image'] != "") {
-                imageUrl = list[i]['image'];
+              print(list[i]['imagen']);
+              if (list[i]['imagen'] != null && list[i]['imagen'] != "") {
+                imageUrl = list[i]['imagen'];
+                print(imageUrl);
               }
               var name = list[i]['nombre'] ?? "";
               var cantidad = list[i]['porciones'] ?? 0;

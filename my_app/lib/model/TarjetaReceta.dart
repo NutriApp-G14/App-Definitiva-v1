@@ -52,7 +52,7 @@ class _TarjetaReceta extends State<TarjetaReceta> {
     IOClient ioClient = IOClient(httpClient);
     final response = await ioClient
       ..delete(
-        Uri.parse("$urlConection/foods/$id"),
+        Uri.parse("$urlConection/recipes/$id"), headers: {"Authorization" : widget.token}
       );
     _refreshListAlimentos();
   }

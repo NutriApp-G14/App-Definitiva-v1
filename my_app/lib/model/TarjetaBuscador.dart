@@ -377,12 +377,12 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
     };
     var body = json.encode(data);
 
-    var response = await ioClient.post(Uri.parse(url),
-        headers: {"Content-Type": "application/json", "Authorization" : token}, body: body);
+    var response = await ioClient.post(Uri.parse(url), headers: {"Content-Type": "application/json", "Authorization" : token}, body: body);
     
     print("estado:");
     print("${response.statusCode}");
     Navigator.pop(context);
+    
     _navigateTipoComida(context);
     return response;
   }

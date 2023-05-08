@@ -1,8 +1,8 @@
-# my_app
+# NutriApp
 
-A new Flutter project.
+A new application that helps you track your weight in order to achieve a healthier lifestyle.
 
-## Getting Started
+## Getting Started. Downloading the app
 
 This project is a starting point for a Flutter application.
 

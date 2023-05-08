@@ -15,6 +15,7 @@ class StaticsCard extends StatefulWidget {
   final double totalCalorias;
   final double totalCarbohidratos;
   final double totalGrasas;
+  final String token;
 
   const StaticsCard(
       {required this.nombreUsuario,
@@ -23,7 +24,7 @@ class StaticsCard extends StatefulWidget {
       required this.totalProteinas,
       required this.totalCalorias,
       required this.totalCarbohidratos,
-      required this.totalGrasas});
+      required this.totalGrasas, required this.token});
 
   @override
   _StaticsCardState createState() => _StaticsCardState();
@@ -138,6 +139,7 @@ class _StaticsCardState extends State<StaticsCard> {
         future: dataRegistroHelper.getRegistroDiario(
           widget.nombreUsuario,
           widget.fecha,
+          widget.token
         ),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
@@ -343,7 +345,7 @@ class _StaticsCardState extends State<StaticsCard> {
                     }
                   }),
               ObjetiveCard(
-                  nombreUsuario: widget.nombreUsuario, fecha: widget.day)
+                  nombreUsuario: widget.nombreUsuario, fecha: widget.day, token: widget.token)
             ]));
           } else {
             return CircularProgressIndicator();

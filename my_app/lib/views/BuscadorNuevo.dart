@@ -14,8 +14,9 @@ class BuscadorNuevo extends StatefulWidget {
   final String nombreUsuario;
   final String fecha;
   final String tipoDeComida = "";
+  final String token;
 
-  const BuscadorNuevo({required this.nombreUsuario, required this.fecha});
+  const BuscadorNuevo({required this.nombreUsuario, required this.fecha, required this.token});
 
   @override
   _BuscadorNuevoState createState() => _BuscadorNuevoState();
@@ -37,7 +38,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+                ListAlimentos(nombreUsuario: widget.nombreUsuario,token: widget.token)));
   }
 
   @override
@@ -201,6 +202,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
                         alergenos: alergenos,
+                        token: widget.token,
                       );
                     });
               } else if (constraints.maxWidth < 1100) {
@@ -316,6 +318,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
                         alergenos: alergenos,
+                        token: widget.token,
                       );
                     });
               } else {
@@ -431,6 +434,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
                         alergenos: alergenos,
+                        token: widget.token
                       );
                     });
               }
@@ -551,6 +555,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                     showBotonAlimentos: true,
                     showBotonRegistro: true,
                     showBotonGuardar: false,
+                    token: widget.token
                   )));
       setState(() {
         _listaDeAlimentos = alimentoCodBar;
@@ -573,7 +578,9 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
       double azucar,
       double fibra,
       String image,
-      List<String> alergenosController) async {
+      List<String> alergenosController,
+      String token
+      ) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -583,6 +590,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
       Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+         "Authorization" : token     
       },
       body: jsonEncode(<String, dynamic>{
         'name': name,

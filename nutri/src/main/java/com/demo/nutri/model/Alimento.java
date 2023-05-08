@@ -34,7 +34,6 @@ public class Alimento {
     private Receta receta;
     @ManyToOne
     private RegistroComidas registroComidas;
-    private List<String> alergenos;
 
     public String getCodigoDeBarras() {
         return codigoDeBarras;
@@ -133,13 +132,6 @@ public class Alimento {
     public void setRegistroComidas(RegistroComidas registroComidas) {
         this.registroComidas = registroComidas;
     }
-    public List<String> getAlergenos() {
-        return alergenos;
-    }
-    public void setAlergenos(List<String> alergenos) {
-        this.alergenos = alergenos;
-    }
-
     public List<String> getAlergenos() {
         return alergenos;
     }

@@ -15,12 +15,13 @@ class PaginaTipoComida extends StatefulWidget {
   final String tipoDeComida;
   final String fecha;
   final List registros;
+  final String token;
 
   const PaginaTipoComida(
       {required this.nombreUsuario,
       required this.tipoDeComida,
       required this.fecha,
-      required this.registros});
+      required this.registros, required this.token});
 
   @override
   _PaginaTipoComidaState createState() => _PaginaTipoComidaState();
@@ -48,7 +49,8 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
             builder: (context) => BuscadorAlimentos(
                 nombreUsuario: widget.nombreUsuario,
                 day: widget.fecha,
-                tipoDeComida: widget.tipoDeComida)));
+                tipoDeComida: widget.tipoDeComida,
+                token: widget.token)));
   }
 
   Future<List<dynamic>> searchAndDisplayFoodNuevaAPI(
@@ -84,7 +86,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
           backgroundColor: Colors.white,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(52),
-            child: NutriAppBar(nombreUsuario: widget.nombreUsuario),
+            child: NutriAppBar(nombreUsuario: widget.nombreUsuario, token : widget.token),
           ),
         ),
         body: FutureBuilder<List<dynamic>>(
@@ -179,7 +181,8 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                           ],
                                           fecha: widget.fecha,
                                           registros: widget.registros,
-                                          tipodeComida: widget.tipoDeComida);
+                                          tipodeComida: widget.tipoDeComida,
+                                          token: widget.token);
                                     }));
                           } else if (constraints.maxWidth < 1100) {
                             return SizedBox(
@@ -232,7 +235,8 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                           ],
                                           fecha: widget.fecha,
                                           registros: widget.registros,
-                                          tipodeComida: widget.tipoDeComida);
+                                          tipodeComida: widget.tipoDeComida,
+                                          token: widget.token);
                                     }));
                           } else {
                             return SizedBox(
@@ -286,6 +290,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                         fecha: widget.fecha,
                                         registros: widget.registros,
                                         tipodeComida: widget.tipoDeComida,
+                                        token: widget.token
                                       );
                                     }));
                           }

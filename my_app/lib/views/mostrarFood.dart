@@ -62,7 +62,7 @@ class MostrarFood extends StatefulWidget {
   final bool showBotonAlimentos;
   final bool showBotonRegistro;
   final bool showBotonGuardar;
-  final List<String> alergenos;
+  final String token;
 
   const MostrarFood({
     required this.id,
@@ -82,8 +82,7 @@ class MostrarFood extends StatefulWidget {
     required this.alergenos,
     required this.showBotonAlimentos,
     required this.showBotonRegistro,
-    required this.showBotonGuardar,
-    required this.alergenos,
+    required this.showBotonGuardar, required this.token,
   });
   @override
   _MostrarFoodState createState() => _MostrarFoodState();
@@ -101,7 +100,7 @@ class _MostrarFoodState extends State<MostrarFood> {
     super.initState();
     List<String> alergiasCoincidentes = [];
     formattedDate = DateFormat('dd-MM-yyyy').format(now);
-    _futureAlergias = dataBaseHelper.getAlergiasById(widget.nombreUsuario);
+    _futureAlergias = dataBaseHelper.getAlergiasById(widget.nombreUsuario, widget.token);
   }
 
 // Agregar si se quiere más códigos de alérgenos y nombres de alimentos aquí
@@ -123,7 +122,7 @@ class _MostrarFoodState extends State<MostrarFood> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+                ListAlimentos(nombreUsuario: widget.nombreUsuario,token: widget.token)));
   }
 
   _recalucularInformacion(
@@ -1402,6 +1401,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                   widget.name
                                                                       .trim(),
                                                                   alimentosRegistro,
+                                                                  widget.token
                                                                 );
                                                                 Navigator.pop(
                                                                     context);
@@ -1478,6 +1478,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                   widget.name
                                                                       .trim(),
                                                                   alimentosRegistro,
+                                                                  widget.token
                                                                 );
                                                                 Navigator.pop(
                                                                     context);
@@ -1554,6 +1555,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                   widget.name
                                                                       .trim(),
                                                                   alimentosRegistro,
+                                                                  widget.token
                                                                 );
                                                                 Navigator.pop(
                                                                     context);
@@ -1630,6 +1632,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                   widget.name
                                                                       .trim(),
                                                                   alimentosRegistro,
+                                                                  widget.token
                                                                 );
                                                                 Navigator.pop(
                                                                     context);
@@ -1706,6 +1709,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                   widget.name
                                                                       .trim(),
                                                                   alimentosRegistro,
+                                                                  widget.token
                                                                 );
                                                                 Navigator.pop(
                                                                     context);
@@ -1835,14 +1839,14 @@ class _MostrarFoodState extends State<MostrarFood> {
     };
     var body = json.encode(data);
     var response = await ioClient.put(Uri.parse(url),
-        headers: {"Content-Type": "application/json"}, body: body);
+        headers: {"Content-Type": "application/json", "Authorization" : widget.token}, body: body);
     //Navigator.pop(context);
     Navigator.pop(context);
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+                ListAlimentos(nombreUsuario: widget.nombreUsuario,token: widget.token)));
     return response;
   }
 
@@ -1871,6 +1875,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       Uri.parse('${urlConection}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization" : widget.token
       },
       body: jsonEncode(<String, dynamic>{
         'name': name,

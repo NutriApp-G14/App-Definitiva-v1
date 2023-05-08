@@ -16,6 +16,7 @@ import 'package:my_app/views/mostrarFood.dart';
 
 class TarjetaMisAlimento extends StatefulWidget {
   final int id;
+  final String token;
   final String nombreAlimento;
   final String imageUrl;
   final String codigoDeBarras;
@@ -46,7 +47,7 @@ class TarjetaMisAlimento extends StatefulWidget {
     required this.azucar,
     required this.fibra,
     required this.unidadesCantidad,
-    required this.alergenos,
+    required this.alergenos, required this.token,
   });
 
   @override
@@ -70,7 +71,7 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            ListAlimentos(nombreUsuario: widget.nombreUsuario),
+            ListAlimentos(nombreUsuario: widget.nombreUsuario, token: widget.token),
       ),
     );
   }
@@ -79,7 +80,7 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            ListAlimentos(nombreUsuario: widget.nombreUsuario),
+            ListAlimentos(nombreUsuario: widget.nombreUsuario, token: widget.token),
         transitionDuration: Duration(seconds: 0),
       ),
     );
@@ -126,7 +127,7 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                           showBotonAlimentos: false,
                           showBotonRegistro: true,
                           showBotonGuardar: false,
-                          alergenos: [],
+                          token:widget.token
                         )));
           },
           child: Column(

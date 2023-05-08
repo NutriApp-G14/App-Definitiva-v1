@@ -17,6 +17,7 @@ class MostrarReceta extends StatelessWidget {
   final String descripcion;
   final List pasos;
   final String nombreUsuario;
+  final String token;
 
   const MostrarReceta({
     required this.name,
@@ -26,7 +27,7 @@ class MostrarReceta extends StatelessWidget {
     required this.ingredientes,
     required this.descripcion,
     required this.pasos,
-    required this.nombreUsuario,
+    required this.nombreUsuario, required this.token,
   });
   final bool isPremium = true;
 
@@ -326,7 +327,7 @@ class MostrarReceta extends StatelessWidget {
                                                 showBotonAlimentos: false,
                                                 showBotonRegistro: false,
                                                 showBotonGuardar: true,
-                                                alergenos: [],
+                                                token: token
                                               )));
                                 },
                                 child: Card(

@@ -19,11 +19,12 @@ class ItemListAlimento extends StatelessWidget {
   final List list;
   final Function(int) deleteItem;
   final String nombreUsuario;
+  final String token;
 
   const ItemListAlimento(
       {required this.list,
       required this.deleteItem,
-      required this.nombreUsuario});
+      required this.nombreUsuario, required this.token});
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -64,7 +65,7 @@ class ItemListAlimento extends StatelessWidget {
                         showBotonAlimentos: true,
                         showBotonRegistro: false,
                         showBotonGuardar: false,
-                        alergenos: [],
+                        token: token
                       ),
                     ),
                   );
@@ -176,7 +177,8 @@ class ItemListAlimento extends StatelessWidget {
                         showBotonAlimentos: true,
                         showBotonRegistro: false,
                         showBotonGuardar: false,
-                        alergenos: [],
+                        token: token
+
                       ),
                     ),
                   );
@@ -288,7 +290,8 @@ class ItemListAlimento extends StatelessWidget {
                         showBotonAlimentos: true,
                         showBotonRegistro: false,
                         showBotonGuardar: false,
-                        alergenos: [],
+                        token: token
+
                       ),
                     ),
                   );

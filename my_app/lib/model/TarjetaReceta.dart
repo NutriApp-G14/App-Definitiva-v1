@@ -26,6 +26,7 @@ class TarjetaReceta extends StatefulWidget {
   final String descripcion;
   final List pasos;
   final List ingredientes;
+  final String token;
 
   const TarjetaReceta({
     required this.imageUrl,
@@ -36,7 +37,7 @@ class TarjetaReceta extends StatefulWidget {
     required this.name,
     required this.descripcion,
     required this.pasos,
-    required this.ingredientes,
+    required this.ingredientes, required this.token,
   });
 
   @override
@@ -61,7 +62,7 @@ class _TarjetaReceta extends State<TarjetaReceta> {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            ListAlimentos(nombreUsuario: widget.nombreUsuario),
+            ListAlimentos(nombreUsuario: widget.nombreUsuario, token: widget.token),
       ),
     );
   }
@@ -97,6 +98,7 @@ class _TarjetaReceta extends State<TarjetaReceta> {
                           ingredientes: widget.ingredientes,
                           image: widget.imageUrl,
                           nombreUsuario: widget.nombreUsuario,
+                          token:widget.token
                         )));
           },
           child: Column(

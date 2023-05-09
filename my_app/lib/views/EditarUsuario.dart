@@ -15,10 +15,11 @@ import 'package:my_app/views/UsuarioPage.dart';
 class EditarUsuarioPage extends StatefulWidget {
   final String nombreUsuario;
   final String nombre;
+  final String token;
 
   EditarUsuarioPage({
     required this.nombreUsuario,
-    required this.nombre,
+    required this.nombre, required this.token,
   });
 
   @override
@@ -59,7 +60,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
     IOClient ioClient = IOClient(httpClient);
 
     final response = await ioClient
-        .get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
+        .get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'), headers: {"Authorization" : widget.token});
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Alergias.fromJson(jsonData);
@@ -98,7 +99,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
     ;
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(
-          nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),
+          nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre, token:widget.token),
       transitionDuration: Duration(seconds: 0),
     ));
   }
@@ -336,7 +337,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                                     ? usuario.activity
                                     : _nivelActividadSeleccionado,
                                 usuario.objective,
-                                "",
+                                "", widget.token
                                 //luego hay q cambiar esto
                               );
 
@@ -353,6 +354,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                                 seleccionadas.contains('Mariscos'),
                                 seleccionadas.contains('Frutos secos'),
                                 seleccionadas.contains('Pescado'),
+                                widget.token
                               );
 
                               ;
@@ -361,6 +363,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                                 MaterialPageRoute(
                                   builder: (context) => ListAlimentos(
                                     nombreUsuario: usuario.nombreUsuario,
+                                    token: widget.token
                                   ),
                                 ),
                               );

@@ -16,6 +16,7 @@ import 'package:my_app/views/mostrarFood.dart';
 
 class TarjetaMisAlimento extends StatefulWidget {
   final int id;
+  final String token;
   final String nombreAlimento;
   final String imageUrl;
   final String codigoDeBarras;
@@ -47,6 +48,7 @@ class TarjetaMisAlimento extends StatefulWidget {
     required this.fibra,
     required this.unidadesCantidad,
     required this.alergenos,
+    required this.token,
   });
 
   @override
@@ -60,9 +62,8 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
           ((X509Certificate cert, String host, int port) => true);
     IOClient ioClient = IOClient(httpClient);
     final response = await ioClient
-      ..delete(
-        Uri.parse("$urlConection/foods/$id"),
-      );
+      ..delete(Uri.parse("$urlConection/foods/$id"),
+          headers: {"Authorization": widget.token});
     _refreshListAlimentos();
   }
 
@@ -70,8 +71,8 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            ListAlimentos(nombreUsuario: widget.nombreUsuario),
+        builder: (context) => ListAlimentos(
+            nombreUsuario: widget.nombreUsuario, token: widget.token),
       ),
     );
   }
@@ -79,8 +80,8 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
   _navigateAlimentos(BuildContext context) async {
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            ListAlimentos(nombreUsuario: widget.nombreUsuario),
+        pageBuilder: (context, animation, secondaryAnimation) => ListAlimentos(
+            nombreUsuario: widget.nombreUsuario, token: widget.token),
         transitionDuration: Duration(seconds: 0),
       ),
     );
@@ -109,28 +110,28 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => MostrarFood(
-                          name: widget.nombreAlimento,
-                          cantidad: widget.cantidad,
-                          unidadesCantidad: widget.unidadesCantidad,
-                          calorias: widget.calorias,
-                          grasas: widget.grasas,
-                          proteinas: widget.proteinas,
-                          carbohidratos: widget.carbohidratos,
-                          sodio: widget.sodio,
-                          azucar: widget.azucar,
-                          fibra: widget.fibra,
-                          image: widget.imageUrl,
-                          codigoDeBarras: widget.codigoDeBarras,
-                          nombreUsuario: widget.nombreUsuario,
-                          id: 0,
-                          alergenos: widget.alergenos,
-                          day: '',
-                          tipoDeComida: '',
-                          showBotonAlimentos: false,
-                          showBotonRegistro: true,
-                          showBotonGuardar: false,
-                          dentroRegistro: false,
-                        )));
+                        name: widget.nombreAlimento,
+                        cantidad: widget.cantidad,
+                        unidadesCantidad: widget.unidadesCantidad,
+                        calorias: widget.calorias,
+                        grasas: widget.grasas,
+                        proteinas: widget.proteinas,
+                        carbohidratos: widget.carbohidratos,
+                        sodio: widget.sodio,
+                        azucar: widget.azucar,
+                        fibra: widget.fibra,
+                        image: widget.imageUrl,
+                        codigoDeBarras: widget.codigoDeBarras,
+                        nombreUsuario: widget.nombreUsuario,
+                        id: 0,
+                        alergenos: widget.alergenos,
+                        day: '',
+                        tipoDeComida: '',
+                        showBotonAlimentos: false,
+                        showBotonRegistro: true,
+                        showBotonGuardar: false,
+                        dentroRegistro: false,
+                        token: widget.token)));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

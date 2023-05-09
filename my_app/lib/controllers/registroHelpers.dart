@@ -8,8 +8,9 @@ import 'package:my_app/model/Alimento.dart';
 
 final urlConection = 'https://34.76.252.0:8443';
 
+
 class RegistroHelper {
-  // Add Registro
+
   Future<http.Response> addRegistro(
       String codigoDeBarrasController,
       double cantidadController,
@@ -17,7 +18,8 @@ class RegistroHelper {
       String fechaController,
       String tipoDeComidaController,
       String nombreAlimento,
-      List<Alimento> alimento) async {
+      List<Alimento> alimento,
+      String token)async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -37,13 +39,13 @@ class RegistroHelper {
     var body = json.encode(data);
 
     var response = await ioClient.post(Uri.parse(url),
-        headers: {"Content-Type": "application/json"}, body: body);
+        headers: {"Content-Type": "application/json", "Authorization" : token}, body: body);
     print("${response.statusCode}");
     return response;
   }
 
 // Borrar Registro
-  Future<http.Response> deleteRegistro(int id) async {
+  Future<http.Response> deleteRegistro(int id, String token) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -51,33 +53,33 @@ class RegistroHelper {
 
     var url = "${urlConection}/registro/reg/{id}";
     var response = await http
-        .delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
+        .delete(Uri.parse(url), headers: {"Content-Type": "application/json", "Authorization" : token});
     print("${response.statusCode}");
     return response;
   }
 
   // Obtiene los registros a partir de su nombre de usuario,fecha y tipodeComida
   Future<List> getRegistroComidas(
-      String nombreUsuario, String tipoDeComida, String fecha) async {
+      String nombreUsuario, String tipoDeComida, String fecha, String token) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
     IOClient ioClient = IOClient(httpClient);
 
     final response = await ioClient.get(Uri.parse(
-        "${urlConection}/registro/registros/$fecha/$tipoDeComida/$nombreUsuario"));
+        "${urlConection}/registro/registros/$fecha/$tipoDeComida/$nombreUsuario"),headers: {"Authorization" : token});
 
     return json.decode(response.body);
   }
 
-  Future<List> getRegistroDiario(String nombreUsuario, String fecha) async {
+  Future<List> getRegistroDiario(String nombreUsuario, String fecha, String token) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
     IOClient ioClient = IOClient(httpClient);
 
     final response = await ioClient.get(
-        Uri.parse("${urlConection}/registro/registros/$fecha/$nombreUsuario"));
+        Uri.parse("${urlConection}/registro/registros/$fecha/$nombreUsuario"),headers: { "Authorization" : token});
 
     return json.decode(response.body);
   }

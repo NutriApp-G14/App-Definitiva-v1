@@ -20,7 +20,16 @@ public class Usuario {
     private String objective;
     @Lob
     private String imageString;
+    private String[] roles;
+    @Lob
+    private String token;
 
+    public String[] getRoles() {
+        return roles;
+    }
+    public void setRoles(String[] roles) {
+        this.roles = roles;
+    }
     public String getPassword() {
         return password;
     }
@@ -104,5 +113,11 @@ public class Usuario {
     }
     public void setImageString(String imageString) {
         this.imageString = imageString;
+    }
+    public String getToken() {
+        return token;
+    }
+    public void setToken(String token) {
+        this.token = token;
     }
 }

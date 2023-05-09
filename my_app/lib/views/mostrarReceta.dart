@@ -17,6 +17,7 @@ class MostrarReceta extends StatelessWidget {
   final String descripcion;
   final List pasos;
   final String nombreUsuario;
+  final String token;
 
   const MostrarReceta({
     required this.name,
@@ -27,6 +28,7 @@ class MostrarReceta extends StatelessWidget {
     required this.descripcion,
     required this.pasos,
     required this.nombreUsuario,
+    required this.token,
   });
   final bool isPremium = true;
 
@@ -288,48 +290,40 @@ class MostrarReceta extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => MostrarFood(
-                                                id: ingredientes[index]['id'] ??
-                                                    0.0,
-                                                codigoDeBarras: ingredientes[
-                                                            index]
-                                                        ['codigoDeBarras'] ??
-                                                    "",
-                                                nombreUsuario: nombreUsuario,
-                                                name: ingredientes[index]
-                                                    ['name'],
-                                                cantidad: ingredientes[index]
-                                                    ['cantidad'],
-                                                unidadesCantidad:
-                                                    ingredientes[index]
-                                                        ['unidadesCantidad'],
-                                                calorias: ingredientes[index]
-                                                    ['calorias'],
-                                                grasas: ingredientes[index]
-                                                    ['grasas'],
-                                                proteinas: ingredientes[index]
-                                                    ['proteinas'],
-                                                carbohidratos:
-                                                    ingredientes[index]
-                                                        ['carbohidratos'],
-                                                sodio: ingredientes[index]
-                                                        ['sodio'] ??
-                                                    0.0,
-                                                azucar: ingredientes[index]
-                                                        ['azucar'] ??
-                                                    0.0,
-                                                fibra: ingredientes[index]
-                                                        ['fibra'] ??
-                                                    0.0,
-                                                image: ingredientes[index]
-                                                    ['image'],
-                                                alergenos: [],
-                                                day: '',
-                                                tipoDeComida: '',
-                                                showBotonAlimentos: false,
-                                                showBotonRegistro: false,
-                                                showBotonGuardar: true,
-                                                dentroRegistro: false,
-                                              )));
+                                              id: ingredientes[index]['id'] ??
+                                                  0.0,
+                                              codigoDeBarras: ingredientes[index]
+                                                      ['codigoDeBarras'] ??
+                                                  "",
+                                              nombreUsuario: nombreUsuario,
+                                              name: ingredientes[index]['name'],
+                                              cantidad: ingredientes[index]
+                                                  ['cantidad'],
+                                              unidadesCantidad: ingredientes[index]
+                                                  ['unidadesCantidad'],
+                                              calorias: ingredientes[index]
+                                                  ['calorias'],
+                                              grasas: ingredientes[index]
+                                                  ['grasas'],
+                                              proteinas: ingredientes[index]
+                                                  ['proteinas'],
+                                              carbohidratos: ingredientes[index]
+                                                  ['carbohidratos'],
+                                              sodio: ingredientes[index]
+                                                      ['sodio'] ??
+                                                  0.0,
+                                              azucar:
+                                                  ingredientes[index]['azucar'] ?? 0.0,
+                                              fibra: ingredientes[index]['fibra'] ?? 0.0,
+                                              image: ingredientes[index]['image'],
+                                              alergenos: [],
+                                              day: '',
+                                              tipoDeComida: '',
+                                              showBotonAlimentos: false,
+                                              showBotonRegistro: false,
+                                              showBotonGuardar: true,
+                                              dentroRegistro: false,
+                                              token: token)));
                                 },
                                 child: Card(
                                   color: Color.fromARGB(255, 253, 238, 215),

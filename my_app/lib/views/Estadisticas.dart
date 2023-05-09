@@ -12,10 +12,11 @@ import 'package:my_app/model/StaticsCard.dart';
 import 'package:my_app/model/Usuario.dart';
 
 class StatisticsPage extends StatefulWidget {
+  final String token;
   final nombreUsuario;
   final registros;
 
-  const StatisticsPage({required this.nombreUsuario, required this.registros});
+  const StatisticsPage({required this.nombreUsuario, required this.registros, required this.token});
   @override
   _StatisticsPageState createState() => _StatisticsPageState();
 }
@@ -46,7 +47,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
           backgroundColor: Colors.white,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(52),
-            child: NutriAppBar(nombreUsuario: widget.nombreUsuario),
+            child: NutriAppBar(nombreUsuario: widget.nombreUsuario,token: widget.token),
           ),
         ),
         //
@@ -86,7 +87,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
               totalProteinas: 0,
               totalCalorias: 0,
               totalCarbohidratos: 0,
-              totalGrasas: 0),
+              totalGrasas: 0,
+              token: widget.token),
         ]))));
 
     // //

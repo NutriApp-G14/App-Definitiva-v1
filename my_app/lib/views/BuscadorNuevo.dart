@@ -25,6 +25,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
   String _query = '';
   var _listaDeAlimentos = [];
   var alimentoCodBar = [];
+  var qr = false;
 
   void _onSubmitSearch() async {
     if (_query.isNotEmpty) {
@@ -442,6 +443,9 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
   String _barcode = '';
 
   Future<void> _scanBarcode() async {
+    setState((){
+      qr = true;
+    });
     try {
       String barcode = await FlutterBarcodeScanner.scanBarcode(
           '#FF0000', 'Cancel', true, ScanMode.BARCODE);
@@ -484,10 +488,13 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
   }
 
   Future<void> _fetchFood(barcode) async {
+    print(qr);
     var response = await searchFoodNuevaAPIBarCode(barcode);
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
       var alimentoCodBar = body['product'];
+
+      List<String> listaVacia = new List.empty();
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -547,7 +554,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                                     ?.toDouble() ??
                                 0.0,
                     image: alimentoCodBar['image_url'] ?? "",
-                    alergenos: alimentoCodBar['allergens_hierarchy'] ?? "",
+                    alergenos: (qr==false)?(alimentoCodBar['allergens_hierarchy'] ?? []) : listaVacia,
                     day: '',
                     tipoDeComida: '',
                     showBotonAlimentos: true,

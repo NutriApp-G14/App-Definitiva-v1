@@ -95,7 +95,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
       Uri.parse("$urlConexion/foods/$id"), headers: { "Authorization" : widget.token}
     );
     setState(() {
-      cambiar = 1;
+      cambiar = 2;
     });
   }
 

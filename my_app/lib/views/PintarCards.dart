@@ -61,9 +61,12 @@ class ItemListAlimento extends StatelessWidget {
                         fibra: list[i]['fibra'] ?? 0.0,
                         image: list[i]['image'],
                         alergenos: [],
+                        day: '',
+                        tipoDeComida: '',
                         showBotonAlimentos: true,
                         showBotonRegistro: false,
                         showBotonGuardar: false,
+                        dentroRegistro: false,
                       ),
                     ),
                   );
@@ -172,10 +175,12 @@ class ItemListAlimento extends StatelessWidget {
                         fibra: list[i]['fibra'] ?? 0.0,
                         image: list[i]['image'],
                         alergenos: [],
+                        day: '',
+                        tipoDeComida: '',
                         showBotonAlimentos: true,
                         showBotonRegistro: false,
                         showBotonGuardar: false,
-                
+                        dentroRegistro: false,
                       ),
                     ),
                   );
@@ -284,10 +289,12 @@ class ItemListAlimento extends StatelessWidget {
                         fibra: list[i]['fibra'] ?? 0.0,
                         image: list[i]['image'],
                         alergenos: [],
+                        day: '',
+                        tipoDeComida: '',
                         showBotonAlimentos: true,
                         showBotonRegistro: false,
                         showBotonGuardar: false,
-                    
+                        dentroRegistro: false,
                       ),
                     ),
                   );

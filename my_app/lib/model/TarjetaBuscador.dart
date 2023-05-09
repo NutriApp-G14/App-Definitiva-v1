@@ -117,9 +117,12 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
                           alergenos: listaAlergenos,
+                          day: '',
+                          tipoDeComida: '',
                           showBotonAlimentos: true,
                           showBotonRegistro: true,
                           showBotonGuardar: false,
+                          dentroRegistro: false,
                         )));
           },
           child: Column(
@@ -306,10 +309,10 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
       double azucar,
       double fibra,
       String image) async {
-  HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
     final response = await ioClient.post(
       Uri.parse('${urlConection}/foods/add'),
       headers: <String, String>{

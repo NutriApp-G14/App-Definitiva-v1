@@ -548,9 +548,12 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                                 0.0,
                     image: alimentoCodBar['image_url'] ?? "",
                     alergenos: alimentoCodBar['allergens_hierarchy'] ?? "",
+                    day: '',
+                    tipoDeComida: '',
                     showBotonAlimentos: true,
                     showBotonRegistro: true,
                     showBotonGuardar: false,
+                    dentroRegistro: false,
                   )));
       setState(() {
         _listaDeAlimentos = alimentoCodBar;

@@ -98,10 +98,10 @@ public class RegistroComidasController {
     }
 
     @PutMapping("/cantidad/{id}")
-    public ResponseEntity<RegistroComidas>  updateCantidad(@PathVariable String id, @RequestBody RegistroComidas Registro) {
+    public ResponseEntity<RegistroComidas>  updateCantidad(@PathVariable Integer id, @RequestBody RegistroComidas Registro) {
         return registroComidasRepository.findById(id).map(registro -> {
             registro.setCantidad(Registro.getCantidad());
-            registroComidas.save(registro);
+            registroComidasRepository.save(registro);
             return ResponseEntity.ok().body(registro);
         }).orElse(new ResponseEntity<RegistroComidas>(HttpStatus.NOT_FOUND));
     }

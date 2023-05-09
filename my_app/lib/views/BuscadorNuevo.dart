@@ -14,8 +14,10 @@ class BuscadorNuevo extends StatefulWidget {
   final String nombreUsuario;
   final String fecha;
   final String tipoDeComida = "";
+  final String token;
 
-  const BuscadorNuevo({required this.nombreUsuario, required this.fecha});
+  const BuscadorNuevo(
+      {required this.nombreUsuario, required this.fecha, required this.token});
 
   @override
   _BuscadorNuevoState createState() => _BuscadorNuevoState();
@@ -36,8 +38,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+            builder: (context) => ListAlimentos(
+                nombreUsuario: widget.nombreUsuario, token: widget.token)));
   }
 
   @override
@@ -201,6 +203,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
                         alergenos: alergenos,
+                        token: widget.token,
                       );
                     });
               } else if (constraints.maxWidth < 1100) {
@@ -316,6 +319,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                         anadirRegistro: false,
                         day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
                         alergenos: alergenos,
+                        token: widget.token,
                       );
                     });
               } else {
@@ -397,41 +401,41 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                       var alergenos =
                           _listaDeAlimentos[i]['allergens_hierarchy'] ?? [];
                       return TarjetaBuscador(
-                        tipoDeComida: widget.tipoDeComida,
-                        id: 0,
-                        nombreUsuario: nombreUsuario,
-                        codigoDeBarras: codigoDeBarras,
-                        cantidad: cantidad,
-                        nombreAlimento: nombreAlimento,
-                        imageUrl: imageUrl,
-                        scoreImages: [
-                          nutriscore == ""
-                              ? ""
-                              : 'https://static.openfoodfacts.org/images/attributes/nutriscore-$nutriscore.svg',
-                          novaGroup == ""
-                              ? ""
-                              : 'https://static.openfoodfacts.org/images/attributes/nova-group-$novaGroup.svg',
-                          ecoscore == ""
-                              ? ""
-                              : 'https://static.openfoodfacts.org/images/attributes/ecoscore-$ecoscore.svg'
-                        ],
-                        scoreTitles: [
-                          'Nutri-Score $nutriscore',
-                          'NOVA Group $novaGroup',
-                          'Eco-Score $ecoscore'
-                        ],
-                        calorias: calorias,
-                        grasas: grasas,
-                        proteinas: proteinas,
-                        unidadesCantidad: unidadesCantidad,
-                        carbohidratos: carbohidratos,
-                        sodio: sodio,
-                        azucar: azucar,
-                        fibra: fibra,
-                        anadirRegistro: false,
-                        day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
-                        alergenos: alergenos,
-                      );
+                          tipoDeComida: widget.tipoDeComida,
+                          id: 0,
+                          nombreUsuario: nombreUsuario,
+                          codigoDeBarras: codigoDeBarras,
+                          cantidad: cantidad,
+                          nombreAlimento: nombreAlimento,
+                          imageUrl: imageUrl,
+                          scoreImages: [
+                            nutriscore == ""
+                                ? ""
+                                : 'https://static.openfoodfacts.org/images/attributes/nutriscore-$nutriscore.svg',
+                            novaGroup == ""
+                                ? ""
+                                : 'https://static.openfoodfacts.org/images/attributes/nova-group-$novaGroup.svg',
+                            ecoscore == ""
+                                ? ""
+                                : 'https://static.openfoodfacts.org/images/attributes/ecoscore-$ecoscore.svg'
+                          ],
+                          scoreTitles: [
+                            'Nutri-Score $nutriscore',
+                            'NOVA Group $novaGroup',
+                            'Eco-Score $ecoscore'
+                          ],
+                          calorias: calorias,
+                          grasas: grasas,
+                          proteinas: proteinas,
+                          unidadesCantidad: unidadesCantidad,
+                          carbohidratos: carbohidratos,
+                          sodio: sodio,
+                          azucar: azucar,
+                          fibra: fibra,
+                          anadirRegistro: false,
+                          day: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                          alergenos: alergenos,
+                          token: widget.token);
                     });
               }
             }))
@@ -488,76 +492,49 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
       var alimentoCodBar = body['product'];
-      List<String> listaAlergenos = alimentoCodBar['allergens_hierarchy']
-          .map((elemento) => elemento.toString())
-          .toList();
+      List<dynamic> alergenos = alimentoCodBar['allergens_hierarchy'] ?? [];
+      List<String> listAlergenos =
+          alergenos.map((elemento) => elemento.toString()).toList();
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => MostrarFood(
-                    id: 0,
-                    codigoDeBarras: alimentoCodBar['_id'],
-                    nombreUsuario: widget.nombreUsuario,
-                    name: alimentoCodBar['product_name'] ?? "",
-                    cantidad: 100.0,
-                    unidadesCantidad: "grams",
-                    calorias: (alimentoCodBar['nutriments']?['energy-kcal_100g']
-                            is String)
-                        ? double.parse(
-                            alimentoCodBar['nutriments']['energy-kcal_100g'])
-                        : alimentoCodBar['nutriments']['energy-kcal_100g']
-                                ?.toDouble() ??
-                            0.0,
-                    grasas: (alimentoCodBar['nutriments']?['fat_100g']
-                            is String)
-                        ? double.parse(alimentoCodBar['nutriments']['fat_100g'])
-                        : alimentoCodBar['nutriments']['fat_100g']
-                                ?.toDouble() ??
-                            0.0,
-                    proteinas: (alimentoCodBar['nutriments']?['proteins_100g']
-                            is String)
-                        ? double.parse(
-                            alimentoCodBar['nutriments']['proteins_100g'])
-                        : alimentoCodBar['nutriments']['proteins_100g']
-                                ?.toDouble() ??
-                            0.0,
-                    carbohidratos: (alimentoCodBar['nutriments']
-                            ?['carbohydrates_100g'] is String)
-                        ? double.parse(
-                            alimentoCodBar['nutriments']['carbohydrates_100g'])
-                        : alimentoCodBar['nutriments']['carbohydrates_100g']
-                                ?.toDouble() ??
-                            0.0,
-                    sodio:
-                        (alimentoCodBar['nutriments']?['sodium_100g'] is String)
-                            ? double.parse(
-                                alimentoCodBar['nutriments']['sodium_100g'])
-                            : alimentoCodBar['nutriments']['sodium_100g']
-                                    ?.toDouble() ??
-                                0.0,
-                    azucar:
-                        (alimentoCodBar['nutriments']?['sugars_100g'] is String)
-                            ? double.parse(
-                                alimentoCodBar['nutriments']['sugars_100g'])
-                            : alimentoCodBar['nutriments']['sugars_100g']
-                                    ?.toDouble() ??
-                                0.0,
-                    fibra:
-                        (alimentoCodBar['nutriments']?['fiber_100g'] is String)
-                            ? double.parse(
-                                alimentoCodBar['nutriments']['fiber_100g'])
-                            : alimentoCodBar['nutriments']['fiber_100g']
-                                    ?.toDouble() ??
-                                0.0,
-                    image: alimentoCodBar['image_url'] ?? "",
-                    alergenos: listaAlergenos ?? [""],
-                    day: '',
-                    tipoDeComida: '',
-                    showBotonAlimentos: true,
-                    showBotonRegistro: true,
-                    showBotonGuardar: false,
-                    dentroRegistro: false,
-                  )));
+                  id: 0,
+                  codigoDeBarras: alimentoCodBar['_id'],
+                  nombreUsuario: widget.nombreUsuario,
+                  name: alimentoCodBar['product_name'] ?? "",
+                  cantidad: 100.0,
+                  unidadesCantidad: "grams",
+                  calorias: (alimentoCodBar['nutriments']?['energy-kcal_100g'] is String)
+                      ? double.parse(
+                          alimentoCodBar['nutriments']['energy-kcal_100g'])
+                      : alimentoCodBar['nutriments']['energy-kcal_100g']?.toDouble() ??
+                          0.0,
+                  grasas: (alimentoCodBar['nutriments']?['fat_100g'] is String)
+                      ? double.parse(alimentoCodBar['nutriments']['fat_100g'])
+                      : alimentoCodBar['nutriments']['fat_100g']?.toDouble() ??
+                          0.0,
+                  proteinas: (alimentoCodBar['nutriments']?['proteins_100g'] is String)
+                      ? double.parse(
+                          alimentoCodBar['nutriments']['proteins_100g'])
+                      : alimentoCodBar['nutriments']['proteins_100g']?.toDouble() ??
+                          0.0,
+                  carbohidratos: (alimentoCodBar['nutriments']
+                          ?['carbohydrates_100g'] is String)
+                      ? double.parse(alimentoCodBar['nutriments']['carbohydrates_100g'])
+                      : alimentoCodBar['nutriments']['carbohydrates_100g']?.toDouble() ?? 0.0,
+                  sodio: (alimentoCodBar['nutriments']?['sodium_100g'] is String) ? double.parse(alimentoCodBar['nutriments']['sodium_100g']) : alimentoCodBar['nutriments']['sodium_100g']?.toDouble() ?? 0.0,
+                  azucar: (alimentoCodBar['nutriments']?['sugars_100g'] is String) ? double.parse(alimentoCodBar['nutriments']['sugars_100g']) : alimentoCodBar['nutriments']['sugars_100g']?.toDouble() ?? 0.0,
+                  fibra: (alimentoCodBar['nutriments']?['fiber_100g'] is String) ? double.parse(alimentoCodBar['nutriments']['fiber_100g']) : alimentoCodBar['nutriments']['fiber_100g']?.toDouble() ?? 0.0,
+                  image: alimentoCodBar['image_url'] ?? "",
+                  alergenos: listAlergenos ?? [""],
+                  day: '',
+                  tipoDeComida: '',
+                  showBotonAlimentos: true,
+                  showBotonRegistro: true,
+                  showBotonGuardar: false,
+                  dentroRegistro: false,
+                  token: widget.token)));
       setState(() {
         _listaDeAlimentos = alimentoCodBar;
       });
@@ -579,7 +556,8 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
       double azucar,
       double fibra,
       String image,
-      List<String> alergenosController) async {
+      List<String> alergenosController,
+      String token) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -589,6 +567,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
       Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": token
       },
       body: jsonEncode(<String, dynamic>{
         'name': name,

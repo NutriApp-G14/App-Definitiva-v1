@@ -26,6 +26,7 @@ class TarjetaReceta extends StatefulWidget {
   final String descripcion;
   final List pasos;
   final List ingredientes;
+  final String token;
 
   const TarjetaReceta({
     required this.imageUrl,
@@ -37,6 +38,7 @@ class TarjetaReceta extends StatefulWidget {
     required this.descripcion,
     required this.pasos,
     required this.ingredientes,
+    required this.token,
   });
 
   @override
@@ -50,9 +52,8 @@ class _TarjetaReceta extends State<TarjetaReceta> {
           ((X509Certificate cert, String host, int port) => true);
     IOClient ioClient = IOClient(httpClient);
     final response = await ioClient
-      ..delete(
-        Uri.parse("$urlConection/foods/$id"),
-      );
+      ..delete(Uri.parse("$urlConection/recipes/$id"),
+          headers: {"Authorization": widget.token});
     _refreshListAlimentos();
   }
 
@@ -60,8 +61,8 @@ class _TarjetaReceta extends State<TarjetaReceta> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            ListAlimentos(nombreUsuario: widget.nombreUsuario),
+        builder: (context) => ListAlimentos(
+            nombreUsuario: widget.nombreUsuario, token: widget.token),
       ),
     );
   }
@@ -89,15 +90,15 @@ class _TarjetaReceta extends State<TarjetaReceta> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => MostrarReceta(
-                          name: widget.name,
-                          cantidad: widget.cantidad,
-                          unidadesCantidad: widget.unidadesCantidad,
-                          pasos: widget.pasos,
-                          descripcion: widget.descripcion,
-                          ingredientes: widget.ingredientes,
-                          image: widget.imageUrl,
-                          nombreUsuario: widget.nombreUsuario,
-                        )));
+                        name: widget.name,
+                        cantidad: widget.cantidad,
+                        unidadesCantidad: widget.unidadesCantidad,
+                        pasos: widget.pasos,
+                        descripcion: widget.descripcion,
+                        ingredientes: widget.ingredientes,
+                        image: widget.imageUrl,
+                        nombreUsuario: widget.nombreUsuario,
+                        token: widget.token)));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

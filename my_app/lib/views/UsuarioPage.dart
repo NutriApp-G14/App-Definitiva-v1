@@ -43,11 +43,13 @@ List<String> _alergias(Alergias alergia) {
 class UsuarioPage extends StatefulWidget {
   final String nombreUsuario;
   final String nombre;
+  final String token;
   final bool isPremium = false;
 
   UsuarioPage({
     required this.nombreUsuario,
     required this.nombre,
+    required this.token,
   });
 
   @override
@@ -73,7 +75,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
   void initState() {
     //super.initState();
     _futureUsuario = dataBaseHelper.getUsuarioById(widget.nombreUsuario);
-    _futureAlergias = dataBaseHelper.getAlergiasById(widget.nombreUsuario);
+    _futureAlergias =
+        dataBaseHelper.getAlergiasById(widget.nombreUsuario, widget.token);
   }
 
   final TextEditingController nombreController = TextEditingController();
@@ -85,7 +88,9 @@ class _UsuarioPageState extends State<UsuarioPage> {
     String usuarioNombreUsuario = usuario.nombreUsuario;
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(
-          nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),
+          nombreUsuario: usuarioNombreUsuario,
+          nombre: usuarioNombre,
+          token: widget.token),
       transitionDuration: Duration(seconds: 0),
     ));
   }
@@ -96,8 +101,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
     String usuarioNombreUsuario = usuario.nombreUsuario;
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            ListAlimentos(nombreUsuario: usuarioNombreUsuario),
+        pageBuilder: (context, animation, secondaryAnimation) => ListAlimentos(
+            nombreUsuario: usuarioNombreUsuario, token: widget.token),
         transitionDuration: Duration(seconds: 0),
       ),
     );
@@ -231,7 +236,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
           usuario.gender,
           usuario.activity,
           _objectiveSeleccionado,
-          '');
+          '',
+          widget.token);
     } else {
       showSnackBar('No se ha seleccionado ninguna imagen');
     }
@@ -278,7 +284,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
                     usuario.gender,
                     usuario.activity,
                     _objectiveSeleccionado,
-                    _profileImageURL);
+                    _profileImageURL,
+                    widget.token);
               },
             ),
           ],
@@ -302,7 +309,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
           backgroundColor: Colors.white,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(52),
-            child: NutriAppBar(nombreUsuario: widget.nombreUsuario),
+            child: NutriAppBar(
+                nombreUsuario: widget.nombreUsuario, token: widget.token),
           ),
         ),
         body: ListView(children: [
@@ -372,10 +380,10 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   EditarUsuarioPage(
-                                                nombreUsuario:
-                                                    usuario.nombreUsuario,
-                                                nombre: usuario.nombre,
-                                              ),
+                                                      nombreUsuario:
+                                                          usuario.nombreUsuario,
+                                                      nombre: usuario.nombre,
+                                                      token: widget.token),
                                             ),
                                           );
                                         },
@@ -695,7 +703,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                         usuario.gender,
                                         usuario.activity,
                                         _objectiveSeleccionado,
-                                        usuario.imageString);
+                                        usuario.imageString,
+                                        widget.token);
 
                                     requerimientoCalorico = _factorActividad(
                                         usuario.activity,

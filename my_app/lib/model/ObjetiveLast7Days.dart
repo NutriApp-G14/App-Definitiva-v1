@@ -10,10 +10,11 @@ import 'package:my_app/model/Usuario.dart';
 class ObjetiveCard extends StatefulWidget {
   final String nombreUsuario;
   final DateTime fecha;
+  final String token;
 
   const ObjetiveCard({
     required this.nombreUsuario,
-    required this.fecha,
+    required this.fecha, required this.token,
   });
 
   @override
@@ -146,7 +147,7 @@ class _ObjetiveCardState extends State<ObjetiveCard> {
       String fechaString = DateFormat('dd-MM-yyyy').format(fecha);
       fechaUtimos7Dias.add(fechaString);
       List<dynamic> registros = await dataRegistroHelper.getRegistroDiario(
-          widget.nombreUsuario, fechaString);
+          widget.nombreUsuario, fechaString, widget.token);
       var totalCalorias = 0.0;
       var totalProteinas = 0.0;
       var totalCarbohidratos = 0.0;

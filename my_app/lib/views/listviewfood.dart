@@ -22,9 +22,11 @@ import '../model/Usuario.dart';
 
 class ListAlimentos extends StatefulWidget {
   final String nombreUsuario;
+  final String token;
   final bool isPremium = true;
+  
 
-  const ListAlimentos({required this.nombreUsuario});
+  const ListAlimentos({required this.nombreUsuario, required this.token});
 
   @override
   _ListAlimentosState createState() => _ListAlimentosState();
@@ -34,6 +36,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
   DataBaseHelper dataBaseHelper = DataBaseHelper();
   late List data;
   bool _showFoods = true;
+  late var cambiar;
 
   void _toggleShowFoods() {
     setState(() {
@@ -46,7 +49,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                AddRecetasPage(nombreUsuario: widget.nombreUsuario)));
+                AddRecetasPage(nombreUsuario: widget.nombreUsuario, token: widget.token)));
   }
 
   _navigateAddAlimento(BuildContext context) async {
@@ -54,7 +57,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                AddAlimentoPage(nombreUsuario: widget.nombreUsuario)));
+                AddAlimentoPage(nombreUsuario: widget.nombreUsuario, token: widget.token)));
   }
 
   _navigateListViewRecetas(BuildContext context) async {
@@ -62,7 +65,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                AddAlimentoPage(nombreUsuario: widget.nombreUsuario)));
+                AddAlimentoPage(nombreUsuario: widget.nombreUsuario, token: widget.token)));
   }
 
   _navigateUsuarioPage(BuildContext context) async {
@@ -72,7 +75,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
     String imageProfile = "";
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(
-          nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),
+          nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre,token:widget.token),
       transitionDuration: Duration(seconds: 0),
     ));
   }
@@ -89,9 +92,11 @@ class _ListAlimentosState extends State<ListAlimentos> {
     IOClient ioClient = IOClient(httpClient);
 
     final response = await ioClient.delete(
-      Uri.parse("$urlConexion/foods/$id"),
+      Uri.parse("$urlConexion/foods/$id"), headers: { "Authorization" : widget.token}
     );
-    setState(() {});
+    setState(() {
+      cambiar = 2;
+    });
   }
 
   Future<void> deleteDataReceta(int id) async {
@@ -101,7 +106,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
     IOClient ioClient = IOClient(httpClient);
 
     final response = await ioClient.delete(
-      Uri.parse("${urlConexion}/recipes/$id"),
+      Uri.parse("${urlConexion}/recipes/$id"), headers: {"Authorization" : widget.token}
     );
     setState(() {});
   }
@@ -113,7 +118,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
           backgroundColor: Colors.white,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(52),
-            child: NutriAppBar(nombreUsuario: widget.nombreUsuario),
+            child: NutriAppBar(nombreUsuario: widget.nombreUsuario,token: widget.token),
           ),
         ),
         body: Column(
@@ -191,7 +196,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
             Expanded(
               child: _showFoods
                   ? FutureBuilder<List>(
-                      future: dataBaseHelper.getData(widget.nombreUsuario),
+                      future: dataBaseHelper.getData(widget.nombreUsuario,widget.token),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           print(snapshot.error);
@@ -201,6 +206,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
                                   nombreUsuario: widget.nombreUsuario,
                                   list: snapshot.data!,
                                   deleteItem: deleteData,
+                                  token: widget.token,
                                 )
                               : const Center(
                                   child: CircularProgressIndicator(),
@@ -210,7 +216,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
                       },
                     )
                   : FutureBuilder<List>(
-                      future: dataBaseHelper.getRecetas(widget.nombreUsuario),
+                      future: dataBaseHelper.getRecetas(widget.nombreUsuario, widget.token),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           // print(snapshot.error);
@@ -220,6 +226,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
                                 list: snapshot.data!,
                                 deleteItem: deleteDataReceta,
                                 nombreUsuario: widget.nombreUsuario,
+                                token: widget.token
                               )
                             : const Center(
                                 child: CircularProgressIndicator(),
@@ -288,11 +295,12 @@ class ItemList extends StatelessWidget {
   final List list;
   final Function(int) deleteItem;
   final String nombreUsuario;
+  final String token;
 
   const ItemList(
       {required this.list,
       required this.deleteItem,
-      required this.nombreUsuario});
+      required this.nombreUsuario, required this.token});
 
   @override
   Widget build(BuildContext context) {
@@ -344,7 +352,8 @@ class ItemList extends StatelessWidget {
                     azucar: azucar,
                     fibra: fibra,
                     unidadesCantidad: unidadesCantidad,
-                    alergenos: alergenos));
+                    alergenos: alergenos,
+                    token:token));
           },
         );
       } else if (constraints.maxWidth < 1100) {
@@ -394,6 +403,7 @@ class ItemList extends StatelessWidget {
                   fibra: fibra,
                   unidadesCantidad: unidadesCantidad,
                   alergenos: alergenos,
+                  token:token
                 ));
           },
         );
@@ -443,6 +453,7 @@ class ItemList extends StatelessWidget {
                   fibra: fibra,
                   unidadesCantidad: unidadesCantidad,
                   alergenos: alergenos,
+                  token:token
                 ));
           },
         );
@@ -455,11 +466,12 @@ class ItemListReceta extends StatelessWidget {
   final List list;
   final Function(int) deleteItem;
   final String nombreUsuario;
+  final String token;
 
   const ItemListReceta(
       {required this.list,
       required this.deleteItem,
-      required this.nombreUsuario});
+      required this.nombreUsuario, required this.token});
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -476,8 +488,10 @@ class ItemListReceta extends StatelessWidget {
             itemBuilder: (context, i) {
               var imageUrl = "";
               var id = list[i]['id'];
-              if (list[i]['image'] != null && list[i]['image'] != "") {
-                imageUrl = list[i]['image'];
+              print(list[i]['imagen']);
+              if (list[i]['imagen'] != null && list[i]['imagen'] != "") {
+                imageUrl = list[i]['imagen'];
+                print(imageUrl);
               }
               var name = list[i]['nombre'] ?? "";
               var cantidad = list[i]['porciones'] ?? 0;
@@ -498,7 +512,9 @@ class ItemListReceta extends StatelessWidget {
                       name: name,
                       descripcion: descripcion,
                       pasos: pasos,
-                      ingredientes: ingredientes));
+                      ingredientes: ingredientes,
+                      token:token
+                      ));
             });
       } else if (constraints.maxWidth < 1100) {
         return GridView.builder(
@@ -534,7 +550,7 @@ class ItemListReceta extends StatelessWidget {
                     name: name,
                     descripcion: descripcion,
                     pasos: pasos,
-                    ingredientes: ingredientes));
+                    ingredientes: ingredientes,token:token));
           },
         );
       } else {
@@ -571,7 +587,7 @@ class ItemListReceta extends StatelessWidget {
                     name: name,
                     descripcion: descripcion,
                     pasos: pasos,
-                    ingredientes: ingredientes));
+                    ingredientes: ingredientes, token:token));
           },
         );
       }

@@ -3,6 +3,7 @@ import 'package:my_app/views/AddRecetasPage.dart';
 import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/Estadisticas.dart';
 import 'package:my_app/views/IniciarSesion.dart';
+import 'package:my_app/views/LoginPageToken.dart';
 //import 'package:my_app/views/NuevoBuscador.dart';
 import 'package:my_app/views/listviewFood.dart';
 

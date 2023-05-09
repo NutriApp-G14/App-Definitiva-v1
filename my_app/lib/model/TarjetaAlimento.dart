@@ -22,6 +22,7 @@ class TarjetaAlimento extends StatefulWidget {
   final String fecha;
   final List registros;
   final String tipodeComida;
+  final String token;
 
   const TarjetaAlimento(
       {required this.nombreUsuario,
@@ -34,7 +35,8 @@ class TarjetaAlimento extends StatefulWidget {
       required this.id,
       required this.fecha,
       required this.registros,
-      required this.tipodeComida});
+      required this.tipodeComida,
+      required this.token});
 
   @override
   _TarjetaAlimentoState createState() => _TarjetaAlimentoState();
@@ -128,8 +130,8 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
 
     print(widget.registros);
     final response = await ioClient.delete(
-      Uri.parse("$urlConection/registro/reg/$id"),
-    );
+        Uri.parse("$urlConection/registro/reg/$id"),
+        headers: {"Authorization": widget.token});
     setState(() {});
     widget.registros.removeWhere((element) => element['id'] == id);
     print("reg sin el borrado: ${widget.registros}");
@@ -140,7 +142,8 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                 nombreUsuario: widget.nombreUsuario,
                 tipoDeComida: widget.tipodeComida,
                 fecha: widget.fecha,
-                registros: widget.registros)));
+                registros: widget.registros,
+                token: widget.token)));
   }
 
   @override
@@ -168,28 +171,28 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => MostrarFood(
-                          name: widget.nombreAlimento,
-                          cantidad: widget.cantidad,
-                          unidadesCantidad: "gramos",
-                          calorias: calorias,
-                          grasas: grasas,
-                          proteinas: proteinas,
-                          carbohidratos: carbohidratos,
-                          sodio: sodio,
-                          azucar: azucar,
-                          fibra: fibra,
-                          image: widget.imageUrl,
-                          codigoDeBarras: codigoDeBarras,
-                          nombreUsuario: nombreDeUsuario,
-                          id: widget.id,
-                          alergenos: [],
-                          day: widget.fecha,
-                          tipoDeComida: widget.tipodeComida,
-                          showBotonAlimentos: false,
-                          showBotonRegistro: false,
-                          showBotonGuardar: true,
-                          dentroRegistro: true,
-                        )));
+                        name: widget.nombreAlimento,
+                        cantidad: widget.cantidad,
+                        unidadesCantidad: "gramos",
+                        calorias: calorias,
+                        grasas: grasas,
+                        proteinas: proteinas,
+                        carbohidratos: carbohidratos,
+                        sodio: sodio,
+                        azucar: azucar,
+                        fibra: fibra,
+                        image: widget.imageUrl,
+                        codigoDeBarras: codigoDeBarras,
+                        nombreUsuario: nombreDeUsuario,
+                        id: widget.id,
+                        alergenos: [],
+                        day: widget.fecha,
+                        tipoDeComida: widget.tipodeComida,
+                        showBotonAlimentos: false,
+                        showBotonRegistro: false,
+                        showBotonGuardar: true,
+                        dentroRegistro: true,
+                        token: widget.token)));
 
             //MostrarFood(name: name, cantidad: cantidad, unidadesCantidad: unidadesCantidad, calorias: calorias, grasas: grasas, proteinas: proteinas, carbohidratos: carbohidratos, sodio: sodio, azucar: azucar, fibra: fibra, image: image)
           },
@@ -261,17 +264,21 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                     Row(
                       children: [
                         for (int i = 0; i < widget.scoreTitles.length; i++)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Tooltip(
-                              message: widget.scoreTitles[i],
-                              child: SvgPicture.network(
-                                  height: 20,
-                                  widget.scoreImages[i],
-                                  placeholderBuilder: (BuildContext context) =>
-                                      CircularProgressIndicator.adaptive()),
-                            ),
-                          )
+                          widget.scoreImages[i] != ""
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Tooltip(
+                                    message: widget.scoreTitles[i],
+                                    child: SvgPicture.network(
+                                        height: 20,
+                                        widget.scoreImages[i],
+                                        placeholderBuilder:
+                                            (BuildContext context) =>
+                                                CircularProgressIndicator
+                                                    .adaptive()),
+                                  ),
+                                )
+                              : Container(),
                       ],
                     ),
                     SizedBox(height: 2.0),

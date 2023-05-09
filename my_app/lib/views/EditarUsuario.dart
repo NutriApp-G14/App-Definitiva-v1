@@ -15,10 +15,12 @@ import 'package:my_app/views/UsuarioPage.dart';
 class EditarUsuarioPage extends StatefulWidget {
   final String nombreUsuario;
   final String nombre;
+  final String token;
 
   EditarUsuarioPage({
     required this.nombreUsuario,
     required this.nombre,
+    required this.token,
   });
 
   @override
@@ -58,8 +60,9 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
           ((X509Certificate cert, String host, int port) => true);
     IOClient ioClient = IOClient(httpClient);
 
-    final response = await ioClient
-        .get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
+    final response = await ioClient.get(
+        Uri.parse('${urlConexion}/allergies/$nombreUsuario'),
+        headers: {"Authorization": widget.token});
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Alergias.fromJson(jsonData);
@@ -98,7 +101,9 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
     ;
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(
-          nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),
+          nombreUsuario: usuarioNombreUsuario,
+          nombre: usuarioNombre,
+          token: widget.token),
       transitionDuration: Duration(seconds: 0),
     ));
   }
@@ -302,66 +307,65 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                           child: ElevatedButton(
                             onPressed: () {
                               dataBaseHelper.updateUsuario(
-                                (nombreController.text.trim() == null ||
-                                        nombreController.text.trim() == '')
-                                    ? usuario.nombre
-                                    : nombreController.text.trim(),
-                                (nombreUsuarioController.text.trim() == null ||
-                                        nombreUsuarioController.text.trim() ==
-                                            '')
-                                    ? usuario.nombreUsuario
-                                    : nombreUsuarioController.text.trim(),
-                                (passwordController.text.trim() == null ||
-                                        passwordController.text.trim() == '')
-                                    ? usuario.password
-                                    : passwordController.text.trim(),
-                                (ageController.text.trim() == null ||
-                                        ageController.text.trim() == '')
-                                    ? usuario.age
-                                    : ageController.text.trim(),
-                                (heightController == null ||
-                                        heightController.text.trim() == '')
-                                    ? usuario.height
-                                    : heightController.text.trim(),
-                                (weightController == null ||
-                                        weightController.text.trim() == '')
-                                    ? usuario.weight
-                                    : weightController.text.trim(),
-                                (_generoSeleccionado == null ||
-                                        _generoSeleccionado == '')
-                                    ? usuario.gender
-                                    : _generoSeleccionado,
-                                (_nivelActividadSeleccionado == null ||
-                                        _nivelActividadSeleccionado == '')
-                                    ? usuario.activity
-                                    : _nivelActividadSeleccionado,
-                                usuario.objective,
-                                "",
-                                //luego hay q cambiar esto
-                              );
+                                  (nombreController.text.trim() == null ||
+                                          nombreController.text.trim() == '')
+                                      ? usuario.nombre
+                                      : nombreController.text.trim(),
+                                  (nombreUsuarioController.text.trim() == null ||
+                                          nombreUsuarioController.text.trim() ==
+                                              '')
+                                      ? usuario.nombreUsuario
+                                      : nombreUsuarioController.text.trim(),
+                                  (passwordController.text.trim() == null ||
+                                          passwordController.text.trim() == '')
+                                      ? usuario.password
+                                      : passwordController.text.trim(),
+                                  (ageController.text.trim() == null ||
+                                          ageController.text.trim() == '')
+                                      ? usuario.age
+                                      : ageController.text.trim(),
+                                  (heightController == null || heightController.text.trim() == '')
+                                      ? usuario.height
+                                      : heightController.text.trim(),
+                                  (weightController == null ||
+                                          weightController.text.trim() == '')
+                                      ? usuario.weight
+                                      : weightController.text.trim(),
+                                  (_generoSeleccionado == null || _generoSeleccionado == '')
+                                      ? usuario.gender
+                                      : _generoSeleccionado,
+                                  (_nivelActividadSeleccionado == null ||
+                                          _nivelActividadSeleccionado == '')
+                                      ? usuario.activity
+                                      : _nivelActividadSeleccionado,
+                                  usuario.objective,
+                                  usuario.imageString,
+                                  widget.token
+                                  //luego hay q cambiar esto
+                                  );
 
                               dataBaseHelper.updateAlergias(
-                                (nombreController.text.trim() == null ||
-                                        nombreController.text.trim() == '')
-                                    ? usuario.nombre
-                                    : nombreController.text.trim(),
-                                seleccionadas.contains('Cacahuetes'),
-                                seleccionadas.contains('Leche'),
-                                seleccionadas.contains('Huevo'),
-                                seleccionadas.contains('Trigo'),
-                                seleccionadas.contains('Soja'),
-                                seleccionadas.contains('Mariscos'),
-                                seleccionadas.contains('Frutos secos'),
-                                seleccionadas.contains('Pescado'),
-                              );
+                                  (nombreController.text.trim() == null ||
+                                          nombreController.text.trim() == '')
+                                      ? usuario.nombre
+                                      : nombreController.text.trim(),
+                                  seleccionadas.contains('Cacahuetes'),
+                                  seleccionadas.contains('Leche'),
+                                  seleccionadas.contains('Huevo'),
+                                  seleccionadas.contains('Trigo'),
+                                  seleccionadas.contains('Soja'),
+                                  seleccionadas.contains('Mariscos'),
+                                  seleccionadas.contains('Frutos secos'),
+                                  seleccionadas.contains('Pescado'),
+                                  widget.token);
 
                               ;
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ListAlimentos(
-                                    nombreUsuario: usuario.nombreUsuario,
-                                  ),
+                                      nombreUsuario: usuario.nombreUsuario,
+                                      token: widget.token),
                                 ),
                               );
                             },

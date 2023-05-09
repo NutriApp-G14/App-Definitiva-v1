@@ -66,6 +66,7 @@ class MostrarFood extends StatefulWidget {
   final bool showBotonRegistro;
   final bool showBotonGuardar;
   final bool dentroRegistro;
+  final String token;
 
   const MostrarFood({
     required this.id,
@@ -89,6 +90,7 @@ class MostrarFood extends StatefulWidget {
     required this.showBotonRegistro,
     required this.showBotonGuardar,
     required this.dentroRegistro,
+    required this.token,
   });
   @override
   _MostrarFoodState createState() => _MostrarFoodState();
@@ -106,7 +108,8 @@ class _MostrarFoodState extends State<MostrarFood> {
     super.initState();
     List<String> alergiasCoincidentes = [];
     formattedDate = DateFormat('dd-MM-yyyy').format(now);
-    _futureAlergias = dataBaseHelper.getAlergiasById(widget.nombreUsuario);
+    _futureAlergias =
+        dataBaseHelper.getAlergiasById(widget.nombreUsuario, widget.token);
   }
 
 // Agregar si se quiere más códigos de alérgenos y nombres de alimentos aquí
@@ -127,8 +130,8 @@ class _MostrarFoodState extends State<MostrarFood> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+            builder: (context) => ListAlimentos(
+                nombreUsuario: widget.nombreUsuario, token: widget.token)));
   }
 
   _recalucularInformacion(
@@ -1389,27 +1392,27 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                         .sodio,
                                                                     image: widget
                                                                         .image));
-                                                                registrohelper
-                                                                    .addRegistro(
-                                                                  widget
-                                                                      .codigoDeBarras
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  nueva_cantidad,
-                                                                  widget
-                                                                      .nombreUsuario
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  formattedDate
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  'Desayuno'
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  widget.name
-                                                                      .trim(),
-                                                                  alimentosRegistro,
-                                                                );
+                                                                registrohelper.addRegistro(
+                                                                    widget
+                                                                        .codigoDeBarras
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    nueva_cantidad,
+                                                                    widget
+                                                                        .nombreUsuario
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    formattedDate
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    'Desayuno'
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    widget.name
+                                                                        .trim(),
+                                                                    alimentosRegistro,
+                                                                    widget
+                                                                        .token);
                                                                 Navigator.pop(
                                                                     context);
                                                               },
@@ -1465,27 +1468,27 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                         .sodio,
                                                                     image: widget
                                                                         .image));
-                                                                registrohelper
-                                                                    .addRegistro(
-                                                                  widget
-                                                                      .codigoDeBarras
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  nueva_cantidad,
-                                                                  widget
-                                                                      .nombreUsuario
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  formattedDate
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  'Almuerzo'
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  widget.name
-                                                                      .trim(),
-                                                                  alimentosRegistro,
-                                                                );
+                                                                registrohelper.addRegistro(
+                                                                    widget
+                                                                        .codigoDeBarras
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    nueva_cantidad,
+                                                                    widget
+                                                                        .nombreUsuario
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    formattedDate
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    'Almuerzo'
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    widget.name
+                                                                        .trim(),
+                                                                    alimentosRegistro,
+                                                                    widget
+                                                                        .token);
                                                                 Navigator.pop(
                                                                     context);
                                                               },
@@ -1541,27 +1544,27 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                         .sodio,
                                                                     image: widget
                                                                         .image));
-                                                                registrohelper
-                                                                    .addRegistro(
-                                                                  widget
-                                                                      .codigoDeBarras
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  nueva_cantidad,
-                                                                  widget
-                                                                      .nombreUsuario
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  formattedDate
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  'Comida'
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  widget.name
-                                                                      .trim(),
-                                                                  alimentosRegistro,
-                                                                );
+                                                                registrohelper.addRegistro(
+                                                                    widget
+                                                                        .codigoDeBarras
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    nueva_cantidad,
+                                                                    widget
+                                                                        .nombreUsuario
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    formattedDate
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    'Comida'
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    widget.name
+                                                                        .trim(),
+                                                                    alimentosRegistro,
+                                                                    widget
+                                                                        .token);
                                                                 Navigator.pop(
                                                                     context);
                                                               },
@@ -1617,27 +1620,27 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                         .sodio,
                                                                     image: widget
                                                                         .image));
-                                                                registrohelper
-                                                                    .addRegistro(
-                                                                  widget
-                                                                      .codigoDeBarras
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  nueva_cantidad,
-                                                                  widget
-                                                                      .nombreUsuario
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  formattedDate
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  'Merienda'
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  widget.name
-                                                                      .trim(),
-                                                                  alimentosRegistro,
-                                                                );
+                                                                registrohelper.addRegistro(
+                                                                    widget
+                                                                        .codigoDeBarras
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    nueva_cantidad,
+                                                                    widget
+                                                                        .nombreUsuario
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    formattedDate
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    'Merienda'
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    widget.name
+                                                                        .trim(),
+                                                                    alimentosRegistro,
+                                                                    widget
+                                                                        .token);
                                                                 Navigator.pop(
                                                                     context);
                                                               },
@@ -1693,27 +1696,27 @@ class _MostrarFoodState extends State<MostrarFood> {
                                                                         .sodio,
                                                                     image: widget
                                                                         .image));
-                                                                registrohelper
-                                                                    .addRegistro(
-                                                                  widget
-                                                                      .codigoDeBarras
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  nueva_cantidad,
-                                                                  widget
-                                                                      .nombreUsuario
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  formattedDate
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  'Cena'
-                                                                      .trim()
-                                                                      .toLowerCase(),
-                                                                  widget.name
-                                                                      .trim(),
-                                                                  alimentosRegistro,
-                                                                );
+                                                                registrohelper.addRegistro(
+                                                                    widget
+                                                                        .codigoDeBarras
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    nueva_cantidad,
+                                                                    widget
+                                                                        .nombreUsuario
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    formattedDate
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    'Cena'
+                                                                        .trim()
+                                                                        .toLowerCase(),
+                                                                    widget.name
+                                                                        .trim(),
+                                                                    alimentosRegistro,
+                                                                    widget
+                                                                        .token);
                                                                 Navigator.pop(
                                                                     context);
                                                               },
@@ -1804,7 +1807,7 @@ class _MostrarFoodState extends State<MostrarFood> {
 
   _navigateTipoComida(BuildContext context) async {
     List registro = await registrohelper.getRegistroComidas(
-        widget.nombreUsuario, widget.tipoDeComida, widget.day);
+        widget.nombreUsuario, widget.tipoDeComida, widget.day, widget.token);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -1812,7 +1815,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                 nombreUsuario: widget.nombreUsuario,
                 fecha: widget.day,
                 tipoDeComida: widget.tipoDeComida.trim().toLowerCase(),
-                registros: registro)));
+                registros: registro,
+                token: widget.token)));
   }
 
   Future<http.Response> updateAlimento(
@@ -1855,14 +1859,18 @@ class _MostrarFoodState extends State<MostrarFood> {
     };
     var body = json.encode(data);
     var response = await ioClient.put(Uri.parse(url),
-        headers: {"Content-Type": "application/json"}, body: body);
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": widget.token
+        },
+        body: body);
     //Navigator.pop(context);
     Navigator.pop(context);
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+            builder: (context) => ListAlimentos(
+                nombreUsuario: widget.nombreUsuario, token: widget.token)));
     return response;
   }
 
@@ -1881,8 +1889,11 @@ class _MostrarFoodState extends State<MostrarFood> {
     };
     var body = json.encode(data);
     var response = await ioClient.put(Uri.parse(url),
-        headers: {"Content-Type": "application/json"}, body: body);
-    print("${response.statusCode}");
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": widget.token
+        },
+        body: body);
     Navigator.pop(context);
     _navigateTipoComida(context);
     return response;
@@ -1912,6 +1923,7 @@ class _MostrarFoodState extends State<MostrarFood> {
       Uri.parse('${urlConection}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": widget.token
       },
       body: jsonEncode(<String, dynamic>{
         'name': name,

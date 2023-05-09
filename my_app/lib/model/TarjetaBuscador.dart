@@ -15,6 +15,7 @@ import 'package:my_app/views/listviewfood.dart';
 import 'package:my_app/views/mostrarFood.dart';
 
 class TarjetaBuscador extends StatefulWidget {
+  final String token;
   final int id;
   final String nombreUsuario;
   final String nombreAlimento;
@@ -57,6 +58,7 @@ class TarjetaBuscador extends StatefulWidget {
     required this.tipoDeComida,
     required this.day,
     required this.alergenos,
+    required this.token,
   });
 
   @override
@@ -102,28 +104,28 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => MostrarFood(
-                          name: widget.nombreAlimento,
-                          cantidad: widget.cantidad,
-                          unidadesCantidad: widget.unidadesCantidad,
-                          calorias: widget.calorias,
-                          grasas: widget.grasas,
-                          proteinas: widget.proteinas,
-                          carbohidratos: widget.carbohidratos,
-                          sodio: widget.sodio,
-                          azucar: widget.azucar,
-                          fibra: widget.fibra,
-                          image: widget.imageUrl,
-                          codigoDeBarras: widget.codigoDeBarras,
-                          nombreUsuario: widget.nombreUsuario,
-                          id: 0,
-                          alergenos: listaAlergenos,
-                          day: '',
-                          tipoDeComida: '',
-                          showBotonAlimentos: true,
-                          showBotonRegistro: true,
-                          showBotonGuardar: false,
-                          dentroRegistro: false,
-                        )));
+                        name: widget.nombreAlimento,
+                        cantidad: widget.cantidad,
+                        unidadesCantidad: widget.unidadesCantidad,
+                        calorias: widget.calorias,
+                        grasas: widget.grasas,
+                        proteinas: widget.proteinas,
+                        carbohidratos: widget.carbohidratos,
+                        sodio: widget.sodio,
+                        azucar: widget.azucar,
+                        fibra: widget.fibra,
+                        image: widget.imageUrl,
+                        codigoDeBarras: widget.codigoDeBarras,
+                        nombreUsuario: widget.nombreUsuario,
+                        id: 0,
+                        alergenos: listaAlergenos,
+                        day: '',
+                        tipoDeComida: '',
+                        showBotonAlimentos: true,
+                        showBotonRegistro: true,
+                        showBotonGuardar: false,
+                        dentroRegistro: false,
+                        token: widget.token)));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -265,7 +267,8 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                                     widget.day.trim().toLowerCase(),
                                     widget.tipoDeComida.trim().toLowerCase(),
                                     widget.nombreAlimento.trim(),
-                                    alimentoRegistro);
+                                    alimentoRegistro,
+                                    widget.token);
                               } else {
                                 insertarAlimento(
                                     widget.codigoDeBarras,
@@ -279,7 +282,8 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                                     widget.sodio,
                                     widget.azucar,
                                     widget.fibra,
-                                    widget.imageUrl);
+                                    widget.imageUrl,
+                                    widget.token);
                               }
                             },
                           ),
@@ -308,7 +312,8 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
       double sodio,
       double azucar,
       double fibra,
-      String image) async {
+      String image,
+      String token) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -317,6 +322,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
       Uri.parse('${urlConection}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": token
       },
       body: jsonEncode(<String, dynamic>{
         'name': name,
@@ -343,8 +349,8 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+            builder: (context) => ListAlimentos(
+                nombreUsuario: widget.nombreUsuario, token: widget.token)));
   }
 
   Future<http.Response> addRegistro(
@@ -354,7 +360,8 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
       String fechaController,
       String tipoDeComidaController,
       String nombreAlimento,
-      List<Alimento> alimento) async {
+      List<Alimento> alimento,
+      String token) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -374,16 +381,20 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
     var body = json.encode(data);
 
     var response = await ioClient.post(Uri.parse(url),
-        headers: {"Content-Type": "application/json"}, body: body);
+        headers: {"Content-Type": "application/json", "Authorization": token},
+        body: body);
+
+    print("estado:");
     print("${response.statusCode}");
     Navigator.pop(context);
+
     _navigateTipoComida(context);
     return response;
   }
 
   _navigateTipoComida(BuildContext context) async {
     List registro = await registrohelper.getRegistroComidas(
-        widget.nombreUsuario, widget.tipoDeComida, widget.day);
+        widget.nombreUsuario, widget.tipoDeComida, widget.day, widget.token);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -391,6 +402,7 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                 nombreUsuario: widget.nombreUsuario,
                 fecha: widget.day,
                 tipoDeComida: widget.tipoDeComida.trim().toLowerCase(),
-                registros: registro)));
+                registros: registro,
+                token: widget.token)));
   }
 }

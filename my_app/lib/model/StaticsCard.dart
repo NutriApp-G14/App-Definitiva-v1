@@ -15,6 +15,7 @@ class StaticsCard extends StatefulWidget {
   final double totalCalorias;
   final double totalCarbohidratos;
   final double totalGrasas;
+  final String token;
 
   const StaticsCard(
       {required this.nombreUsuario,
@@ -23,7 +24,8 @@ class StaticsCard extends StatefulWidget {
       required this.totalProteinas,
       required this.totalCalorias,
       required this.totalCarbohidratos,
-      required this.totalGrasas});
+      required this.totalGrasas,
+      required this.token});
 
   @override
   _StaticsCardState createState() => _StaticsCardState();
@@ -136,9 +138,7 @@ class _StaticsCardState extends State<StaticsCard> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: dataRegistroHelper.getRegistroDiario(
-          widget.nombreUsuario,
-          widget.fecha,
-        ),
+            widget.nombreUsuario, widget.fecha, widget.token),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             List registros = snapshot.data;
@@ -149,24 +149,24 @@ class _StaticsCardState extends State<StaticsCard> {
             for (var registro in registros) {
               for (var alimento in registro['alimentos']) {
                 totalCalorias +=
-                    alimento['calorias'] * alimento['cantidad'] / 100;
+                    alimento['calorias'] * registro['cantidad'] / 100;
               }
             }
             for (var registro in registros) {
               for (var alimento in registro['alimentos']) {
                 totalProteinas +=
-                    alimento['proteinas'] * alimento['cantidad'] / 100;
+                    alimento['proteinas'] * registro['cantidad'] / 100;
               }
             }
             for (var registro in registros) {
               for (var alimento in registro['alimentos']) {
                 totalCarbohidratos +=
-                    alimento['carbohidratos'] * alimento['cantidad'] / 100;
+                    alimento['carbohidratos'] * registro['cantidad'] / 100;
               }
             }
             for (var registro in registros) {
               for (var alimento in registro['alimentos']) {
-                totalGrasas += alimento['grasas'] * alimento['cantidad'] / 100;
+                totalGrasas += alimento['grasas'] * registro['cantidad'] / 100;
               }
             }
 
@@ -343,7 +343,9 @@ class _StaticsCardState extends State<StaticsCard> {
                     }
                   }),
               ObjetiveCard(
-                  nombreUsuario: widget.nombreUsuario, fecha: widget.day)
+                  nombreUsuario: widget.nombreUsuario,
+                  fecha: widget.day,
+                  token: widget.token)
             ]));
           } else {
             return CircularProgressIndicator();

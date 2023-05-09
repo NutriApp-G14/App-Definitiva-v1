@@ -15,11 +15,13 @@ class BuscadorIngredientes extends StatefulWidget {
   final String nombreUsuario;
   final List<Alimento> ingredientes;
   final Function(List<Alimento>) onIngredientesUpdated;
+  final String token;
 
   const BuscadorIngredientes(
       {required this.nombreUsuario,
       required this.ingredientes,
-      required this.onIngredientesUpdated});
+      required this.onIngredientesUpdated,
+      required this.token});
 
   @override
   _BuscadorIngredientesState createState() => _BuscadorIngredientesState();
@@ -111,13 +113,14 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+            builder: (context) => ListAlimentos(
+                nombreUsuario: widget.nombreUsuario, token: widget.token)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           TextField(
@@ -308,6 +311,7 @@ class _BuscadorIngredientesState extends State<BuscadorIngredientes> {
       Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": widget.token
       },
       body: jsonEncode(<String, dynamic>{
         'name': name,

@@ -8,9 +8,10 @@ import 'package:my_app/model/TipoComidaCard.dart';
 
 class RegistroComidasPage extends StatefulWidget {
   final String nombreUsuario;
+  final String token;
 
   RegistroComidasPage({
-    required this.nombreUsuario,
+    required this.nombreUsuario, required this.token,
   });
 
   @override
@@ -39,7 +40,7 @@ class _RegistroComidasPageState extends State<RegistroComidasPage> {
           backgroundColor: Colors.white,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(52),
-            child: NutriAppBar(nombreUsuario: widget.nombreUsuario),
+            child: NutriAppBar(nombreUsuario: widget.nombreUsuario,token:widget.token),
           ),
         ),
         body: KeyedSubtree(
@@ -79,6 +80,7 @@ class _RegistroComidasPageState extends State<RegistroComidasPage> {
               carbohidratosFoods: 0,
               caloriasFoods: 0,
               grasasFoods: 0,
+              token:widget.token
             ),
             TipoComidaCard(
               nombreUsuario: widget.nombreUsuario,
@@ -88,6 +90,7 @@ class _RegistroComidasPageState extends State<RegistroComidasPage> {
               carbohidratosFoods: 0,
               caloriasFoods: 0,
               grasasFoods: 0,
+              token:widget.token
             ),
             TipoComidaCard(
               nombreUsuario: widget.nombreUsuario,
@@ -97,6 +100,7 @@ class _RegistroComidasPageState extends State<RegistroComidasPage> {
               carbohidratosFoods: 0,
               caloriasFoods: 0,
               grasasFoods: 0,
+              token:widget.token
             ),
             TipoComidaCard(
               nombreUsuario: widget.nombreUsuario,
@@ -106,6 +110,7 @@ class _RegistroComidasPageState extends State<RegistroComidasPage> {
               carbohidratosFoods: 0,
               caloriasFoods: 0,
               grasasFoods: 0,
+              token:widget.token
             ),
             TipoComidaCard(
               nombreUsuario: widget.nombreUsuario,
@@ -115,6 +120,7 @@ class _RegistroComidasPageState extends State<RegistroComidasPage> {
               carbohidratosFoods: 0,
               caloriasFoods: 0,
               grasasFoods: 0,
+              token:widget.token
             ),
           ],
         ))));

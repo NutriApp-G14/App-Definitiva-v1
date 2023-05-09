@@ -24,6 +24,7 @@ class TipoComidaCard extends StatefulWidget {
   final caloriasFoods;
   final carbohidratosFoods;
   final grasasFoods;
+  final String token;
 
   const TipoComidaCard(
       {required this.nombreUsuario,
@@ -32,7 +33,7 @@ class TipoComidaCard extends StatefulWidget {
       required this.proteinasFoods,
       required this.caloriasFoods,
       required this.carbohidratosFoods,
-      required this.grasasFoods});
+      required this.grasasFoods, required this.token});
 
   @override
   _TipoComidaCardState createState() => _TipoComidaCardState();
@@ -50,7 +51,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
     List registros = await dataBaseHelper.getRegistroComidas(
         nombreUsuario.trim().toLowerCase(),
         tipoDeComida.trim().toLowerCase(),
-        widget.day.trim().toLowerCase());
+        widget.day.trim().toLowerCase(), widget.token);
 
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => PaginaTipoComida(
@@ -58,6 +59,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
         tipoDeComida: tipoDeComida,
         fecha: widget.day,
         registros: registros,
+        token: widget.token
       ),
       transitionDuration: Duration(seconds: 0),
     ));
@@ -70,6 +72,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
           widget.nombreUsuario.trim().toLowerCase(),
           widget.tipoDeComida.trim().toLowerCase(),
           widget.day.trim().toLowerCase(),
+          widget.token
         ),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
@@ -352,7 +355,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                               widget.tipoDeComida
                                                   .trim()
                                                   .toLowerCase(),
-                                              widget.day.trim().toLowerCase());
+                                              widget.day.trim().toLowerCase(), widget.token);
                                           _navigateMostrarTipoComida(
                                               context,
                                               widget.day,

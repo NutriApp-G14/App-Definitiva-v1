@@ -9,8 +9,9 @@ import 'package:my_app/model/Alimento.dart';
 final urlConection = 'https://localhost:8443';
 
 
+
 class RegistroHelper {
-  // Add Registro
+
   Future<http.Response> addRegistro(
       String codigoDeBarrasController,
       double cantidadController,

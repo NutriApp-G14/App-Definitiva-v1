@@ -1807,7 +1807,7 @@ class _MostrarFoodState extends State<MostrarFood> {
 
   _navigateTipoComida(BuildContext context) async {
     List registro = await registrohelper.getRegistroComidas(
-        widget.nombreUsuario, widget.tipoDeComida, widget.day);
+        widget.nombreUsuario, widget.tipoDeComida, widget.day, widget.token);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -1815,7 +1815,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                 nombreUsuario: widget.nombreUsuario,
                 fecha: widget.day,
                 tipoDeComida: widget.tipoDeComida.trim().toLowerCase(),
-                registros: registro)));
+                registros: registro,
+                token: widget.token)));
   }
 
   Future<http.Response> updateAlimento(

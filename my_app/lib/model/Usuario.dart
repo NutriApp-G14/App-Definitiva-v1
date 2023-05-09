@@ -9,6 +9,7 @@ class Usuario {
   final String activity;
   final String objective;
   final String imageString;
+  final String token;
   //final List<String> allergies;
 
   Usuario(
@@ -21,7 +22,7 @@ class Usuario {
       this.gender,
       this.activity,
       this.objective,
-      this.imageString);
+      this.imageString, this.token);
 
   String get _password => password;
 
@@ -48,6 +49,7 @@ class Usuario {
       json['activity'],
       json['objective'],
       json['imageString'],
+      json['token']
     );
   }
 }

@@ -9,7 +9,8 @@ import 'listviewFood.dart';
 
 class AddAlimentoPage extends StatefulWidget {
   final String nombreUsuario;
-  const AddAlimentoPage({required this.nombreUsuario});
+  final String token;
+  const AddAlimentoPage({required this.nombreUsuario, required this.token});
 
   @override
   _AddAlimentoPageState createState() => _AddAlimentoPageState();
@@ -58,7 +59,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
     };
     var body = json.encode(data);
     var response = await ioClient.post(Uri.parse(url),
-        headers: {"Content-Type": "application/json"}, body: body);
+        headers: {"Content-Type": "application/json", "Authorization" : widget.token}, body: body);
     print("${response.statusCode}");
 
     Navigator.pop(context);
@@ -73,7 +74,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+                ListAlimentos(nombreUsuario: widget.nombreUsuario, token:widget.token)));
   }
 
   @override

@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/io_client.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/views/IniciarSesion.dart';
 import 'package:my_app/views/listviewFood.dart';
@@ -50,6 +54,7 @@ class CrearUsuarioPage extends StatefulWidget {
 class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
   var aceptarTerminos = false;
   DataBaseHelper dataBaseHelper = DataBaseHelper();
+  late var token;
 
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController nombreUsuarioController = TextEditingController();
@@ -399,7 +404,11 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                         if (_aceptado == false) {
                           _mostrarDialogoTerminos();
                         } else {
-                          dataBaseHelper.addUsuario(
+
+                         
+
+
+                          await dataBaseHelper.addUsuario(
                               nombreController.text.trim(),
                               nombreUsuarioController.text.trim(),
                               passwordController.text.trim(),
@@ -410,6 +419,8 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                               _nivelActividadSeleccionado,
                               "ninguno",
                               "");
+
+                           token = await login();
                           Map<String, bool> alergiasSeleccionadas =
                               seleccionarAlergias(alergias, seleccionadas);
                           bool cacahuetesController =
@@ -438,13 +449,18 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                               sojaController,
                               mariscosController,
                               frutosSecosController,
-                              pescadoController);
+                              pescadoController,
+                              token);
+
+                         
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ListAlimentos(
                                     nombreUsuario:
-                                        nombreUsuarioController.text.trim())),
+                                        nombreUsuarioController.text.trim(),
+                                        token: token)),
                           );
                         }
                       }
@@ -498,6 +514,36 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
       },
     );
   }
+
+
+  Future<String> login() async {
+    HttpClient httpClient = new HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+    var nombreUsuario = nombreUsuarioController.text;
+    final response = await ioClient.post(
+      Uri.parse('https://localhost:8443/users/login/$nombreUsuario'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'password': passwordController.text,
+      }),
+    );
+    print(response.statusCode);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+
+      token = data['token'];
+      print(token);
+      return token;
+
+    } else {
+      throw Exception('Failed to log in');
+    }
+  }
 }
 
 class TerminosDeUsoPage extends StatelessWidget {
@@ -513,4 +559,7 @@ class TerminosDeUsoPage extends StatelessWidget {
       ),
     );
   }
+
+
+
 }

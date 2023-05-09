@@ -14,10 +14,11 @@ import 'package:my_app/views/UsuarioPage.dart';
 import 'package:my_app/views/listviewFood.dart';
 
 class NutriAppBar extends StatefulWidget {
+  final String token;
   final String nombreUsuario;
   final bool isPremium = false;
 
-  const NutriAppBar({required this.nombreUsuario});
+  const NutriAppBar({required this.nombreUsuario, required this.token});
 
   @override
   _NutriAppBarState createState() => _NutriAppBarState();
@@ -40,7 +41,7 @@ class _NutriAppBarState extends State<NutriAppBar> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                AddAlimentoPage(nombreUsuario: widget.nombreUsuario)));
+                AddAlimentoPage(nombreUsuario: widget.nombreUsuario, token: widget.token)));
   }
 
   _navigateRegistroComidas(BuildContext context) async {
@@ -48,7 +49,7 @@ class _NutriAppBarState extends State<NutriAppBar> {
 
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          RegistroComidasPage(nombreUsuario: usuarioNombreUsuario),
+          RegistroComidasPage(nombreUsuario: usuarioNombreUsuario, token: widget.token),
       transitionDuration: Duration(seconds: 0),
     ));
   }
@@ -57,12 +58,12 @@ class _NutriAppBarState extends State<NutriAppBar> {
     String usuarioNombreUsuario = widget.nombreUsuario;
     Future<List> registrosDiario = dataRegistroHelper.getRegistroDiario(
         usuarioNombreUsuario.trim().toLowerCase(),
-        formattedDate.trim().toLowerCase());
+        formattedDate.trim().toLowerCase(),widget.token);
     List registros = await registrosDiario;
 
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => StatisticsPage(
-          nombreUsuario: usuarioNombreUsuario, registros: registros),
+          nombreUsuario: usuarioNombreUsuario, registros: registros, token: widget.token),
       transitionDuration: Duration(seconds: 0),
     ));
   }
@@ -73,7 +74,7 @@ class _NutriAppBarState extends State<NutriAppBar> {
     String usuarioNombreUsuario = usuario.nombreUsuario;
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => UsuarioPage(
-          nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre),
+          nombreUsuario: usuarioNombreUsuario, nombre: usuarioNombre, token: widget.token),
       transitionDuration: Duration(seconds: 0),
     ));
   }
@@ -90,7 +91,7 @@ class _NutriAppBarState extends State<NutriAppBar> {
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            ListAlimentos(nombreUsuario: usuarioNombreUsuario),
+            ListAlimentos(nombreUsuario: usuarioNombreUsuario, token: widget.token),
         transitionDuration: Duration(seconds: 0),
       ),
     );
@@ -172,6 +173,7 @@ class _NutriAppBarState extends State<NutriAppBar> {
                       builder: (context) => BuscadorNuevo(
                         nombreUsuario: widget.nombreUsuario,
                         fecha: formattedDate,
+                        token : widget.token,
                       ),
                     ),
                   );

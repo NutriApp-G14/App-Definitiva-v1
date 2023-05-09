@@ -12,11 +12,12 @@ class BuscadorAlimentos extends StatefulWidget {
   final String nombreUsuario;
   final String tipoDeComida;
   final String day;
+  final String token;
 
   const BuscadorAlimentos(
       {required this.nombreUsuario,
       required this.tipoDeComida,
-      required this.day});
+      required this.day, required this.token});
 
   @override
   _BuscadorAlimentosState createState() => _BuscadorAlimentosState();
@@ -37,7 +38,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario)));
+                ListAlimentos(nombreUsuario: widget.nombreUsuario,token: widget.token)));
   }
 
   @override
@@ -197,6 +198,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                         anadirRegistro: true,
                         day: widget.day,
                         alergenos: alergenos,
+                        token: widget.token
                       );
                     });
               } else if (constraints.maxWidth < 1100) {
@@ -313,6 +315,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                         anadirRegistro: true,
                         day: widget.day,
                         alergenos: alergenos,
+                        token : widget.token
                       );
                     });
               } else {
@@ -429,6 +432,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
                         anadirRegistro: true,
                         day: widget.day,
                         alergenos: alergenos,
+                        token : widget.token
                       );
                     });
               }
@@ -480,6 +484,7 @@ class _BuscadorAlimentosState extends State<BuscadorAlimentos> {
       Uri.parse('${urlConexion}/foods/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization" : widget.token
       },
       body: jsonEncode(<String, dynamic>{
         'name': name,

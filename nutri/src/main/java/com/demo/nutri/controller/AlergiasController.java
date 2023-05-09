@@ -53,7 +53,7 @@ public class AlergiasController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Alergias>  deleteAlergias(@PathVariable String id) {
+    public ResponseEntity<Alergias> deleteAlergias(@PathVariable String id) {
         repository.deleteById(id);
         return ResponseEntity.ok().build();
     }

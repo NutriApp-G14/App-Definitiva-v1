@@ -24,9 +24,8 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
   final TextEditingController proteinasController = TextEditingController();
   final TextEditingController carbohidratosController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
-  final TextEditingController codigoDeBarrasController =
-      TextEditingController();
-  final TextEditingController alergenosController = TextEditingController();
+  final TextEditingController codigoDeBarrasController= TextEditingController();
+  final TextEditingController alergenosController= TextEditingController();
 
   Future<http.Response> addAlimento(
       String nameController,

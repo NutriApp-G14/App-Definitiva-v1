@@ -124,9 +124,12 @@ class _TarjetaMisAlimentoState extends State<TarjetaMisAlimento> {
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
                           alergenos: widget.alergenos,
+                          day: '',
+                          tipoDeComida: '',
                           showBotonAlimentos: false,
                           showBotonRegistro: true,
                           showBotonGuardar: false,
+                          dentroRegistro: false,
                         )));
           },
           child: Column(

@@ -13,6 +13,41 @@ public class RegistroComidas {
     private String nombreUsuario;
     private String fecha;
     private String tipoDeComida;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((nombreUsuario == null) ? 0 : nombreUsuario.hashCode());
+        result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
+        result = prime * result + ((tipoDeComida == null) ? 0 : tipoDeComida.hashCode());
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        RegistroComidas other = (RegistroComidas) obj;
+        if (nombreUsuario == null) {
+            if (other.nombreUsuario != null)
+                return false;
+        } else if (!nombreUsuario.equals(other.nombreUsuario))
+            return false;
+        if (fecha == null) {
+            if (other.fecha != null)
+                return false;
+        } else if (!fecha.equals(other.fecha))
+            return false;
+        if (tipoDeComida == null) {
+            if (other.tipoDeComida != null)
+                return false;
+        } else if (!tipoDeComida.equals(other.tipoDeComida))
+            return false;
+        return true;
+    }
     private String nombreAlimento;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Alimento> alimentos;

@@ -8,10 +8,12 @@ import 'package:intl/intl.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/controllers/registroHelpers.dart';
 import 'package:my_app/model/Alimento.dart';
+import 'package:my_app/model/PaginaTipoComida.dart';
 import 'package:my_app/views/listviewfood.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:my_app/model/Alergias.dart';
 //import 'package:fl_chart/fl_chart.dart';
+import 'package:my_app/model/Alergias.dart';
 
 //final urlConection = 'http://localhost:8080';
 //final urlConection = 'http://34.77.252.254:8080';
@@ -57,10 +59,13 @@ class MostrarFood extends StatefulWidget {
   final double azucar;
   final double fibra;
   final String image;
+  final String day;
+  final String tipoDeComida;
   final List<String> alergenos;
   final bool showBotonAlimentos;
   final bool showBotonRegistro;
   final bool showBotonGuardar;
+  final bool dentroRegistro;
 
   const MostrarFood({
     required this.id,
@@ -78,9 +83,12 @@ class MostrarFood extends StatefulWidget {
     required this.fibra,
     required this.image,
     required this.alergenos,
+    required this.day,
+    required this.tipoDeComida,
     required this.showBotonAlimentos,
     required this.showBotonRegistro,
     required this.showBotonGuardar,
+    required this.dentroRegistro,
   });
   @override
   _MostrarFoodState createState() => _MostrarFoodState();
@@ -106,14 +114,14 @@ class _MostrarFoodState extends State<MostrarFood> {
     "en:milk": "Leche",
     "en:eggs": "Huevo",
     "en:gluten": "Trigo",
-    "en:nuts": "Frutos Secos",
+    "en:nuts": "Frutos secos",
     "en:peanuts": "Cacahuetes",
     "en:soybeans": "Soja",
     "en:crustaceans": "Marisco",
     "en:molluscs": "Marisco",
     "en:fish": "Pescado"
   };
-  final List<String> nombreAlergenos = [];
+  List<String> nombreAlergenos = [];
 
   _navigateListAlimento(BuildContext context) async {
     Navigator.push(
@@ -307,6 +315,8 @@ class _MostrarFoodState extends State<MostrarFood> {
                                         ),
                                         onChanged: (value) {
                                           setState(() {
+                                            nombreAlergenos = [];
+
                                             cantidad = (value.isNotEmpty
                                                 ? double.tryParse(value)
                                                 : 0.0)!;
@@ -1190,7 +1200,7 @@ class _MostrarFoodState extends State<MostrarFood> {
                           final alergia = snapshot.data!;
                           final listaAlergias = _alergias(alergia);
                           return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               widget.showBotonAlimentos == true
                                   ? ElevatedButton(
@@ -1758,23 +1768,27 @@ class _MostrarFoodState extends State<MostrarFood> {
                             child: TextButton(
                               onPressed: () {
                                 // Lógica para actualizar alimento
-                                updateAlimento(
-                                    widget.id,
-                                    widget.name,
-                                    nueva_cantidad,
-                                    widget.unidadesCantidad,
-                                    widget.calorias,
-                                    widget.grasas,
-                                    widget.proteinas,
-                                    widget.carbohidratos,
-                                    widget.image,
-                                    widget.nombreUsuario,
-                                    widget.sodio,
-                                    widget.azucar,
-                                    widget.fibra,
-                                    widget.codigoDeBarras,
-                                    widget.alergenos);
-
+                                if (widget.dentroRegistro == true) {
+                                  updateCantidadRegistro(
+                                      widget.id, nueva_cantidad);
+                                } else {
+                                  updateAlimento(
+                                      widget.id,
+                                      widget.name,
+                                      nueva_cantidad,
+                                      widget.unidadesCantidad,
+                                      widget.calorias,
+                                      widget.grasas,
+                                      widget.proteinas,
+                                      widget.carbohidratos,
+                                      widget.image,
+                                      widget.nombreUsuario,
+                                      widget.sodio,
+                                      widget.azucar,
+                                      widget.fibra,
+                                      widget.codigoDeBarras,
+                                      widget.alergenos);
+                                }
                                 cantidad == 0;
                               },
                               child: Text('Guardar cambios'),
@@ -1786,6 +1800,19 @@ class _MostrarFoodState extends State<MostrarFood> {
                 )),
           ],
         ));
+  }
+
+  _navigateTipoComida(BuildContext context) async {
+    List registro = await registrohelper.getRegistroComidas(
+        widget.nombreUsuario, widget.tipoDeComida, widget.day);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PaginaTipoComida(
+                nombreUsuario: widget.nombreUsuario,
+                fecha: widget.day,
+                tipoDeComida: widget.tipoDeComida.trim().toLowerCase(),
+                registros: registro)));
   }
 
   Future<http.Response> updateAlimento(
@@ -1839,6 +1866,28 @@ class _MostrarFoodState extends State<MostrarFood> {
     return response;
   }
 
+  Future<http.Response> updateCantidadRegistro(
+    int idController,
+    double cantidadController,
+  ) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    var url = "${urlConexion}/registro/cantidad/$idController";
+    Map data = {
+      'cantidad': cantidadController,
+    };
+    var body = json.encode(data);
+    var response = await ioClient.put(Uri.parse(url),
+        headers: {"Content-Type": "application/json"}, body: body);
+    print("${response.statusCode}");
+    Navigator.pop(context);
+    _navigateTipoComida(context);
+    return response;
+  }
+
   Future<http.Response> insertarAlimento(
       String nombreUsuario,
       String name,
@@ -1883,6 +1932,7 @@ class _MostrarFoodState extends State<MostrarFood> {
     );
     Navigator.pop(context);
     _navigateListAlimento(context);
+
     return response;
   }
 }

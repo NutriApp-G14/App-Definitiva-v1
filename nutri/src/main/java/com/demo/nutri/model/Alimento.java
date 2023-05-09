@@ -4,6 +4,10 @@ package com.demo.nutri.model;
 import java.net.URI;
 import java.util.List;
 
+
+import java.net.URI;
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -24,11 +28,12 @@ public class Alimento {
     private String image; 
     private String nombreUsuario; 
     private String codigoDeBarras;
+    @ElementCollection
+    private List<String> alergenos;
     @ManyToOne
     private Receta receta;
     @ManyToOne
     private RegistroComidas registroComidas;
-    private List<String> alergenos;
 
     public String getCodigoDeBarras() {
         return codigoDeBarras;
@@ -127,13 +132,13 @@ public class Alimento {
     public void setRegistroComidas(RegistroComidas registroComidas) {
         this.registroComidas = registroComidas;
     }
-
     public List<String> getAlergenos() {
         return alergenos;
     }
     public void setAlergenos(List<String> alergenos) {
         this.alergenos = alergenos;
     }
+
 
 
 }

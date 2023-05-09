@@ -8,27 +8,25 @@ import 'package:my_app/model/Alergias.dart';
 import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/model/Usuario.dart';
 
-final urlConexion = 'https://35.240.26.205:8443';
-//final urlConexion = 'http://localhost:8080';
+final urlConexion = 'https://34.76.252.0:8443';
 
 class DataBaseHelper {
 // Add Alimento
   Future<http.Response> addAlimento(
-    String nameController,
-    double cantidadController,
-    String unidadesCantidadController,
-    double caloriasController,
-    double grasasController,
-    double proteinasController,
-    double carbohidratosController,
-    String imageController,
-    String nombreUsuarioController,
-    double sodioController,
-    double azucarController,
-    double fibraController,
-    String codigoDeBarrasController,
-    List<String> alergenosController,
-  ) async {
+      String nameController,
+      double cantidadController,
+      String unidadesCantidadController,
+      double caloriasController,
+      double grasasController,
+      double proteinasController,
+      double carbohidratosController,
+      String imageController,
+      String nombreUsuarioController,
+      double sodioController,
+      double azucarController,
+      double fibraController,
+      String codigoDeBarrasController,
+      List<String> alergenosController) async {
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -59,7 +57,7 @@ class DataBaseHelper {
   }
 
   // Add Usuario
-  Future<http.Response> addUsuario(
+  Future<int> addUsuario(
     String nombreController,
     String nombreUsuarioController,
     String passwordController,
@@ -94,7 +92,8 @@ class DataBaseHelper {
     var response = await ioClient.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
-    return response;
+
+    return response.statusCode;
   }
 
 //add Alergias
@@ -267,6 +266,25 @@ class DataBaseHelper {
     }
   }
 
+  Future<Usuario?> getUsuarioByNombreUsuarioParaLogin(
+      String nombreUsuario) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    final response =
+        await ioClient.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      return Usuario.fromJson(jsonData);
+    } else if (response.statusCode == 404) {
+      return null;
+    } else {
+      throw Exception('Error al cargar el usuario');
+    }
+  }
+
 // Actualizar Usuario
   Future<http.Response> updateUsuario(
       String nombreController,
@@ -304,6 +322,28 @@ class DataBaseHelper {
     return response;
   }
 
+  // Actualizar Usuario
+  Future<http.Response> updatePassword(
+    String nombreUsuarioController,
+    String passwordController,
+  ) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
+    var url = "${urlConexion}/users/password/$nombreUsuarioController";
+    Map data = {
+      'password': passwordController,
+    };
+    var body = json.encode(data);
+    var response = await ioClient.put(Uri.parse(url),
+        headers: {"Content-Type": "application/json"}, body: body);
+    print("${response.statusCode}");
+
+    return response;
+  }
+
 // Funciones Para Alergías
 
 // Obtienen las Alergía de un Usuario a partir de su nombre de Usuario
@@ -322,6 +362,18 @@ class DataBaseHelper {
       throw Exception('Error al cargar el usuario');
     }
   }
+
+  // Obtienen las Alergenos del nombre del alimento
+  // Future<Alergenos> getAlergenosById(String name) async {
+  //   final response =
+  //       await http.get(Uri.parse('${urlConexion}/allergens/$name'));
+  //   if (response.statusCode == 200) {
+  //     final jsonData = jsonDecode(response.body);
+  //     return Alergenos.fromJson(jsonData);
+  //   } else {
+  //     throw Exception('Error al cargar el usuario');
+  //   }
+  // }
 
   //actualizaAlimentos
   Future<http.Response> updateAlimento(

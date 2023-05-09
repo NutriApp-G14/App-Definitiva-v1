@@ -116,7 +116,7 @@ class NutriApplicationTests {
 		assertNotEquals(alimentosUsuario.size(), 0);
 
 //Prueba de la obtención de los alimentos con un codigo de barras y un usuario
-		List<Alimento> alimentosCodigo = alimentoRepo.findByCodigoDeBarrasAndNombreUsuario("1", "usuarioPrueba");
+		List<Alimento> alimentosCodigo= alimentoRepo.findByCodigoDeBarrasAndNombreUsuario("1", "usuarioPrueba");
 		assertNotEquals(alimentosUsuario.size(), 0);
 
 

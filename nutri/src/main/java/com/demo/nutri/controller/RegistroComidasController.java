@@ -96,4 +96,13 @@ public class RegistroComidasController {
     public List<RegistroComidas> getRegistroUsuario(@PathVariable String nombreUsuario) {
         return (List<RegistroComidas>) registroComidasRepository.findByNombreUsuario(nombreUsuario);
     }
+
+    @PutMapping("/cantidad/{id}")
+    public ResponseEntity<RegistroComidas>  updateCantidad(@PathVariable Integer id, @RequestBody RegistroComidas Registro) {
+        return registroComidasRepository.findById(id).map(registro -> {
+            registro.setCantidad(Registro.getCantidad());
+            registroComidasRepository.save(registro);
+            return ResponseEntity.ok().body(registro);
+        }).orElse(new ResponseEntity<RegistroComidas>(HttpStatus.NOT_FOUND));
+    }
 }

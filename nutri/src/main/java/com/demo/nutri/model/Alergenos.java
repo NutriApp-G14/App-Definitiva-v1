@@ -1,38 +1,17 @@
+
 package com.demo.nutri.model;
 
-import java.net.URI;
+
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+
 @Entity
-public class Alergias {
+public class Alergenos {
+ 
     @Id
-    private String nombreUsuario;
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((nombreUsuario == null) ? 0 : nombreUsuario.hashCode());
-        return result;
-    }
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Alergias other = (Alergias) obj;
-        if (nombreUsuario == null) {
-            if (other.nombreUsuario != null)
-                return false;
-        } else if (!nombreUsuario.equals(other.nombreUsuario))
-            return false;
-        return true;
-    }
+    private String name;
     private Boolean cacahuetes;
     private Boolean leche;
     private Boolean huevo;
@@ -42,12 +21,13 @@ public class Alergias {
     private Boolean frutosSecos;
     private Boolean pescado;
     
-    public String getNombreUsuario() {
-        return nombreUsuario;
+    public String getName() {
+        return name;
     }
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+    public void setName(String name) {
+        this.name = name;
     }
+
     public Boolean getCacahuetes() {
         return cacahuetes;
     }
@@ -97,7 +77,6 @@ public class Alergias {
         this.pescado = pescado;
     }
     
+
+
 }
-
-
-

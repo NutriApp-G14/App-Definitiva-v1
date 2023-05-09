@@ -170,7 +170,7 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                     builder: (context) => MostrarFood(
                           name: widget.nombreAlimento,
                           cantidad: widget.cantidad,
-                          unidadesCantidad: unidadesCantidad,
+                          unidadesCantidad: "gramos",
                           calorias: calorias,
                           grasas: grasas,
                           proteinas: proteinas,
@@ -181,11 +181,14 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                           image: widget.imageUrl,
                           codigoDeBarras: codigoDeBarras,
                           nombreUsuario: nombreDeUsuario,
-                          id: 0,
+                          id: widget.id,
                           alergenos: [],
+                          day: widget.fecha,
+                          tipoDeComida: widget.tipodeComida,
                           showBotonAlimentos: false,
                           showBotonRegistro: false,
                           showBotonGuardar: true,
+                          dentroRegistro: true,
                         )));
 
             //MostrarFood(name: name, cantidad: cantidad, unidadesCantidad: unidadesCantidad, calorias: calorias, grasas: grasas, proteinas: proteinas, carbohidratos: carbohidratos, sodio: sodio, azucar: azucar, fibra: fibra, image: image)

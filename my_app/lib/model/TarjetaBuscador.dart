@@ -117,9 +117,12 @@ class _TarjetaBuscadorState extends State<TarjetaBuscador> {
                           nombreUsuario: widget.nombreUsuario,
                           id: 0,
                           alergenos: listaAlergenos,
+                          day: '',
+                          tipoDeComida: '',
                           showBotonAlimentos: true,
                           showBotonRegistro: true,
                           showBotonGuardar: false,
+                          dentroRegistro: false,
                         )));
           },
           child: Column(

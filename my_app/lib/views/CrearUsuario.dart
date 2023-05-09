@@ -404,10 +404,6 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                         if (_aceptado == false) {
                           _mostrarDialogoTerminos();
                         } else {
-
-                         
-
-
                           await dataBaseHelper.addUsuario(
                               nombreController.text.trim(),
                               nombreUsuarioController.text.trim(),
@@ -420,7 +416,7 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                               "ninguno",
                               "");
 
-                           token = await login();
+                          token = await login();
                           Map<String, bool> alergiasSeleccionadas =
                               seleccionarAlergias(alergias, seleccionadas);
                           bool cacahuetesController =
@@ -452,15 +448,13 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                               pescadoController,
                               token);
 
-                         
-
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ListAlimentos(
                                     nombreUsuario:
                                         nombreUsuarioController.text.trim(),
-                                        token: token)),
+                                    token: token)),
                           );
                         }
                       }
@@ -485,7 +479,6 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
               },
               child: Text('¿Ya tienes cuenta? Inicia sesión'),
             ),
-        
             SizedBox(
               height: 15,
             ),
@@ -515,15 +508,14 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
     );
   }
 
-
   Future<String> login() async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
     IOClient ioClient = IOClient(httpClient);
     var nombreUsuario = nombreUsuarioController.text;
     final response = await ioClient.post(
-      Uri.parse('https://localhost:8443/users/login/$nombreUsuario'),
+      Uri.parse('https://35.205.198.163:8443/users/login/$nombreUsuario'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -539,7 +531,6 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
       token = data['token'];
       print(token);
       return token;
-
     } else {
       throw Exception('Failed to log in');
     }
@@ -559,7 +550,4 @@ class TerminosDeUsoPage extends StatelessWidget {
       ),
     );
   }
-
-
-
 }

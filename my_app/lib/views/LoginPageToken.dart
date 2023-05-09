@@ -19,15 +19,14 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> login() async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
     IOClient ioClient = IOClient(httpClient);
     var nombreUsuario = usernameController.text;
     final response = await ioClient.post(
-      Uri.parse('https://localhost:8443/users/login/$nombreUsuario'),
+      Uri.parse('https://35.205.198.163:8443/users/login/$nombreUsuario'),
       headers: {
         'Content-Type': 'application/json',
-        
       },
       body: jsonEncode({
         'password': passwordController.text,
@@ -38,16 +37,12 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
-   
       token = data['token'];
       print(token);
-        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => IniciarSesionPage(
-                                   )),
-                          );
-
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => IniciarSesionPage()),
+      );
     } else {
       throw Exception('Failed to log in');
     }

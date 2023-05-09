@@ -264,17 +264,21 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                     Row(
                       children: [
                         for (int i = 0; i < widget.scoreTitles.length; i++)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Tooltip(
-                              message: widget.scoreTitles[i],
-                              child: SvgPicture.network(
-                                  height: 20,
-                                  widget.scoreImages[i],
-                                  placeholderBuilder: (BuildContext context) =>
-                                      CircularProgressIndicator.adaptive()),
-                            ),
-                          )
+                          widget.scoreImages[i] != ""
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Tooltip(
+                                    message: widget.scoreTitles[i],
+                                    child: SvgPicture.network(
+                                        height: 20,
+                                        widget.scoreImages[i],
+                                        placeholderBuilder:
+                                            (BuildContext context) =>
+                                                CircularProgressIndicator
+                                                    .adaptive()),
+                                  ),
+                                )
+                              : Container(),
                       ],
                     ),
                     SizedBox(height: 2.0),

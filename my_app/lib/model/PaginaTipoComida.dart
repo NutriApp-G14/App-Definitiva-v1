@@ -21,7 +21,8 @@ class PaginaTipoComida extends StatefulWidget {
       {required this.nombreUsuario,
       required this.tipoDeComida,
       required this.fecha,
-      required this.registros, required this.token});
+      required this.registros,
+      required this.token});
 
   @override
   _PaginaTipoComidaState createState() => _PaginaTipoComidaState();
@@ -86,7 +87,8 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
           backgroundColor: Colors.white,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(52),
-            child: NutriAppBar(nombreUsuario: widget.nombreUsuario, token : widget.token),
+            child: NutriAppBar(
+                nombreUsuario: widget.nombreUsuario, token: widget.token),
           ),
         ),
         body: FutureBuilder<List<dynamic>>(
@@ -171,9 +173,15 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                           nombreAlimento: nombreAlimento,
                                           imageUrl: imageUrl,
                                           scoreImages: [
-                                            'https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg',
-                                            'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg',
-                                            'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'
+                                            nutriscore == ""
+                                                ? ""
+                                                : 'https://static.openfoodfacts.org/images/attributes/nutriscore-$nutriscore.svg',
+                                            novaGroup == ""
+                                                ? ""
+                                                : 'https://static.openfoodfacts.org/images/attributes/nova-group-$novaGroup.svg',
+                                            ecoscore == ""
+                                                ? ""
+                                                : 'https://static.openfoodfacts.org/images/attributes/ecoscore-$ecoscore.svg'
                                           ],
                                           scoreTitles: [
                                             'Nutri-Score ${nutriscore}',
@@ -272,27 +280,26 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                           "";
 
                                       return TarjetaAlimento(
-                                        id: widget.registros[i]['id'],
-                                        nombreUsuario: nombreUsuario,
-                                        codigoDeBarras: codigoDeBarras,
-                                        cantidad: cantidad,
-                                        nombreAlimento: nombreAlimento,
-                                        imageUrl: imageUrl,
-                                        scoreImages: [
-                                          'https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg',
-                                          'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg',
-                                          'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'
-                                        ],
-                                        scoreTitles: [
-                                          'Nutri-Score ${nutriscore}',
-                                          'NOVA Group ${novaGroup}',
-                                          'Eco-Score ${ecoscore}'
-                                        ],
-                                        fecha: widget.fecha,
-                                        registros: widget.registros,
-                                        tipodeComida: widget.tipoDeComida,
-                                        token: widget.token
-                                      );
+                                          id: widget.registros[i]['id'],
+                                          nombreUsuario: nombreUsuario,
+                                          codigoDeBarras: codigoDeBarras,
+                                          cantidad: cantidad,
+                                          nombreAlimento: nombreAlimento,
+                                          imageUrl: imageUrl,
+                                          scoreImages: [
+                                            'https://static.openfoodfacts.org/images/attributes/nutriscore-${nutriscore}.svg',
+                                            'https://static.openfoodfacts.org/images/attributes/nova-group-${novaGroup}.svg',
+                                            'https://static.openfoodfacts.org/images/attributes/ecoscore-${ecoscore}.svg'
+                                          ],
+                                          scoreTitles: [
+                                            'Nutri-Score ${nutriscore}',
+                                            'NOVA Group ${novaGroup}',
+                                            'Eco-Score ${ecoscore}'
+                                          ],
+                                          fecha: widget.fecha,
+                                          registros: widget.registros,
+                                          tipodeComida: widget.tipoDeComida,
+                                          token: widget.token);
                                     }));
                           }
                         })),

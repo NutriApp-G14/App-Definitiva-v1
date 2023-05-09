@@ -35,8 +35,8 @@ class _AddRecetasPageState extends State<AddRecetasPage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ListAlimentos(nombreUsuario: widget.nombreUsuario, token: widget.token)));
+            builder: (context) => ListAlimentos(
+                nombreUsuario: widget.nombreUsuario, token: widget.token)));
   }
 
   Future<http.Response> addReceta(
@@ -65,7 +65,11 @@ class _AddRecetasPageState extends State<AddRecetasPage> {
     };
     var body = json.encode(data);
     var response = await ioClient.post(Uri.parse(url),
-        headers: {"Content-Type": "application/json", "Authorization" : widget.token}, body: body);
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": widget.token
+        },
+        body: body);
     print("${response.statusCode}");
     Navigator.pop(context);
     _navigateListAlimento(context);
@@ -84,7 +88,7 @@ class _AddRecetasPageState extends State<AddRecetasPage> {
           content: BuscadorIngredientes(
               nombreUsuario: widget.nombreUsuario,
               ingredientes: ingredientes,
-              token:widget.token,
+              token: widget.token,
               onIngredientesUpdated: (listaDeIngredientes) {
                 setState(() {
                   ingredientes = listaDeIngredientes;
@@ -153,6 +157,7 @@ class _AddRecetasPageState extends State<AddRecetasPage> {
         appBar: AppBar(
           title: Text('Añadir Receta'),
         ),
+        resizeToAvoidBottomInset: false,
         body: Container(
             child: ListView(
                 padding: const EdgeInsets.only(

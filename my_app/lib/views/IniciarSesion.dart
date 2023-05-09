@@ -36,6 +36,7 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
         )),
         automaticallyImplyLeading: false,
       ),
+      resizeToAvoidBottomInset: false,
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -100,21 +101,17 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
                             nombreUsuarioController.text.trim(),
                             passwordController.text.trim());
 
-                        
                         if (usuario != null) {
-
-                        final token1 = await login();
-                        print(token1);
+                          final token1 = await login();
+                          print(token1);
 
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ListAlimentos(
-                                    nombreUsuario: nombreUsuarioController.text.trim(),
-                                    token: token1
-                                )
-                                )
-                          );
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ListAlimentos(
+                                      nombreUsuario:
+                                          nombreUsuarioController.text.trim(),
+                                      token: token1)));
                         } else {
                           showDialog(
                             context: context,
@@ -150,14 +147,16 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
                 child: Text('¿Aún no eres miembro? Crea una cuenta'),
               ),
               TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RecuperarContrasenaPage(nombreUsuario: nombreUsuarioController.text.trim())));
-              },
-              child: Text('¿Has olvidado tu contraseña?'),
-            ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RecuperarContrasenaPage(
+                              nombreUsuario:
+                                  nombreUsuarioController.text.trim())));
+                },
+                child: Text('¿Has olvidado tu contraseña?'),
+              ),
             ])
           ],
         ),
@@ -165,15 +164,14 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
     );
   }
 
-
   Future<String> login() async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
     IOClient ioClient = IOClient(httpClient);
     var nombreUsuario = nombreUsuarioController.text;
     final response = await ioClient.post(
-      Uri.parse('https://localhost:8443/users/login/$nombreUsuario'),
+      Uri.parse('https://35.205.198.163:8443/users/login/$nombreUsuario'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -189,10 +187,8 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
       token = data['token'];
       print(token);
       return token;
-
     } else {
       throw Exception('Failed to log in');
     }
   }
-  
 }

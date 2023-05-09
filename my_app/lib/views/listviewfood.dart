@@ -24,6 +24,7 @@ class ListAlimentos extends StatefulWidget {
   final String nombreUsuario;
   final String token;
   final bool isPremium = true;
+  
 
   const ListAlimentos({required this.nombreUsuario, required this.token});
 
@@ -35,6 +36,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
   DataBaseHelper dataBaseHelper = DataBaseHelper();
   late List data;
   bool _showFoods = true;
+  late var cambiar;
 
   void _toggleShowFoods() {
     setState(() {
@@ -92,7 +94,9 @@ class _ListAlimentosState extends State<ListAlimentos> {
     final response = await ioClient.delete(
       Uri.parse("$urlConexion/foods/$id"), headers: { "Authorization" : widget.token}
     );
-    setState(() {});
+    setState(() {
+      cambiar = 1;
+    });
   }
 
   Future<void> deleteDataReceta(int id) async {

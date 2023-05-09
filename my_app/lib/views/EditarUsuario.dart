@@ -337,7 +337,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                                     ? usuario.activity
                                     : _nivelActividadSeleccionado,
                                 usuario.objective,
-                                "", widget.token
+                                usuario.imageString, widget.token
                                 //luego hay q cambiar esto
                               );
 

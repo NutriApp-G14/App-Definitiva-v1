@@ -492,9 +492,9 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
       var alimentoCodBar = body['product'];
-      List<String> listaAlergenos = alimentoCodBar['allergens_hierarchy']
-          .map((elemento) => elemento.toString())
-          .toList();
+      List<dynamic> alergenos = alimentoCodBar['allergens_hierarchy'] ?? [];
+      List<String> listAlergenos =
+          alergenos.map((elemento) => elemento.toString()).toList();
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -527,7 +527,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                   azucar: (alimentoCodBar['nutriments']?['sugars_100g'] is String) ? double.parse(alimentoCodBar['nutriments']['sugars_100g']) : alimentoCodBar['nutriments']['sugars_100g']?.toDouble() ?? 0.0,
                   fibra: (alimentoCodBar['nutriments']?['fiber_100g'] is String) ? double.parse(alimentoCodBar['nutriments']['fiber_100g']) : alimentoCodBar['nutriments']['fiber_100g']?.toDouble() ?? 0.0,
                   image: alimentoCodBar['image_url'] ?? "",
-                  alergenos: listaAlergenos ?? [""],
+                  alergenos: listAlergenos ?? [""],
                   day: '',
                   tipoDeComida: '',
                   showBotonAlimentos: true,

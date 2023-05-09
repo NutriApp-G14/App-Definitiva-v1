@@ -1889,8 +1889,11 @@ class _MostrarFoodState extends State<MostrarFood> {
     };
     var body = json.encode(data);
     var response = await ioClient.put(Uri.parse(url),
-        headers: {"Content-Type": "application/json"}, body: body);
-    print("${response.statusCode}");
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": widget.token
+        },
+        body: body);
     Navigator.pop(context);
     _navigateTipoComida(context);
     return response;

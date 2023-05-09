@@ -151,24 +151,24 @@ class _StaticsCardState extends State<StaticsCard> {
             for (var registro in registros) {
               for (var alimento in registro['alimentos']) {
                 totalCalorias +=
-                    alimento['calorias'] * alimento['cantidad'] / 100;
+                    alimento['calorias'] * registro['cantidad'] / 100;
               }
             }
             for (var registro in registros) {
               for (var alimento in registro['alimentos']) {
                 totalProteinas +=
-                    alimento['proteinas'] * alimento['cantidad'] / 100;
+                    alimento['proteinas'] * registro['cantidad'] / 100;
               }
             }
             for (var registro in registros) {
               for (var alimento in registro['alimentos']) {
                 totalCarbohidratos +=
-                    alimento['carbohidratos'] * alimento['cantidad'] / 100;
+                    alimento['carbohidratos'] * registro['cantidad'] / 100;
               }
             }
             for (var registro in registros) {
               for (var alimento in registro['alimentos']) {
-                totalGrasas += alimento['grasas'] * alimento['cantidad'] / 100;
+                totalGrasas += alimento['grasas'] * registro['cantidad'] / 100;
               }
             }
 

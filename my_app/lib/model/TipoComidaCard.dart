@@ -80,6 +80,7 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
             List registroComidas = snapshot.data;
             List<String> alimentos = [];
             List foods = [];
+            List cantidades = [];
             List<dynamic> tamanos =
                 List.generate(alimentos.length, (index) => 0);
             int size = 0;
@@ -92,20 +93,20 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                   .map((registro) => registro['alimentos'])
                   .toList();
               //print(foods);
+              cantidades = registroComidas
+                  .map((registro) => registro['cantidad'])
+                  .toList();
               for (int i = 0; i < alimentos.length; i++) {
                 size += alimentos[i].length;
                 tamanos.add(size);
               }
             }
             for (int i = 0; i < foods.length; i++) {
-              caloriasFoods +=
-                  foods[i][0]['cantidad'] * foods[i][0]['calorias'] / 100;
-              proteinasFoods +=
-                  foods[i][0]['cantidad'] * foods[i][0]['proteinas'] / 100;
+              caloriasFoods += cantidades[i] * foods[i][0]['calorias'] / 100;
+              proteinasFoods += cantidades[i] * foods[i][0]['proteinas'] / 100;
               carbohidratosFoods +=
-                  foods[i][0]['cantidad'] * foods[i][0]['carbohidratos'] / 100;
-              grasasFoods +=
-                  foods[i][0]['cantidad'] * foods[i][0]['grasas'] / 100;
+                  cantidades[i] * foods[i][0]['carbohidratos'] / 100;
+              grasasFoods += cantidades[i] * foods[i][0]['grasas'] / 100;
             }
 
             // print('Protes: ');
@@ -185,17 +186,19 @@ class _TipoComidaCardState extends State<TipoComidaCard> {
                                               for (int i = 0;
                                                   i < alimentos.length;
                                                   i++)
-                                                 (tamanos[i] < 30) ?
-                                                  Text(
-                                                    '${tamanos[i] > 27 ? '${alimentos[i].substring(0, 2)} ...' : alimentos[i]}, ',
-                                                    style: TextStyle(
-                                                      color: Colors.grey,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 14,
-                                                      fontFamily: 'Montserrat',
-                                                    ),
-                                                  ): Text(".."),
+                                                (tamanos[i] < 30)
+                                                    ? Text(
+                                                        '${tamanos[i] > 27 ? '${alimentos[i].substring(0, 2)} ...' : alimentos[i]}, ',
+                                                        style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                        ),
+                                                      )
+                                                    : Text(".."),
                                           ],
                                         ),
                                         SizedBox(

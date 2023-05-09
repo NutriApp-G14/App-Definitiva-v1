@@ -170,7 +170,7 @@ class _TarjetaAlimentoState extends State<TarjetaAlimento> {
                     builder: (context) => MostrarFood(
                           name: widget.nombreAlimento,
                           cantidad: widget.cantidad,
-                          unidadesCantidad: unidadesCantidad,
+                          unidadesCantidad: "gramos",
                           calorias: calorias,
                           grasas: grasas,
                           proteinas: proteinas,

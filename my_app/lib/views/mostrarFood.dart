@@ -114,7 +114,7 @@ class _MostrarFoodState extends State<MostrarFood> {
     "en:milk": "Leche",
     "en:eggs": "Huevo",
     "en:gluten": "Trigo",
-    "en:nuts": "Frutos Secos",
+    "en:nuts": "Frutos secos",
     "en:peanuts": "Cacahuetes",
     "en:soybeans": "Soja",
     "en:crustaceans": "Marisco",
@@ -1884,7 +1884,7 @@ class _MostrarFoodState extends State<MostrarFood> {
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
     Navigator.pop(context);
-    //_navigateTipoComida(context);
+    _navigateTipoComida(context);
     return response;
   }
 

@@ -488,6 +488,9 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
       var alimentoCodBar = body['product'];
+      List<String> listaAlergenos = alimentoCodBar['allergens_hierarchy']
+          .map((elemento) => elemento.toString())
+          .toList();
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -547,7 +550,7 @@ class _BuscadorNuevoState extends State<BuscadorNuevo> {
                                     ?.toDouble() ??
                                 0.0,
                     image: alimentoCodBar['image_url'] ?? "",
-                    alergenos: alimentoCodBar['allergens_hierarchy'] ?? "",
+                    alergenos: listaAlergenos ?? [""],
                     day: '',
                     tipoDeComida: '',
                     showBotonAlimentos: true,

@@ -6,8 +6,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:my_app/model/Alimento.dart';
 
-final urlConection = 'https://localhost:8443';
-
+final urlConection = 'https://34.76.252.0:8443';
 
 class RegistroHelper {
   // Add Registro
@@ -20,9 +19,9 @@ class RegistroHelper {
       String nombreAlimento,
       List<Alimento> alimento) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     print("Funcion ejecutada");
     var url = "${urlConection}/registro/add";

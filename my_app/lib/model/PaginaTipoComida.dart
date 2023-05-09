@@ -147,6 +147,7 @@ class _PaginaTipoComidaState extends State<PaginaTipoComida> {
                                           alimentos[i][0]['_id'];
                                       var cantidad =
                                           widget.registros[i]['cantidad'];
+
                                       var nombreAlimento =
                                           alimentos[i][0]['product_name'] ?? "";
                                       var imageUrl =

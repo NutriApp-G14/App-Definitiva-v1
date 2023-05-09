@@ -8,7 +8,7 @@ import 'package:my_app/model/Alergias.dart';
 import 'package:my_app/model/Alimento.dart';
 import 'package:my_app/model/Usuario.dart';
 
-final urlConexion = 'https://localhost:8443';
+final urlConexion = 'https://34.76.252.0:8443';
 
 class DataBaseHelper {
 // Add Alimento
@@ -26,14 +26,12 @@ class DataBaseHelper {
       double azucarController,
       double fibraController,
       String codigoDeBarrasController,
-       List<String> alergenosController) async {
-    
+      List<String> alergenosController) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
-    
     var url = "${urlConexion}/foods/add";
     Map data = {
       'name': nameController,
@@ -72,9 +70,9 @@ class DataBaseHelper {
     String? imageController,
   ) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     var url = "${urlConexion}/users/add";
     Map data = {
@@ -110,10 +108,9 @@ class DataBaseHelper {
       bool frutosSecosController,
       bool pescadoController) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     var url = "${urlConexion}/allergies/add";
     Map data = {
@@ -143,12 +140,10 @@ class DataBaseHelper {
       List<String> pasos,
       String imagen,
       String nombreUsuario) async {
-    
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     var url = "${urlConexion}/recipes/add";
     List<Map<String, dynamic>> ingredientesData = [];
@@ -187,11 +182,10 @@ class DataBaseHelper {
 
   // // Método para agregar un ingrediente a la lista de ingredientes de la receta
   Future agregarAlimento(int idReceta, Alimento alimento) async {
-
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     final url = Uri.parse('$urlConexion/$idReceta/addIngrediente');
     final headers = {'Content-Type': 'application/json'};
@@ -218,34 +212,29 @@ class DataBaseHelper {
 // Funciones para Usuario
 
 // Obtener un Usuario al Iniciar sesión comprobando la contraseña
-Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
-
-  
-  HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-  final response =
-      await ioClient.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
-  if (response.statusCode == 200) {
-    final json = jsonDecode(response.body);
-    final usuario = Usuario.fromJson(json);
-    if (usuario.password == password) {
-      return usuario;
+  Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
+    HttpClient httpClient = new HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+    final response =
+        await ioClient.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      final usuario = Usuario.fromJson(json);
+      if (usuario.password == password) {
+        return usuario;
+      }
     }
+    return null;
   }
-  return null;
-}
-
 
 // Comprueba si el Usuario Ya existe en la BBDD
   Future<bool> usuarioExists(String nombreUsuario) async {
-
-
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
     var url = Uri.parse("${urlConexion}/users/$nombreUsuario");
     //print(await ioClient.get(url));
     var response = await ioClient.get(url);
@@ -262,43 +251,36 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
 
 // Obtener un Usuario con el Nombre de Usuario (id)
   Future<Usuario> getUsuarioById(String nombreUsuario) async {
-
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     final response =
         await ioClient.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Usuario.fromJson(jsonData);
-
-      
     } else {
       throw Exception('Error al cargar el usuario');
     }
   }
 
-    Future<Usuario?> getUsuarioByNombreUsuarioParaLogin(String nombreUsuario) async {
-
+  Future<Usuario?> getUsuarioByNombreUsuarioParaLogin(
+      String nombreUsuario) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     final response =
         await ioClient.get(Uri.parse('${urlConexion}/users/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Usuario.fromJson(jsonData);
-
-      
     } else if (response.statusCode == 404) {
       return null;
-
-      
-    }else {
+    } else {
       throw Exception('Error al cargar el usuario');
     }
   }
@@ -316,9 +298,9 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
       String? objectiveController,
       String? imageController) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     var url = "${urlConexion}/users/$nombreUsuarioController";
     Map data = {
@@ -340,16 +322,15 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
     return response;
   }
 
-
   // Actualizar Usuario
   Future<http.Response> updatePassword(
-       String nombreUsuarioController,
-      String passwordController,
-     ) async {
+    String nombreUsuarioController,
+    String passwordController,
+  ) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     var url = "${urlConexion}/users/password/$nombreUsuarioController";
     Map data = {
@@ -359,7 +340,7 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
     var response = await ioClient.put(Uri.parse(url),
         headers: {"Content-Type": "application/json"}, body: body);
     print("${response.statusCode}");
- 
+
     return response;
   }
 
@@ -368,12 +349,12 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
 // Obtienen las Alergía de un Usuario a partir de su nombre de Usuario
   Future<Alergias> getAlergiasById(String nombreUsuario) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
-    final response =
-        await ioClient.get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
+    final response = await ioClient
+        .get(Uri.parse('${urlConexion}/allergies/$nombreUsuario'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Alergias.fromJson(jsonData);
@@ -412,9 +393,9 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
       String codigoDeBarrasController,
       List<String> alergenosController) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     var url = "${urlConexion}/foods/$idController";
     Map data = {
@@ -451,12 +432,11 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
       bool mariscosController,
       bool frutosSecosController,
       bool pescadoController) async {
-
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
-  
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
+
     var url = "${urlConexion}/allergies/$nombreUsuarioController";
     Map data = {
       'nombreUsuario': nombreUsuarioController,
@@ -480,11 +460,10 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
 
 // Método para eliminar una receta por ID
   Future<http.Response> deleteReceta(int recetaId) async {
-
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     var url = "${urlConexion}/recipes/$recetaId";
     var response = await http
@@ -495,14 +474,13 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
 
 // Método para obtener todas las recetas de un usuario por nombre de usuario
   Future<List> getRecetas(String nombreUsuario) async {
-
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
-    final response =
-        await ioClient.get(Uri.parse("${urlConexion}/recipes/user/$nombreUsuario"));
+    final response = await ioClient
+        .get(Uri.parse("${urlConexion}/recipes/user/$nombreUsuario"));
     return json.decode(response.body);
   }
 
@@ -518,11 +496,10 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
     String imagenController,
     String nombreUsuarioController,
   ) async {
-
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     var url = "${urlConexion}/recipes/$idController";
     Map data = {
@@ -547,11 +524,10 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
 
 // Obtener un Alimento al añadirlo
   Future<bool> getAlimento(int id) async {
-
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     final response = await ioClient.get(Uri.parse('${urlConexion}/foods/$id'));
     if (response.statusCode == 200) {
@@ -563,9 +539,9 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
 // Borrar Alimento
   Future<http.Response> deleteAlimento(int id) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
     var url = "${urlConexion}/foods/{id}";
     var response = await ioClient
@@ -577,12 +553,12 @@ Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
 // Obtiene los alimentos de un usuario a partir de su nombre de usuario
   Future<List> getData(String nombreUsuario) async {
     HttpClient httpClient = new HttpClient()
-    ..badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-  IOClient ioClient = IOClient(httpClient);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+    IOClient ioClient = IOClient(httpClient);
 
-    final response =
-        await ioClient.get(Uri.parse("${urlConexion}/foods/user/$nombreUsuario"));
+    final response = await ioClient
+        .get(Uri.parse("${urlConexion}/foods/user/$nombreUsuario"));
 
     return json.decode(response.body);
   }
